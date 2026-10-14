@@ -15,7 +15,7 @@ Steady, incompressible, laminar (Re < ~200 in the film), SI units inside the cas
 Pressure in the incompressible solvers is kinematic (p / rho).
 """
 from __future__ import annotations
-import os, json, stat, textwrap
+import os, json, stat, textwrap, gzip
 import numpy as np
 
 from .foam_mesh import FoamMesh
@@ -113,6 +113,7 @@ def write_case(fm: FoamMesh, case, cfg, kind="porous", iface_U=None):
     writeInterval   {of['end_iter']};
     purgeWrite      1;
     writeFormat     ascii;
+    writeCompression {"on" if of.get("write_compression", False) else "off"};
     writePrecision  10;
     timeFormat      general;
     runTimeModifiable true;
@@ -144,9 +145,10 @@ def write_case(fm: FoamMesh, case, cfg, kind="porous", iface_U=None):
     snGradSchemes   { default limited corrected 0.5; }
     wallDist        { method meshWave; }
     """)
+    # conservative relaxation: the hole is an orifice jet (Re up to ~1000 with a standoff)
     consistent = "no" if kind == "porous" else "yes"
-    relax_p = 0.3 if kind == "porous" else 0.7
-    relax_U = 0.7 if kind == "porous" else 0.9
+    relax_p = 0.3 if kind == "porous" else 0.6
+    relax_U = 0.7 if kind == "porous" else 0.6
     _w(case, "system/fvSolution", "dictionary", f"""
     solvers
     {{
@@ -219,7 +221,10 @@ def write_case(fm: FoamMesh, case, cfg, kind="porous", iface_U=None):
     Ub, pb = {}, {}
     open_U = "type            pressureInletOutletVelocity;\n            value           uniform (0 0 0);"
     for n in names:
-        if n in walls:
+        if n == "tissue_side" and n in walls:           # closed edge: tissue continues sideways, no flux
+            Ub[n] = "type            slip;"
+            pb[n] = "type            zeroGradient;"
+        elif n in walls:
             Ub[n] = "type            noSlip;"
             pb[n] = "type            zeroGradient;"
         elif n == "outlet":
@@ -274,7 +279,7 @@ def write_case(fm: FoamMesh, case, cfg, kind="porous", iface_U=None):
     else
         $SOLVER > log.solver 2>&1
     fi
-    foamToVTK -latestTime > log.foamToVTK 2>&1 || true
+    [ -n "$SKIP_VTK" ] || foamToVTK -latestTime > log.foamToVTK 2>&1 || true
     touch case.foam
     echo "done - flow rates in postProcessing/, open case.foam in ParaView"
     """)
@@ -301,9 +306,33 @@ def latest_time(case):
     return max(ts)[1] if ts else None
 
 
+def _read_field_text(path):
+    if os.path.exists(path):
+        return open(path).read()
+    if os.path.exists(path + ".gz"):
+        with gzip.open(path + ".gz", "rt") as f:
+            return f.read()
+    raise FileNotFoundError(path)
+
+
+def read_internal_vector(path):
+    """internalField of an ascii volVectorField -> (n, 3)."""
+    txt = _read_field_text(path)
+    i = txt.index("internalField")
+    head = txt[i:i + 200]
+    if "nonuniform" not in head:
+        v = head.split("uniform")[1].split(";")[0].strip().strip("()").split()
+        return np.array(v, float)
+    j = txt.index("(", i)
+    n = int(txt[txt.index(">", i) + 1:j].split()[-1])
+    k = txt.index("\n)", j)
+    body = txt[j + 1:k].replace("(", " ").replace(")", " ")
+    return np.array(body.split(), float)[:3 * n].reshape(n, 3)
+
+
 def read_internal_scalar(path):
     """internalField of an ascii volScalarField."""
-    txt = open(path).read()
+    txt = _read_field_text(path)
     i = txt.index("internalField")
     head = txt[i:i + 200]
     if "nonuniform" not in head:

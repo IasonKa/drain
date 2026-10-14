@@ -1,0 +1,9 @@
+{
+  "_comment": "Toolchain check: tiny mesh, 3 windows. Should finish in 15-30 min on 8 cores.",
+  "design": "standoff",
+  "resolution": "test",
+  "boundary": {"film_edge": "closed"},
+  "time": {"t_end_s": 0.1, "n_windows": 3, "t_first_s": 0.001, "febio_steps_per_window": 4},
+  "coupling": {"max_iter": 4, "min_iter": 2, "n_patches": 120},
+  "openfoam": {"end_iter": 300}
+}

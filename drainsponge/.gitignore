@@ -1,0 +1,12 @@
+# large or regenerable outputs (rebuild with the scripts, see README)
+out/cases/
+out/preview/
+out/media/
+out/figures/
+out/drainsponge_viewer.html
+out/mesh/
+out/openfoam/
+out/febio/
+out/cad/*/*.stl
+data/*.stl
+__pycache__/

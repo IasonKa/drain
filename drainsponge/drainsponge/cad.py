@@ -44,10 +44,27 @@ def _hole(occ, w: Window, z0, z1):
     return [(3, occ.addCylinder(0, 0, z0, 0, 0, z1 - z0, w.a))]
 
 
+def _ring(occ, w: Window):
+    """Standoff ring on the skin: annulus r_in..r_out between skin and skin + h, minus the slots."""
+    L = w.half
+    big = (-L - 1, 2 * L + 2)
+    ann, _ = occ.cut([(3, occ.addCylinder(0, 0, -1, 0, 0, 3, w.standoff_rout))],
+                     [(3, occ.addCylinder(0, 0, -1.5, 0, 0, 4, w.standoff_rin))])
+    band, _ = occ.cut(_elliptic_cyl(occ, w, w.standoff_h, *big), _elliptic_cyl(occ, w, 0, *big))
+    ring, _ = occ.intersect(ann, band)
+    for d in w.slot_dirs():
+        ang = float(np.degrees(np.arctan2(d[1], d[0])))
+        b = occ.addBox(0, -0.5 * w.slot_w, -2, 2 * w.standoff_rout, w.slot_w, 4)
+        occ.rotate([(3, b)], 0, 0, 0, 0, 0, 1, np.radians(ang))
+        ring, _ = occ.cut(ring, [(3, b)])
+    return ring
+
+
 def build_part(occ, w: Window, part):
     L = w.half
     big = (-L - 1, 2 * L + 2)
-    zlo, zhi = -w.wall - w.channel_d - 1, w.gap + w.tissue_h + 1
+    top = w.top_feature                                  # ring height (0 without standoff)
+    zlo, zhi = -w.wall - w.channel_d - 1, top + w.gap + w.tissue_h + 1
     box = _box(occ, w, zlo, zhi)
     if part == "drain":
         out = _elliptic_cyl(occ, w, 0, *big)
@@ -65,12 +82,16 @@ def build_part(occ, w: Window, part):
                 if zmax > -0.2 * w.wall and max(abs(xmin), abs(xmax), abs(ymin), abs(ymax)) < w.a + 1e-3:
                     curves.append(t)
             wall = occ.fillet([v for _, v in wall], sorted(set(curves)), [w.fillet])
+        if w.has_standoff:
+            wall, _ = occ.fuse(wall, _ring(occ, w))
         return wall
     if part == "film":
-        top = _elliptic_cyl(occ, w, w.gap, *big)
+        upper = _elliptic_cyl(occ, w, top + w.gap, *big)
         skin = _elliptic_cyl(occ, w, 0, *big)
-        film, _ = occ.cut(top, skin)
+        film, _ = occ.cut(upper, skin)
         film, _ = occ.intersect(film, box)
+        if w.has_standoff:
+            film, _ = occ.cut(film, _ring(occ, w))
         hole_in_wall, _ = occ.intersect(_hole(occ, w, -w.wall, 0.5), _elliptic_cyl(occ, w, 0, *big))
         hole_in_wall, _ = occ.cut(hole_in_wall, _elliptic_cyl(occ, w, -w.wall, *big))
         film, _ = occ.fuse(film, hole_in_wall)
@@ -82,9 +103,9 @@ def build_part(occ, w: Window, part):
         ch, _ = occ.intersect(ch, _box(occ, w, zlo, zhi))
         return ch
     if part == "tissue":
-        top = _elliptic_cyl(occ, w, w.gap + w.tissue_h, *big)
-        bot = _elliptic_cyl(occ, w, w.gap, *big)
-        t, _ = occ.cut(top, bot)
+        upper = _elliptic_cyl(occ, w, top + w.gap + w.tissue_h, *big)
+        bot = _elliptic_cyl(occ, w, top + w.gap, *big)
+        t, _ = occ.cut(upper, bot)
         t, _ = occ.intersect(t, box)
         return t
     raise KeyError(part)
@@ -140,7 +161,7 @@ def build_organ(occ, w: Window, size=(22.0, 30.0, 9.0), seed=4):
         lobes.append((3, t))
     body, _ = occ.fuse(body, lobes)
     # carve the drain out of it at gap g0: the underside follows the skin
-    env = _elliptic_cyl(occ, w, w.gap, -sy, 2 * sy)
+    env = _elliptic_cyl(occ, w, w.top_feature + w.gap, -sy, 2 * sy)
     body, _ = occ.cut(body, env)
     # drop pieces that ended up below the drain (keep the largest = the organ)
     if len(body) > 1:

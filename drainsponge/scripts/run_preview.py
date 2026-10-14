@@ -47,9 +47,13 @@ def timeline_figure(h, pv, path):
     ax.set_ylabel("flow (mL/min, one hole)"); ax.legend(fontsize=9); ax.set_title("where the liquid comes from")
     ax.grid(True, which="both", alpha=0.3)
     ax = axs[0, 1]
-    ax.semilogx(t, np.array(h["h_rim"]) * 1e3, color="#4a90d9", lw=2, label="film at the hole rim")
-    ax.semilogx(t, np.array(h["intrusion"]) * 1e3, color="#c0392b", lw=2, label="tissue depth into the hole")
-    ax.axhline(0, color="k", lw=0.6)
+    ax.semilogx(t, np.array(h["clearance"]) * 1e3, color="#c0392b", lw=2,
+                label="lowest tissue point over the hole%s vs. the rim" % (" / ring cup" if pv.hs > 0 else ""))
+    if pv.hs > 0:
+        ax.axhline(pv.hs * 1e3, color="#555", lw=1, ls=":")
+        ax.text(t[0], pv.hs * 1e3 + 8, "ring top", fontsize=8, color="#555")
+    ax.axhline(0, color="k", lw=0.8)
+    ax.text(t[0], -25, "below 0 = tissue inside the hole", fontsize=8)
     ax.set_ylabel("um"); ax.legend(fontsize=9); ax.set_title("tissue pulled onto / into the hole")
     ax.grid(True, which="both", alpha=0.3)
     ax = axs[1, 0]
@@ -64,11 +68,14 @@ def timeline_figure(h, pv, path):
     for a in axs.ravel():
         if ts:
             a.axvline(ts, color="#888", ls="--", lw=1)
-    if ts:
-        axs[0, 1].annotate(f"sealed at {ts*1e3:.1f} ms", xy=(ts, 30), xytext=(ts * 3, 38), fontsize=9,
-                           arrowprops=dict(arrowstyle="->", color="#666"))
-    fig.suptitle("Single hole + sponge tissue (reduced-order axisymmetric model)  E=%.0f kPa, k=%.0e m4/Ns, "
-                 "suction %.0f kPa, gap %.0f um" % (pv.E * 1e3, pv.k * 1e-12, pv.dp * 1e3, pv.g0 * 1e3), fontsize=11)
+    tc = h.get("t_contact")
+    if ts or tc:
+        lab = f"sealed on the rim at {ts*1e3:.1f} ms" if ts else f"tissue lands on the drain at {tc:.3g} s"
+        axs[0, 1].set_title("tissue pulled onto / into the hole  (" + lab + ")")
+    design = "standoff ring %.2f mm" % pv.hs if pv.hs > 0 else "current design (no ring)"
+    edge = "free liquid at the edge" if pv.film_edge_open else "no free liquid"
+    fig.suptitle("%s, %s | E=%.0f kPa, k=%.0e m4/Ns, suction %.0f kPa, gap %.0f um (reduced-order model)"
+                 % (design, edge, pv.E * 1e3, pv.k * 1e-12, pv.dp * 1e3, pv.gap * 1e3), fontsize=11)
     fig.tight_layout()
     fig.savefig(path, dpi=140)
     plt.close(fig)
@@ -103,13 +110,20 @@ def fields_figure(snaps, pv, path, pick=(1, 3, 5, 8)):
         ax.fill_between([a, R], [-t, -t], [0, 0], color="#8a9bb0", zorder=3)
         hf, ub = s["film_h"], u[0, :, 1]
         o = r >= a
+        zb = pv.zb
         for sg in (1, -1):
-            ax.fill_between(sg * r[o], 0, hf[o], color="#4a90d9", alpha=0.85, lw=0, zorder=4)
-        ax.set_xlim(-R, R); ax.set_ylim(-t, 0.75); ax.set_aspect("equal")
-        sealed = "sealed on the rim" if hf[o][:3].max() < 1.5 * pv.hmin else "film open"
-        ax.set_title(f"t = {s['t']:.3g} s   hole {s['p_hole_Pa']*1e-3:.2f} kPa   film at rim "
-                     f"{hf[o][0]*1e3:.1f} um ({sealed})   depth into hole {max(-(g0+ub[~o].min()),0)*1e3:.0f} um",
-                     fontsize=10)
+            ax.fill_between(sg * r[o], zb[o], zb[o] + hf[o], color="#4a90d9", alpha=0.85, lw=0, zorder=4)
+            if pv.hs > 0:                                           # ring arcs (slots not drawn)
+                ax.fill_between(sg * np.array([pv.rin, pv.rout]), [0, 0], [pv.hs, pv.hs],
+                                color="#4a5568", zorder=5)
+        ax.set_xlim(-R, R); ax.set_ylim(-t, 0.75 + pv.hs); ax.set_aspect("equal")
+        low = float((g0 + ub[r < (pv.rin if pv.hs > 0 else a)]).min())
+        if pv.hs > 0:
+            state = "on the ring" if np.any(hf[pv.ring2] < 1.5 * pv.hmin) else "above the ring"
+        else:
+            state = "sealed on the rim" if hf[o][:3].max() < 1.5 * pv.hmin else "film open"
+        ax.set_title(f"t = {s['t']:.3g} s   hole {s['p_hole_Pa']*1e-3:.2f} kPa   tissue {state}   "
+                     f"lowest point {low*1e3:+.0f} um vs rim", fontsize=10)
         fig.colorbar(cs, ax=ax, label="pore pressure (kPa)", fraction=0.02, pad=0.01)
     axs[-1].set_xlabel("mm across the hole (true scale; blue = liquid film, lines = liquid flowing inside the sponge)")
     fig.savefig(path, dpi=130)
@@ -120,10 +134,13 @@ def summarize(h):
     t = np.array(h["t"])
     seal = [i for i, s in enumerate(h["sealed"]) if s]
     h["t_seal"] = float(t[seal[0]]) if seal else None
+    con = [i for i, s in enumerate(h["contact"]) if s]
+    h["t_contact"] = float(t[con[0]]) if con else None
     seep = (np.array(h["Q_body"]) + np.array(h["Q_seep"]))
     dt = np.diff(np.concatenate([[0.0], t]))
     h["V_cum_seep"] = np.cumsum(seep * dt).tolist()
-    return dict(t_seal_s=h["t_seal"], peak_flow_mL_min=float(np.max(np.abs(h["Q_hole"])) * 0.06),
+    return dict(t_seal_s=h["t_seal"], t_contact_s=h["t_contact"], clearance_end_um=float(h["clearance"][-1] * 1e3),
+                peak_flow_mL_min=float(np.max(np.abs(h["Q_hole"])) * 0.06),
                 flow_1h_mL_min=float(h["Q_hole"][-1] * 0.06),
                 tissue_flow_1h_mL_min=float(seep[-1] * 0.06),
                 tissue_volume_1h_mm3=float(h["V_cum_seep"][-1]),
@@ -142,14 +159,14 @@ def sweep(cfg, out):
     I = np.zeros((len(Es), len(dps))); TS = np.zeros_like(I)
     for i, E in enumerate(Es):
         for j, dp in enumerate(dps):
-            c = config.load(tissue={"E_Pa": E}, suction={"dp_Pa": dp})
+            c = config.load(design="current", tissue={"E_Pa": E}, suction={"dp_Pa": dp})
             pv = Preview(c); h, _ = pv.run(t_end=3600, n_steps=60, verbose=False)
             sm = summarize(h)
             I[i, j] = sm["intrusion_1h_um"]; TS[i, j] = sm["t_seal_s"] or np.nan
             print(f"E={E:.0f} dp={dp:.0f}: intrusion {I[i,j]:.0f} um, seal {TS[i,j]:.3g} s")
     Qk = []
     for k in ks:
-        c = config.load(tissue={"perm_m4_Ns": k})
+        c = config.load(design="current", tissue={"perm_m4_Ns": k})
         pv = Preview(c); h, _ = pv.run(t_end=3600, n_steps=60, verbose=False)
         sm = summarize(h)
         Qk.append((sm["tissue_flow_1h_mL_min"], sm["tissue_volume_1h_mm3"], sm["flow_1h_mL_min"]))
@@ -183,35 +200,100 @@ def sweep(cfg, out):
                 k=ks, tissue_flow_mL_min=Qk[:, 0].tolist(), total_flow_mL_min=Qk[:, 2].tolist())
 
 
+def run_one(cfg, steps, outdir, figs, tag):
+    pv = Preview(cfg)
+    t_end = cfg["time"]["t_end_s"]
+    snaps_t = [5e-4, 2e-3, 4e-3, 9e-3, 0.05] + list(np.geomspace(5, t_end, 4))
+    h, snaps = pv.run(t_end=t_end, n_steps=steps, snap_times=snaps_t, verbose=False)
+    sm = summarize(h)
+    timeline_figure(h, pv, os.path.join(figs, f"05_timeline_{tag}.png"))
+    fields_figure(snaps, pv, os.path.join(figs, f"06_fields_{tag}.png"))
+    res = dict(summary=sm, config=cfg, history=h, snapshots=snaps,
+               geometry=dict(a=pv.a, R=pv.R, H=pv.H, g0=pv.g0, gap=pv.gap, wall=pv.t_wall, hs=pv.hs,
+                             rin=pv.rin, rout=pv.rout, slot_w=pv.slot_w, n_slots=pv.n_slots,
+                             film_edge_open=pv.film_edge_open))
+    os.makedirs(outdir, exist_ok=True)
+    json.dump(to_jsonable(res), open(os.path.join(outdir, "preview.json"), "w"))
+    return tag, sm
+
+
+def _job(args):
+    cfg, steps, outdir, figs, tag = args
+    return run_one(cfg, steps, outdir, figs, tag)
+
+
+def compare_figure(results, path):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    fig, axs = plt.subplots(2, 2, figsize=(14, 8.5), sharex=True)
+    sty = {"current": dict(color="#c0392b"), "standoff": dict(color="#2f6db3"), "standoff_opt": dict(color="#1b9e77")}
+    names = {"current": "current (no ring)", "standoff": "standoff ring (new design)", "standoff_opt": "optimized ring"}
+    for col, edge in enumerate(["open", "closed"]):
+        for design in ["current", "standoff", "standoff_opt"]:
+            key = f"{design}_{edge}"
+            if key not in results:
+                continue
+            h = results[key]["history"]
+            t = np.array(h["t"])
+            lab = names[design]
+            axs[0, col].semilogx(t, np.array(h["clearance"]) * 1e3, lw=2, label=lab, **sty[design])
+            axs[1, col].loglog(t, np.abs(h["Q_hole"]) * 0.06, lw=2, label=lab + ": total", **sty[design])
+            seep = np.array(h["Q_body"]) + np.array(h["Q_seep"])
+            axs[1, col].loglog(t, np.where(seep > 0, seep, np.nan) * 0.06, lw=1.2, ls="--",
+                               label=lab + ": out of the tissue", **sty[design])
+        axs[0, col].axhline(0, color="k", lw=0.8)
+        axs[0, col].set_title("free liquid at the window edge" if edge == "open" else "no free liquid (tissue only)")
+        axs[0, col].set_ylabel("lowest tissue point vs. hole rim (um)")
+        axs[1, col].set_ylabel("flow into the hole (mL/min)")
+        axs[1, col].set_xlabel("time after suction on (s)")
+        axs[1, col].set_ylim(1e-8, 1e3)
+        for a_ in axs[:, col]:
+            a_.grid(True, which="both", alpha=0.3)
+            a_.legend(fontsize=8)
+    c = next(iter(results.values()))["config"]
+    fig.suptitle("Current vs standoff designs, one hole (reduced-order model) | E=%.0f kPa, suction %.0f kPa, k=%.0e m4/Ns"
+                 % (c["tissue"]["E_Pa"] / 1e3, c["suction"]["dp_Pa"] / 1e3, c["tissue"]["perm_m4_Ns"]), fontsize=11)
+    fig.tight_layout()
+    fig.savefig(path, dpi=140)
+    plt.close(fig)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default=None)
+    ap.add_argument("--design", default=None, choices=list(config.DESIGNS))
+    ap.add_argument("--film-edge", default=None, choices=["open", "closed"])
     ap.add_argument("--out", default="out")
-    ap.add_argument("--steps", type=int, default=140)
-    ap.add_argument("--sweep", action="store_true")
-    ap.add_argument("--figs-only", action="store_true", help="redraw figures from out/preview/preview.json")
+    ap.add_argument("--steps", type=int, default=120)
+    ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--compare", action="store_true", help="both designs x both scenarios + figure 09")
+    ap.add_argument("--sweep", action="store_true", help="E x suction map of the current design (figure 07)")
     a = ap.parse_args()
-    cfg = config.load(a.config)
     figs = os.path.join(a.out, "figures"); os.makedirs(figs, exist_ok=True)
-    pdir = os.path.join(a.out, "preview"); os.makedirs(pdir, exist_ok=True)
     t0 = time.time()
-    pv = Preview(cfg)
-    if a.figs_only:
-        res = json.load(open(os.path.join(pdir, "preview.json")))
-        sn = [{k: (np.array(v) if isinstance(v, list) else v) for k, v in s.items()} for s in res["snapshots"]]
-        timeline_figure(res["history"], pv, os.path.join(figs, "05_preview_timeline.png"))
-        fields_figure(sn, pv, os.path.join(figs, "06_preview_fields.png"))
-        return
-    h, snaps = pv.run(t_end=cfg["time"]["t_end_s"], n_steps=a.steps, snap_times=SNAPS)
-    sm = summarize(h)
-    print(json.dumps(sm, indent=1), f"({time.time()-t0:.0f} s)")
-    timeline_figure(h, pv, os.path.join(figs, "05_preview_timeline.png"))
-    fields_figure(snaps, pv, os.path.join(figs, "06_preview_fields.png"))
-    res = dict(summary=sm, config=cfg, history=h, snapshots=snaps,
-               geometry=dict(a=pv.a, R=pv.R, H=pv.H, g0=pv.g0, wall=pv.t_wall))
+    if a.compare:
+        jobs = []
+        for design in ["current", "standoff", "standoff_opt"]:
+            for edge in ["open", "closed"]:
+                cfg = config.load(a.config, design=design, boundary={"film_edge": edge})
+                tag = f"{design}_{edge}"
+                jobs.append((cfg, a.steps, os.path.join(a.out, "preview", tag), figs, tag))
+        from concurrent.futures import ProcessPoolExecutor
+        with ProcessPoolExecutor(a.workers) as ex:
+            for tag, sm in ex.map(_job, jobs):
+                print(tag, json.dumps(sm), flush=True)
+        res = {j[4]: json.load(open(os.path.join(j[2], "preview.json"))) for j in jobs}
+        compare_figure(res, os.path.join(figs, "09_design_comparison.png"))
+    else:
+        over = {"boundary": {"film_edge": a.film_edge}} if a.film_edge else {}
+        cfg = config.load(a.config, design=a.design, **over)
+        tag = f"{cfg['design']}_{cfg.get('boundary', {}).get('film_edge', 'open')}"
+        _, sm = run_one(cfg, a.steps, os.path.join(a.out, "preview", tag), figs, tag)
+        print(json.dumps(sm, indent=1))
     if a.sweep:
-        res["sweep"] = sweep(cfg, figs)
-    json.dump(to_jsonable(res), open(os.path.join(pdir, "preview.json"), "w"))
+        sweep(config.load(a.config, design="current"), figs)
+    print(f"({time.time()-t0:.0f} s)")
 
 
 if __name__ == "__main__":

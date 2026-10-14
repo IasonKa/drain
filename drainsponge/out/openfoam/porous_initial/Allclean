@@ -1,3 +1,0 @@
-#!/bin/bash
-cd "$(dirname "$0")"
-rm -rf processor* postProcessing VTK log.* [1-9]* 0.[0-9]*

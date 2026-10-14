@@ -1,0 +1,26 @@
+{
+ "name": "h0.30_w0.45_s0.20",
+ "standoff_h": 0.3,
+ "standoff_rin": 0.55,
+ "standoff_rout": 1.0,
+ "slot_w": 0.2,
+ "n_slots": 4,
+ "worst": {
+  "clearance_um": -301.9164317571493,
+  "Q_1h_mL_min": 4.301329425854179e-05,
+  "ring_contact_kPa": 9.93245452714097,
+  "mass_err": 2.0313928808979195e-05
+ },
+ "pool": {
+  "clearance_um": 214.19098995048142,
+  "Q_1h_mL_min": 107.72856711507318,
+  "ring_contact_kPa": 0.8241306849685803,
+  "mass_err": 2.57767002492887e-13
+ },
+ "severe": {
+  "clearance_um": -8.867415233422493,
+  "Q_1h_mL_min": 3.429744331466124e-05,
+  "ring_contact_kPa": 11.656692063156479,
+  "mass_err": 2.0455445571962647e-05
+ }
+}

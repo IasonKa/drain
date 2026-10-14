@@ -1,0 +1,13 @@
+{
+  "_comment": "Comparison run: current design (no ring), fine mesh, 72 coupling windows from 0.1 ms to 6 h. Tissue/suction values are placeholders (softish tissue, -75 mmHg) chosen where the designs differ; replace with clinical values.",
+  "design": "current",
+  "resolution": "fine",
+  "boundary": {"film_edge": "closed"},
+  "suction": {"dp_Pa": 10000.0, "ramp_s": 0.01},
+  "tissue": {"E_Pa": 10000.0, "nu": 0.2, "phi0": 0.2, "perm_m4_Ns": 1e-14,
+             "perm_M": 4.0, "perm_alpha": 2.0, "friction": 0.2},
+  "time": {"t_end_s": 21600.0, "n_windows": 72, "t_first_s": 1e-4, "febio_steps_per_window": 8},
+  "coupling": {"max_iter": 30, "min_iter": 2, "tol_p_rel": 5e-4, "tol_disp_mm": 5e-4, "n_patches": 1500,
+               "febio_restart": true, "omega0": 0.3},
+  "openfoam": {"end_iter": 4000, "write_compression": true}
+}

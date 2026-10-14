@@ -25,7 +25,7 @@ HDR = """FoamFile
 # patch order and OpenFOAM types
 PATCHES = [("outlet", "patch"), ("film_edge", "patch"), ("tissue_iface", "patch"),
            ("tissue_top", "patch"), ("tissue_side", "patch"),
-           ("drain_skin", "wall"), ("hole_wall", "wall"), ("wall_under", "wall"),
+           ("drain_skin", "wall"), ("standoff", "wall"), ("hole_wall", "wall"), ("wall_under", "wall"),
            ("channel_walls", "wall"), ("tissue_bottom", "wall")]
 
 
@@ -37,14 +37,18 @@ def _hdr(cls, loc, obj, note=""):
 class FoamMesh:
     """Face-ordered view of a WindowMesh (internal faces upper-triangular, then patches)."""
 
-    def __init__(self, m: WindowMesh):
+    def __init__(self, m: WindowMesh, closed_edge=False):
+        """closed_edge: no free liquid at the window edge -> film_edge and tissue_side are walls."""
         self.m = m
+        self.closed_edge = closed_edge
         internal = np.nonzero(m.f_internal)[0]
         o = np.lexsort((m.f_neigh[internal], m.f_owner[internal]))
         order = [internal[o]]
         self.patches = []
         start = len(internal)
         for name, typ in PATCHES:
+            if closed_edge and name in ("film_edge", "tissue_side"):
+                typ = "wall"
             idx = np.nonzero((~m.f_internal) & (m.f_patch == name))[0]
             if len(idx) == 0:
                 continue

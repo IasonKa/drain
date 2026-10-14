@@ -1,0 +1,1194 @@
+[
+ {
+  "name": "current",
+  "standoff_h": 0.0,
+  "worst": {
+   "clearance_um": -563.7960043686992,
+   "Q_1h_mL_min": 4.252622860205138e-05,
+   "ring_contact_kPa": NaN,
+   "mass_err": 0.00020683807178610033
+  },
+  "pool": {
+   "clearance_um": -350.65104347616074,
+   "Q_1h_mL_min": 0.015295636196598673,
+   "ring_contact_kPa": NaN,
+   "mass_err": 5.412634443063905e-13
+  },
+  "severe": {
+   "clearance_um": -279.034954920674,
+   "Q_1h_mL_min": 3.3746605236874234e-05,
+   "ring_contact_kPa": NaN,
+   "mass_err": 1.118248409600141e-10
+  }
+ },
+ {
+  "name": "h0.20_w0.20_s0.20",
+  "standoff_h": 0.2,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -415.26780671784434,
+   "Q_1h_mL_min": 4.278370669399909e-05,
+   "ring_contact_kPa": 13.636018369870012,
+   "mass_err": 2.8606344026611117e-05
+  },
+  "pool": {
+   "clearance_um": 89.02430951131315,
+   "Q_1h_mL_min": 102.95943399245988,
+   "ring_contact_kPa": 2.055073969736398,
+   "mass_err": 1.8565849013977628e-13
+  },
+  "severe": {
+   "clearance_um": -130.1860281596071,
+   "Q_1h_mL_min": 3.401969827929693e-05,
+   "ring_contact_kPa": 16.93924180706952,
+   "mass_err": 1.1101342798187451e-06
+  }
+ },
+ {
+  "name": "h0.20_w0.20_s0.35",
+  "standoff_h": 0.2,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -415.1813423514079,
+   "Q_1h_mL_min": 4.278310502370301e-05,
+   "ring_contact_kPa": 16.668221199463883,
+   "mass_err": 6.493723579321874e-05
+  },
+  "pool": {
+   "clearance_um": 155.83221253297052,
+   "Q_1h_mL_min": 114.91742824500999,
+   "ring_contact_kPa": 0.7660547081995294,
+   "mass_err": 2.2654265451685523e-13
+  },
+  "severe": {
+   "clearance_um": -130.30561936163787,
+   "Q_1h_mL_min": 3.4020004970177044e-05,
+   "ring_contact_kPa": 20.713241098473006,
+   "mass_err": 1.347107185792486e-05
+  }
+ },
+ {
+  "name": "h0.20_w0.20_s0.50",
+  "standoff_h": 0.2,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -415.3235742619422,
+   "Q_1h_mL_min": 4.2782200818801595e-05,
+   "ring_contact_kPa": 21.433719673549152,
+   "mass_err": 0.00015811534334153274
+  },
+  "pool": {
+   "clearance_um": 171.64314863627212,
+   "Q_1h_mL_min": 117.51259913977269,
+   "ring_contact_kPa": 0.4794551063220126,
+   "mass_err": 1.1761588089913653e-13
+  },
+  "severe": {
+   "clearance_um": -130.49116167807185,
+   "Q_1h_mL_min": 3.4020498923355005e-05,
+   "ring_contact_kPa": 26.65109010466097,
+   "mass_err": 4.417475233400306e-05
+  }
+ },
+ {
+  "name": "h0.20_w0.30_s0.20",
+  "standoff_h": 0.2,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -407.1881992858446,
+   "Q_1h_mL_min": 4.278325435125395e-05,
+   "ring_contact_kPa": 11.092727677267625,
+   "mass_err": 1.493218707734254e-05
+  },
+  "pool": {
+   "clearance_um": 50.85523425312066,
+   "Q_1h_mL_min": 95.48893827502847,
+   "ring_contact_kPa": 2.1475160322539586,
+   "mass_err": 1.6972618559883204e-13
+  },
+  "severe": {
+   "clearance_um": -119.8532144944352,
+   "Q_1h_mL_min": 3.401258602385916e-05,
+   "ring_contact_kPa": 13.320979443613316,
+   "mass_err": 5.727847366954965e-07
+  }
+ },
+ {
+  "name": "h0.20_w0.30_s0.35",
+  "standoff_h": 0.2,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -407.37832888026514,
+   "Q_1h_mL_min": 4.278379341683771e-05,
+   "ring_contact_kPa": 13.304708653580725,
+   "mass_err": 6.878429937439234e-05
+  },
+  "pool": {
+   "clearance_um": 140.73569306789966,
+   "Q_1h_mL_min": 112.41175063688537,
+   "ring_contact_kPa": 0.825036171523418,
+   "mass_err": 2.6969023535731047e-13
+  },
+  "severe": {
+   "clearance_um": -119.97629137696397,
+   "Q_1h_mL_min": 3.4013057824971924e-05,
+   "ring_contact_kPa": 15.98015495804251,
+   "mass_err": 1.0750533700604497e-06
+  }
+ },
+ {
+  "name": "h0.20_w0.30_s0.50",
+  "standoff_h": 0.2,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -407.77711185632813,
+   "Q_1h_mL_min": 4.278473465428062e-05,
+   "ring_contact_kPa": 16.618158422598615,
+   "mass_err": 0.00015192565313250413
+  },
+  "pool": {
+   "clearance_um": 163.18347720799213,
+   "Q_1h_mL_min": 116.20419657210016,
+   "ring_contact_kPa": 0.5043048600039959,
+   "mass_err": 2.2823593909210354e-13
+  },
+  "severe": {
+   "clearance_um": -120.11469226886801,
+   "Q_1h_mL_min": 3.401364838714194e-05,
+   "ring_contact_kPa": 19.96569175802061,
+   "mass_err": 2.422552149199288e-05
+  }
+ },
+ {
+  "name": "h0.20_w0.45_s0.20",
+  "standoff_h": 0.2,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -400.6213893872399,
+   "Q_1h_mL_min": 4.276913869649531e-05,
+   "ring_contact_kPa": 9.224217970268295,
+   "mass_err": 7.873636000616914e-07
+  },
+  "pool": {
+   "clearance_um": 4.006535213545714,
+   "Q_1h_mL_min": 85.41924304372321,
+   "ring_contact_kPa": 2.226057563008487,
+   "mass_err": 1.6547237648718146e-13
+  },
+  "severe": {
+   "clearance_um": -111.58987057837611,
+   "Q_1h_mL_min": 3.400263082238933e-05,
+   "ring_contact_kPa": 10.719066517319906,
+   "mass_err": 7.029432711841856e-06
+  }
+ },
+ {
+  "name": "h0.20_w0.45_s0.35",
+  "standoff_h": 0.2,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -401.0266295944035,
+   "Q_1h_mL_min": 4.27696335400686e-05,
+   "ring_contact_kPa": 10.815132297295264,
+   "mass_err": 2.8953559925040824e-05
+  },
+  "pool": {
+   "clearance_um": 118.70219971789462,
+   "Q_1h_mL_min": 108.62091645625542,
+   "ring_contact_kPa": 0.9114785821959769,
+   "mass_err": 1.7119454624129652e-13
+  },
+  "severe": {
+   "clearance_um": -111.41675717956967,
+   "Q_1h_mL_min": 3.400266256425918e-05,
+   "ring_contact_kPa": 12.569337745342576,
+   "mass_err": 5.483780663010587e-06
+  }
+ },
+ {
+  "name": "h0.20_w0.45_s0.50",
+  "standoff_h": 0.2,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -401.2661040246076,
+   "Q_1h_mL_min": 4.277039046387757e-05,
+   "ring_contact_kPa": 13.068686225528507,
+   "mass_err": 0.00010029168348223072
+  },
+  "pool": {
+   "clearance_um": 150.252405689425,
+   "Q_1h_mL_min": 114.13706437570251,
+   "ring_contact_kPa": 0.5512892900399602,
+   "mass_err": 1.9191066764881156e-13
+  },
+  "severe": {
+   "clearance_um": -111.96380009219936,
+   "Q_1h_mL_min": 3.400361951982145e-05,
+   "ring_contact_kPa": 15.191635142294952,
+   "mass_err": 6.3840316502213674e-06
+  }
+ },
+ {
+  "name": "h0.30_w0.20_s0.20",
+  "standoff_h": 0.3,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -326.58104476251424,
+   "Q_1h_mL_min": 4.307980374536811e-05,
+   "ring_contact_kPa": 15.271996016984517,
+   "mass_err": 5.328022177521589e-05
+  },
+  "pool": {
+   "clearance_um": 269.75409818472303,
+   "Q_1h_mL_min": 116.86142761231959,
+   "ring_contact_kPa": 0.23658292783496632,
+   "mass_err": 1.9662584610511118e-13
+  },
+  "severe": {
+   "clearance_um": -37.31546811831438,
+   "Q_1h_mL_min": 3.433861851049513e-05,
+   "ring_contact_kPa": 18.935173557906143,
+   "mass_err": 1.7855791359516255e-05
+  }
+ },
+ {
+  "name": "h0.30_w0.20_s0.35",
+  "standoff_h": 0.3,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -325.4386499217419,
+   "Q_1h_mL_min": 4.3081161812664826e-05,
+   "ring_contact_kPa": 18.67388411770857,
+   "mass_err": 8.259654566103949e-05
+  },
+  "pool": {
+   "clearance_um": 315.20237572224914,
+   "Q_1h_mL_min": 122.67386529843509,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.935877508873936e-13
+  },
+  "severe": {
+   "clearance_um": -37.46043936644039,
+   "Q_1h_mL_min": 3.43389885213768e-05,
+   "ring_contact_kPa": 23.154907125973416,
+   "mass_err": 3.689101841791987e-05
+  }
+ },
+ {
+  "name": "h0.30_w0.20_s0.50",
+  "standoff_h": 0.3,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -323.16378176043384,
+   "Q_1h_mL_min": 4.308175907733112e-05,
+   "ring_contact_kPa": 24.02493646062446,
+   "mass_err": 0.00016558445864260697
+  },
+  "pool": {
+   "clearance_um": 326.58159604710124,
+   "Q_1h_mL_min": 123.96911134146286,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.3358577495577214e-13
+  },
+  "severe": {
+   "clearance_um": -37.54950007941643,
+   "Q_1h_mL_min": 3.433986989537399e-05,
+   "ring_contact_kPa": 29.794651704829068,
+   "mass_err": 6.880011859924453e-05
+  }
+ },
+ {
+  "name": "h0.30_w0.30_s0.20",
+  "standoff_h": 0.3,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -313.6231090806975,
+   "Q_1h_mL_min": 4.305646656649082e-05,
+   "ring_contact_kPa": 12.163726354068762,
+   "mass_err": 3.008030996563959e-05
+  },
+  "pool": {
+   "clearance_um": 245.92613415426268,
+   "Q_1h_mL_min": 113.11253556904738,
+   "ring_contact_kPa": 0.5414233154598351,
+   "mass_err": 2.635943871299285e-13
+  },
+  "severe": {
+   "clearance_um": -22.72486645536409,
+   "Q_1h_mL_min": 3.432844730037894e-05,
+   "ring_contact_kPa": 14.688970121712178,
+   "mass_err": 4.74609644041993e-06
+  }
+ },
+ {
+  "name": "h0.30_w0.30_s0.35",
+  "standoff_h": 0.3,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -313.6691216593491,
+   "Q_1h_mL_min": 4.305758717100957e-05,
+   "ring_contact_kPa": 14.59135294521053,
+   "mass_err": 8.008349835375067e-05
+  },
+  "pool": {
+   "clearance_um": 303.45480508243304,
+   "Q_1h_mL_min": 121.47403474932611,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.597795344953828e-13
+  },
+  "severe": {
+   "clearance_um": -23.64321193843044,
+   "Q_1h_mL_min": 3.43292270614928e-05,
+   "ring_contact_kPa": 17.62164249148501,
+   "mass_err": 1.574498512821119e-05
+  }
+ },
+ {
+  "name": "h0.30_w0.30_s0.50",
+  "standoff_h": 0.3,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -313.7278563793152,
+   "Q_1h_mL_min": 4.305879617608438e-05,
+   "ring_contact_kPa": 18.229441246180095,
+   "mass_err": 0.0001779486956654797
+  },
+  "pool": {
+   "clearance_um": 321.9012267848042,
+   "Q_1h_mL_min": 123.50250099438405,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 1.8283045676617754e-13
+  },
+  "severe": {
+   "clearance_um": -23.29930213741993,
+   "Q_1h_mL_min": 3.4329913038886436e-05,
+   "ring_contact_kPa": 22.017272751182063,
+   "mass_err": 4.96860958799745e-05
+  }
+ },
+ {
+  "name": "h0.30_w0.45_s0.20",
+  "standoff_h": 0.3,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -301.9164317571493,
+   "Q_1h_mL_min": 4.301329425854179e-05,
+   "ring_contact_kPa": 9.93245452714097,
+   "mass_err": 2.0313928808979195e-05
+  },
+  "pool": {
+   "clearance_um": 214.19098995048142,
+   "Q_1h_mL_min": 107.72856711507318,
+   "ring_contact_kPa": 0.8241306849685803,
+   "mass_err": 2.57767002492887e-13
+  },
+  "severe": {
+   "clearance_um": -8.867415233422493,
+   "Q_1h_mL_min": 3.429744331466124e-05,
+   "ring_contact_kPa": 11.656692063156479,
+   "mass_err": 2.0455445571962647e-05
+  }
+ },
+ {
+  "name": "h0.30_w0.45_s0.35",
+  "standoff_h": 0.3,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -300.1960482469698,
+   "Q_1h_mL_min": 4.301400649621196e-05,
+   "ring_contact_kPa": 11.646660758769684,
+   "mass_err": 6.829089654130307e-05
+  },
+  "pool": {
+   "clearance_um": 284.9486486349782,
+   "Q_1h_mL_min": 119.53501702123914,
+   "ring_contact_kPa": 0.04255044162984951,
+   "mass_err": 2.3553654641109844e-13
+  },
+  "severe": {
+   "clearance_um": -9.006911041552657,
+   "Q_1h_mL_min": 3.4298512361088455e-05,
+   "ring_contact_kPa": 13.66916282510118,
+   "mass_err": 1.6877112571078637e-05
+  }
+ },
+ {
+  "name": "h0.30_w0.45_s0.50",
+  "standoff_h": 0.3,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -301.58144570806667,
+   "Q_1h_mL_min": 4.301569455556931e-05,
+   "ring_contact_kPa": 14.075605033367953,
+   "mass_err": 0.00017658145059222397
+  },
+  "pool": {
+   "clearance_um": 313.64149977335376,
+   "Q_1h_mL_min": 122.7248035156816,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.5679491378049146e-13
+  },
+  "severe": {
+   "clearance_um": -8.92356509576503,
+   "Q_1h_mL_min": 3.429912691301535e-05,
+   "ring_contact_kPa": 16.521345307272735,
+   "mass_err": 3.299417464966941e-05
+  }
+ },
+ {
+  "name": "h0.40_w0.20_s0.20",
+  "standoff_h": 0.4,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -223.26161675707718,
+   "Q_1h_mL_min": 4.33814395868996e-05,
+   "ring_contact_kPa": 16.284795440090818,
+   "mass_err": 5.0667136596027784e-05
+  },
+  "pool": {
+   "clearance_um": 399.52339083614504,
+   "Q_1h_mL_min": 120.72224989298286,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 4.998698685720602e-13
+  },
+  "severe": {
+   "clearance_um": 62.4267190373437,
+   "Q_1h_mL_min": 3.535850540170013e-05,
+   "ring_contact_kPa": 20.22207507768144,
+   "mass_err": 3.497169821044739e-05
+  }
+ },
+ {
+  "name": "h0.40_w0.20_s0.35",
+  "standoff_h": 0.4,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -225.04728970333804,
+   "Q_1h_mL_min": 4.3381921265546336e-05,
+   "ring_contact_kPa": 19.9126416354492,
+   "mass_err": 8.018099005595543e-05
+  },
+  "pool": {
+   "clearance_um": 432.41091756366217,
+   "Q_1h_mL_min": 124.4780769713729,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.1033881925525273e-13
+  },
+  "severe": {
+   "clearance_um": 62.49124496572528,
+   "Q_1h_mL_min": 3.5357498725490525e-05,
+   "ring_contact_kPa": 24.728507827086627,
+   "mass_err": 3.9591847119857105e-05
+  }
+ },
+ {
+  "name": "h0.40_w0.20_s0.50",
+  "standoff_h": 0.4,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -226.95416658062146,
+   "Q_1h_mL_min": 4.338327658733846e-05,
+   "ring_contact_kPa": 25.620584939172673,
+   "mass_err": 0.00013917104339682273
+  },
+  "pool": {
+   "clearance_um": 438.2643117267217,
+   "Q_1h_mL_min": 125.13372629163872,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.1476364972525524e-13
+  },
+  "severe": {
+   "clearance_um": 61.89554777505568,
+   "Q_1h_mL_min": 3.536222760312669e-05,
+   "ring_contact_kPa": 31.822157236135677,
+   "mass_err": 7.772848810854308e-05
+  }
+ },
+ {
+  "name": "h0.40_w0.30_s0.20",
+  "standoff_h": 0.4,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -209.5833002174669,
+   "Q_1h_mL_min": 4.335478787612586e-05,
+   "ring_contact_kPa": 12.853708679532403,
+   "mass_err": 5.8177797326376515e-05
+  },
+  "pool": {
+   "clearance_um": 376.99355609401596,
+   "Q_1h_mL_min": 118.09102414970171,
+   "ring_contact_kPa": 0.10568396566178197,
+   "mass_err": 3.7190626113104965e-13
+  },
+  "severe": {
+   "clearance_um": 76.80796528637246,
+   "Q_1h_mL_min": 3.527230781296075e-05,
+   "ring_contact_kPa": 15.559132706633923,
+   "mass_err": 3.277012865162549e-05
+  }
+ },
+ {
+  "name": "h0.40_w0.30_s0.35",
+  "standoff_h": 0.4,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -209.3205371307662,
+   "Q_1h_mL_min": 4.335509115259859e-05,
+   "ring_contact_kPa": 15.41900490552193,
+   "mass_err": 7.807975016784025e-05
+  },
+  "pool": {
+   "clearance_um": 426.2165528528889,
+   "Q_1h_mL_min": 123.86545969203188,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.0075262037282663e-13
+  },
+  "severe": {
+   "clearance_um": 79.07903453725557,
+   "Q_1h_mL_min": 3.527170657403424e-05,
+   "ring_contact_kPa": 18.665585994745005,
+   "mass_err": 3.849076907326405e-05
+  }
+ },
+ {
+  "name": "h0.40_w0.30_s0.50",
+  "standoff_h": 0.4,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -208.8133963031051,
+   "Q_1h_mL_min": 4.335760893845275e-05,
+   "ring_contact_kPa": 19.26361519544085,
+   "mass_err": 0.00015767244701246695
+  },
+  "pool": {
+   "clearance_um": 435.5616674887156,
+   "Q_1h_mL_min": 124.8702691163233,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.276185860742715e-13
+  },
+  "severe": {
+   "clearance_um": 80.08715844235992,
+   "Q_1h_mL_min": 3.5272830176885864e-05,
+   "ring_contact_kPa": 23.32226917863544,
+   "mass_err": 6.0169111112321166e-05
+  }
+ },
+ {
+  "name": "h0.40_w0.45_s0.20",
+  "standoff_h": 0.4,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -196.8371041539539,
+   "Q_1h_mL_min": 4.329293876908243e-05,
+   "ring_contact_kPa": 10.4067721901027,
+   "mass_err": 3.851973754752492e-05
+  },
+  "pool": {
+   "clearance_um": 352.67767416147257,
+   "Q_1h_mL_min": 114.41539164591505,
+   "ring_contact_kPa": 0.3538641167469492,
+   "mass_err": 4.007928713948565e-13
+  },
+  "severe": {
+   "clearance_um": 95.38361341166485,
+   "Q_1h_mL_min": 3.51273450154921e-05,
+   "ring_contact_kPa": 12.250924792362438,
+   "mass_err": 8.235872232342453e-05
+  }
+ },
+ {
+  "name": "h0.40_w0.45_s0.35",
+  "standoff_h": 0.4,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -196.83331341527006,
+   "Q_1h_mL_min": 4.329592448053438e-05,
+   "ring_contact_kPa": 12.203122221819765,
+   "mass_err": 7.534157711542452e-05
+  },
+  "pool": {
+   "clearance_um": 415.6945755350935,
+   "Q_1h_mL_min": 122.88961902427107,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.4431273799939743e-13
+  },
+  "severe": {
+   "clearance_um": 85.25434033423535,
+   "Q_1h_mL_min": 3.512882418880118e-05,
+   "ring_contact_kPa": 14.364514697135613,
+   "mass_err": 6.072939817434217e-05
+  }
+ },
+ {
+  "name": "h0.40_w0.45_s0.50",
+  "standoff_h": 0.4,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -195.5660803803791,
+   "Q_1h_mL_min": 4.329467324636994e-05,
+   "ring_contact_kPa": 14.747962737258028,
+   "mass_err": 0.00015602114904248905
+  },
+  "pool": {
+   "clearance_um": 430.9904919166294,
+   "Q_1h_mL_min": 124.45512801554982,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 1.735549689106072e-13
+  },
+  "severe": {
+   "clearance_um": 94.53517486310714,
+   "Q_1h_mL_min": 3.513148443635012e-05,
+   "ring_contact_kPa": 17.36292405085234,
+   "mass_err": 6.251744405556116e-05
+  }
+ },
+ {
+  "name": "h0.50_w0.20_s0.20",
+  "standoff_h": 0.5,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -128.38573287838207,
+   "Q_1h_mL_min": 4.395653509146046e-05,
+   "ring_contact_kPa": 17.04816943683029,
+   "mass_err": 4.805865922240154e-05
+  },
+  "pool": {
+   "clearance_um": 514.0726243625655,
+   "Q_1h_mL_min": 122.34435185322978,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 6.257948163200105e-13
+  },
+  "severe": {
+   "clearance_um": 178.30176430616996,
+   "Q_1h_mL_min": 4.326387612856554e-05,
+   "ring_contact_kPa": 20.374590189245012,
+   "mass_err": 6.497253739622378e-05
+  }
+ },
+ {
+  "name": "h0.50_w0.20_s0.35",
+  "standoff_h": 0.5,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -124.33295117028686,
+   "Q_1h_mL_min": 4.3955074281385806e-05,
+   "ring_contact_kPa": 20.842805219847133,
+   "mass_err": 7.89737027912503e-05
+  },
+  "pool": {
+   "clearance_um": 538.8763732589334,
+   "Q_1h_mL_min": 125.14439342016209,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 3.829830963220021e-13
+  },
+  "severe": {
+   "clearance_um": 177.36434884462398,
+   "Q_1h_mL_min": 4.326900201340663e-05,
+   "ring_contact_kPa": 24.91439274802786,
+   "mass_err": 5.1512446898775064e-05
+  }
+ },
+ {
+  "name": "h0.50_w0.20_s0.50",
+  "standoff_h": 0.5,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -115.89847116170537,
+   "Q_1h_mL_min": 4.3951877397406357e-05,
+   "ring_contact_kPa": 26.820188164459044,
+   "mass_err": 0.00010163017791828143
+  },
+  "pool": {
+   "clearance_um": 542.9174914192782,
+   "Q_1h_mL_min": 125.59428649137035,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 4.233483844695385e-13
+  },
+  "severe": {
+   "clearance_um": 175.81894518924557,
+   "Q_1h_mL_min": 4.3269150748425084e-05,
+   "ring_contact_kPa": 32.06086553502546,
+   "mass_err": 5.801348813568674e-05
+  }
+ },
+ {
+  "name": "h0.50_w0.30_s0.20",
+  "standoff_h": 0.5,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -103.93289348442968,
+   "Q_1h_mL_min": 4.390866823877654e-05,
+   "ring_contact_kPa": 13.36770887774552,
+   "mass_err": 4.700191282116113e-05
+  },
+  "pool": {
+   "clearance_um": 495.092495372004,
+   "Q_1h_mL_min": 120.41973793694198,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 7.398125370720247e-13
+  },
+  "severe": {
+   "clearance_um": 195.09002880069286,
+   "Q_1h_mL_min": 4.242313097927135e-05,
+   "ring_contact_kPa": 15.625838063449399,
+   "mass_err": 2.461584641030035e-05
+  }
+ },
+ {
+  "name": "h0.50_w0.30_s0.35",
+  "standoff_h": 0.5,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -103.01092271545897,
+   "Q_1h_mL_min": 4.3910356000829135e-05,
+   "ring_contact_kPa": 16.0360397458872,
+   "mass_err": 8.475972362652654e-05
+  },
+  "pool": {
+   "clearance_um": 534.6755885563018,
+   "Q_1h_mL_min": 124.73367500462032,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.2919918642056935e-13
+  },
+  "severe": {
+   "clearance_um": 189.49767969182918,
+   "Q_1h_mL_min": 4.2434520654703325e-05,
+   "ring_contact_kPa": 18.74884025802327,
+   "mass_err": 3.864613000785606e-05
+  }
+ },
+ {
+  "name": "h0.50_w0.30_s0.50",
+  "standoff_h": 0.5,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -99.15707088896075,
+   "Q_1h_mL_min": 4.391114334704271e-05,
+   "ring_contact_kPa": 20.034906856117498,
+   "mass_err": 0.00013574353463904882
+  },
+  "pool": {
+   "clearance_um": 541.0544663899667,
+   "Q_1h_mL_min": 125.41353035858832,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 6.029080793045308e-13
+  },
+  "severe": {
+   "clearance_um": 193.1304031878393,
+   "Q_1h_mL_min": 4.24364480238579e-05,
+   "ring_contact_kPa": 23.42545531572669,
+   "mass_err": 5.5331841780345586e-05
+  }
+ },
+ {
+  "name": "h0.50_w0.45_s0.20",
+  "standoff_h": 0.5,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -92.98882717971524,
+   "Q_1h_mL_min": 4.379645363828469e-05,
+   "ring_contact_kPa": 10.75885722638558,
+   "mass_err": 5.629733066188527e-05
+  },
+  "pool": {
+   "clearance_um": 472.27039753181765,
+   "Q_1h_mL_min": 117.58974660661957,
+   "ring_contact_kPa": 0.1457987140747083,
+   "mass_err": 9.56107060833278e-13
+  },
+  "severe": {
+   "clearance_um": 204.99688830839435,
+   "Q_1h_mL_min": 4.169976473618151e-05,
+   "ring_contact_kPa": 12.267589767499514,
+   "mass_err": 0.00013497543792591514
+  }
+ },
+ {
+  "name": "h0.50_w0.45_s0.35",
+  "standoff_h": 0.5,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -85.14637065851272,
+   "Q_1h_mL_min": 4.379689163250825e-05,
+   "ring_contact_kPa": 12.616383189480036,
+   "mass_err": 6.917884557099794e-05
+  },
+  "pool": {
+   "clearance_um": 527.7007696836706,
+   "Q_1h_mL_min": 124.09931795774105,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.9581176419697555e-13
+  },
+  "severe": {
+   "clearance_um": 208.86982097838634,
+   "Q_1h_mL_min": 4.1689588680974817e-05,
+   "ring_contact_kPa": 14.387555528824072,
+   "mass_err": 0.00015825341315955506
+  }
+ },
+ {
+  "name": "h0.50_w0.45_s0.50",
+  "standoff_h": 0.5,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -83.11229011725163,
+   "Q_1h_mL_min": 4.379454823305267e-05,
+   "ring_contact_kPa": 15.248059445937708,
+   "mass_err": 0.0001260810196700236
+  },
+  "pool": {
+   "clearance_um": 537.9296846870383,
+   "Q_1h_mL_min": 125.13239345997901,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 4.852446535235233e-13
+  },
+  "severe": {
+   "clearance_um": 200.85899687718089,
+   "Q_1h_mL_min": 4.1700873948459165e-05,
+   "ring_contact_kPa": 17.392312388941804,
+   "mass_err": 9.168287155066558e-05
+  }
+ },
+ {
+  "name": "h0.60_w0.20_s0.20",
+  "standoff_h": 0.6,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -10.18775939672123,
+   "Q_1h_mL_min": 4.512069989082221e-05,
+   "ring_contact_kPa": 17.508731891818044,
+   "mass_err": 6.311465207788044e-05
+  },
+  "pool": {
+   "clearance_um": 621.9861211085616,
+   "Q_1h_mL_min": 123.21818517461651,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 4.217789917903388e-13
+  },
+  "severe": {
+   "clearance_um": 288.2596845352255,
+   "Q_1h_mL_min": 4.9048293476349385e-05,
+   "ring_contact_kPa": 20.02309439405566,
+   "mass_err": 7.378631621399415e-05
+  }
+ },
+ {
+  "name": "h0.60_w0.20_s0.35",
+  "standoff_h": 0.6,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -23.27204186023235,
+   "Q_1h_mL_min": 4.511806708351637e-05,
+   "ring_contact_kPa": 21.40758403562131,
+   "mass_err": 8.323872957949207e-05
+  },
+  "pool": {
+   "clearance_um": 642.0473066176254,
+   "Q_1h_mL_min": 125.4700484525987,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.83486931529685e-13
+  },
+  "severe": {
+   "clearance_um": 291.18256441071355,
+   "Q_1h_mL_min": 4.9059744412093287e-05,
+   "ring_contact_kPa": 24.487676872504554,
+   "mass_err": 0.00010543187409631287
+  }
+ },
+ {
+  "name": "h0.60_w0.20_s0.50",
+  "standoff_h": 0.6,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.75,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": -24.122233457632312,
+   "Q_1h_mL_min": 4.514421140142095e-05,
+   "ring_contact_kPa": 27.55262682672676,
+   "mass_err": 0.00011190564593222616
+  },
+  "pool": {
+   "clearance_um": 645.3705957642659,
+   "Q_1h_mL_min": 125.83921854088919,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 1.9874671223905012e-13
+  },
+  "severe": {
+   "clearance_um": 288.6926148984623,
+   "Q_1h_mL_min": 4.904929373212794e-05,
+   "ring_contact_kPa": 31.507786369495445,
+   "mass_err": 9.369050878791331e-05
+  }
+ },
+ {
+  "name": "h0.60_w0.30_s0.20",
+  "standoff_h": 0.6,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": 2.1601715140862066,
+   "Q_1h_mL_min": 4.5064613113766484e-05,
+   "ring_contact_kPa": 13.671428804523574,
+   "mass_err": 7.80956890056119e-05
+  },
+  "pool": {
+   "clearance_um": 607.0432339461676,
+   "Q_1h_mL_min": 121.72242597274524,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 6.156717283877444e-13
+  },
+  "severe": {
+   "clearance_um": 266.35115430236334,
+   "Q_1h_mL_min": 4.6741723839520513e-05,
+   "ring_contact_kPa": 15.441137578115285,
+   "mass_err": 0.0001600918105181485
+  }
+ },
+ {
+  "name": "h0.60_w0.30_s0.35",
+  "standoff_h": 0.6,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": 4.842580984519396,
+   "Q_1h_mL_min": 4.506795667564786e-05,
+   "ring_contact_kPa": 16.4011296120514,
+   "mass_err": 0.00011663635151979918
+  },
+  "pool": {
+   "clearance_um": 638.8177333517706,
+   "Q_1h_mL_min": 125.15606685534385,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.8855433068774947e-13
+  },
+  "severe": {
+   "clearance_um": 300.7936496732165,
+   "Q_1h_mL_min": 4.674441818438403e-05,
+   "ring_contact_kPa": 18.52709464984583,
+   "mass_err": 6.978296051717607e-05
+  }
+ },
+ {
+  "name": "h0.60_w0.30_s0.50",
+  "standoff_h": 0.6,
+  "standoff_rin": 0.55,
+  "standoff_rout": 0.8500000000000001,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": 2.640228611970996,
+   "Q_1h_mL_min": 4.506829564235301e-05,
+   "ring_contact_kPa": 20.49307948965141,
+   "mass_err": 7.332979141270576e-05
+  },
+  "pool": {
+   "clearance_um": 644.0506329013787,
+   "Q_1h_mL_min": 125.71196029437773,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 3.8047879816105817e-13
+  },
+  "severe": {
+   "clearance_um": 302.6152194250262,
+   "Q_1h_mL_min": 4.674359934181193e-05,
+   "ring_contact_kPa": 23.146744372319358,
+   "mass_err": 9.768046616179642e-05
+  }
+ },
+ {
+  "name": "h0.60_w0.45_s0.20",
+  "standoff_h": 0.6,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.2,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": 14.454908989396609,
+   "Q_1h_mL_min": 4.4908103445941386e-05,
+   "ring_contact_kPa": 10.969480425430739,
+   "mass_err": 0.00012687510348654586
+  },
+  "pool": {
+   "clearance_um": 584.5378700344228,
+   "Q_1h_mL_min": 119.43429462644013,
+   "ring_contact_kPa": 0.04093210085046612,
+   "mass_err": 1.17160231246224e-12
+  },
+  "severe": {
+   "clearance_um": 235.54811800769482,
+   "Q_1h_mL_min": 4.321130210112791e-05,
+   "ring_contact_kPa": 12.226364131916133,
+   "mass_err": 0.00020694167083651132
+  }
+ },
+ {
+  "name": "h0.60_w0.45_s0.35",
+  "standoff_h": 0.6,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.35,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": 14.05138670766204,
+   "Q_1h_mL_min": 4.49100464518083e-05,
+   "ring_contact_kPa": 12.862270542306018,
+   "mass_err": 0.00014425231328229216
+  },
+  "pool": {
+   "clearance_um": 633.5104214362219,
+   "Q_1h_mL_min": 124.6765582061876,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.417813448721684e-13
+  },
+  "severe": {
+   "clearance_um": 228.2809390243945,
+   "Q_1h_mL_min": 4.321264862617263e-05,
+   "ring_contact_kPa": 14.335294801804684,
+   "mass_err": 0.0004534383578696796
+  }
+ },
+ {
+  "name": "h0.60_w0.45_s0.50",
+  "standoff_h": 0.6,
+  "standoff_rin": 0.55,
+  "standoff_rout": 1.0,
+  "slot_w": 0.5,
+  "n_slots": 4,
+  "worst": {
+   "clearance_um": 26.37714765223709,
+   "Q_1h_mL_min": 4.496233290467128e-05,
+   "ring_contact_kPa": 15.54965550902767,
+   "mass_err": 9.925993981456054e-05
+  },
+  "pool": {
+   "clearance_um": 641.863800163876,
+   "Q_1h_mL_min": 125.5160937437843,
+   "ring_contact_kPa": 0.0,
+   "mass_err": 2.2650821459192264e-13
+  },
+  "severe": {
+   "clearance_um": 286.4680547772086,
+   "Q_1h_mL_min": 4.32055080074119e-05,
+   "ring_contact_kPa": 17.324602219532633,
+   "mass_err": 0.0003651815387540536
+  }
+ }
+]

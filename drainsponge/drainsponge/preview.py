@@ -57,7 +57,12 @@ class Preview:
         half = W.get("half", 1.6)
         self.R = R or 2 * half / np.sqrt(np.pi)                  # same plan area as the square window
         self.H = W.get("tissue_h", 2.0)
-        self.g0 = W.get("gap", 0.05)
+        # standoff ring (new offset design): ring top at hs, tissue starts gap above it
+        self.hs = W.get("standoff_h", 0.0)
+        self.rin, self.rout = W.get("standoff_rin", 0.55), W.get("standoff_rout", 0.85)
+        self.slot_w, self.n_slots = W.get("slot_w", 0.35), W.get("n_slots", 4)
+        self.gap = W.get("gap", 0.05)
+        self.g0 = self.gap + self.hs                              # initial tissue height above the skin
         self.hmin = W.get("h_min", 0.003)
         T = cfg["tissue"]
         self.E = T["E_Pa"] * 1e-6
@@ -68,9 +73,20 @@ class Preview:
         self.ramp = cfg["suction"].get("ramp_s", 0.01)
         a = self.a
         self.R_hole = 8 * self.mu * self.t_wall / (np.pi * a ** 4) + 3 * self.mu / a ** 3
+        # inertial (orifice) loss of the hole: dp = rho Q^2 / (2 Cd^2 A^2), Cd = 0.61
+        self.rho = cfg["fluid"]["rho_kg_m3"] * 1e-12                 # N s^2 / mm^4
+        self.K_hole = self.rho / (2 * 0.61 ** 2 * (np.pi * a * a) ** 2)
+        # free liquid at the window edge: "open" = pool at body pressure, "closed" = none
+        self.film_edge_open = cfg.get("boundary", {}).get("film_edge", "open") == "open"
         # ---- element edges
         rh = a * (1 - graded(nr_hole, 0.03)[::-1])               # fine towards the rim
-        ro = a + (self.R - a) * graded(nr_out, 0.004 / (self.R - a) * 2)
+        if self.hs > 0:                                          # nodes exactly at the ring radii
+            r_a = np.linspace(a, self.rin, 3)
+            r_r = np.linspace(self.rin, self.rout, 9)
+            r_o = self.rout + (self.R - self.rout) * graded(nr_out - 10, 0.004 / (self.R - self.rout) * 2)
+            ro = np.concatenate([r_a, r_r[1:], r_o[1:]])
+        else:
+            ro = a + (self.R - a) * graded(nr_out, 0.004 / (self.R - a) * 2)
         self.re = np.concatenate([rh, ro[1:]])
         self.ze = self.H * graded(nz, 0.012 / self.H * 2)
         self._mesh()
@@ -111,6 +127,14 @@ class Preview:
             d = np.clip(self.a + f - r2, 0, f)
             self.zb = -(f - np.sqrt(np.clip(f * f - d * d, 0, None)))
             self.zb[r2 < self.a] = 0.0
+        # standoff: ring top at hs; phi = share of the circumference that is slot (open)
+        self.ring2 = (r2 >= self.rin - 1e-12) & (r2 <= self.rout + 1e-12) if self.hs > 0 else np.zeros(len(r2), bool)
+        self.zb = np.where(self.ring2, self.hs, self.zb)
+        rm = 0.5 * (re[1:] + re[:-1])
+        self.ring_e = (rm > self.rin) & (rm < self.rout) if self.hs > 0 else np.zeros(nr, bool)
+        self.phi_e = np.clip(self.n_slots * self.slot_w / (2 * np.pi * rm), 0, 1) * self.ring_e
+        self.support2 = np.ones(len(r2))                         # share of the area that can carry contact
+        self.support2[self.ring2] = 1 - np.clip(self.n_slots * self.slot_w / (2 * np.pi * r2[self.ring2]), 0, 1)
 
     # -------------------------------------------------------------- static matrices
     def _assemble_static(self):
@@ -178,6 +202,20 @@ class Preview:
                         rS.append(self.nu_dof + a_); cS.append(2 * b_ + 1); vS.append(w * la * lb)
         self.S = sp.csr_matrix((vS, (rS, cS)), shape=(n, n))       # int q u_z r dr (bottom)
 
+    def film_conductance(self, h_mid):
+        """Radial film conductance per unit circumference, per element (mm^5/(N s)).
+        Ring elements: (1-phi) of the circumference is ring top (film h above it), phi is slot:
+        a rectangular duct of width slot_w and height hs + h (exact series, 1st term)."""
+        c = h_mid ** 3 / (12 * self.mu)
+        if self.hs > 0 and np.any(self.ring_e):
+            H = self.hs + h_mid
+            b, d = np.minimum(H, self.slot_w), np.maximum(H, self.slot_w)
+            q_duct = d * b ** 3 / (12 * self.mu) * (1 - 0.630 * b / d)       # per unit pressure gradient
+            c_slot = q_duct / self.slot_w                                  # per unit slot width
+            ph = self.phi_e
+            c = np.where(self.ring_e, (1 - ph) * c + ph * c_slot, c)
+        return c
+
     def _film_matrix(self, cbar):
         """Delta-t free film conduction matrix: int c(h) dq/dr dp/dr r dr on r > a (per element, c at midpoint)."""
         re = self.re
@@ -193,7 +231,9 @@ class Preview:
         return sp.csr_matrix((vals, (rows, cols)), shape=(self.ndof, self.ndof))
 
     # -------------------------------------------------------------- solve in time
-    def run(self, t_end=3600.0, n_steps=140, t_first=1e-5, snap_times=None, verbose=True, side_drained=True):
+    def run(self, t_end=3600.0, n_steps=140, t_first=1e-5, snap_times=None, verbose=True, side_drained=None):
+        if side_drained is None:
+            side_drained = self.film_edge_open
         a = self.a
         n = self.ndof
         nud = self.nu_dof
@@ -205,7 +245,8 @@ class Preview:
         fix_u = np.unique(np.concatenate([2 * top2, 2 * top2 + 1, 2 * axis2, 2 * side2]))
         top1 = np.nonzero(np.isclose(X1[:, 1], self.H))[0]
         side1 = np.nonzero(np.isclose(X1[:, 0], self.R))[0]
-        zero_p = nud + np.unique(np.concatenate([top1, side1 if side_drained else side1[:1]]))
+        edge = side1 if side_drained else (side1[:1] if self.film_edge_open else side1[:0])
+        zero_p = nud + np.unique(np.concatenate([top1, edge]))
         hole1 = np.nonzero(np.isclose(X1[:, 1], 0) & (X1[:, 0] <= a + 1e-12))[0]
         hole_p = nud + hole1
         bot_out2 = np.nonzero(self.r2 >= a - 1e-12)[0]            # contact candidates (Q2 bottom row)
@@ -214,7 +255,7 @@ class Preview:
         times = np.concatenate([[0.0], t_first * (t_end / t_first) ** (np.arange(n_steps) / (n_steps - 1))])
         x = np.zeros(n)
         kpen = 50 * self.E / (self.ze[1] - self.ze[0])
-        hist = dict(t=[], p_hole=[], Q_hole=[], Q_edge=[], Q_seep=[], Q_body=[], mass_err=[], V_drained=[], h_rim=[],
+        hist = dict(t=[], p_hole=[], Q_hole=[], Q_edge=[], Q_seep=[], Q_body=[], mass_err=[], V_drained=[], h_rim=[], contact=[], clearance=[], ring_load=[],
                     intrusion=[], contact_r=[], sealed=[], contact_force=[])
         snaps = []
         snap_times = sorted(snap_times or [])
@@ -230,27 +271,45 @@ class Preview:
             h_lag = np.maximum(self.g0 + ubot(xn) - self.zb, self.hmin)
             for it in range(60):
                 h_mid = 0.5 * (h_lag[0:-2:2] + h_lag[2::2])
-                cfilm = h_mid ** 3 / (12 * self.mu)
+                cfilm = self.film_conductance(h_mid)
                 F = self._film_matrix(cfilm)
                 A = self.K + self.B + dt * self.Hk + self.S + dt * F
                 # contact penalty
                 pen = np.zeros(n)
                 dpen = np.zeros(n)
                 idx = 2 * self.bot2 + 1
-                dpen[idx[active]] = kpen * self.area2[active]
-                pen[idx[active]] = kpen * self.area2[active] * (self.hmin - self.g0 + self.zb[active])
+                ka = kpen * self.area2 * self.support2
+                dpen[idx[active]] = ka[active]
+                pen[idx[active]] = ka[active] * (self.hmin - self.g0 + self.zb[active])
                 A = A + sp.diags(dpen)
                 b = (self.B + self.S) @ xn + pen
-                xd = np.zeros(n)
-                xd[hole_p] = p_hole
-                rhs = b - A @ xd
-                A_ff = A[fi][:, fi].tocsc()
-                xs = xd.copy()
-                xs[fi] = spla.spsolve(A_ff, rhs[fi])
-                # outflow into the hole (mm^3/s, full circle)
-                res = A @ xs - b
-                Q_hole = -2 * np.pi * res[hole_p].sum() / dt
-                p_new = ramp * (-self.dp) + self.R_hole * Q_hole
+                # the state is affine in the hole pressure: x = x0 + p_hole * x1
+                lu = spla.splu(A[fi][:, fi].tocsc())
+                x0 = np.zeros(n)
+                x0[fi] = lu.solve(b[fi])
+                e = np.zeros(n); e[hole_p] = 1.0
+                x1 = e.copy()
+                x1[fi] = lu.solve(-(A @ e)[fi])
+                Qf = lambda xx: -2 * np.pi * (A @ xx - b)[hole_p].sum() / dt      # into the hole, mm^3/s
+                Q0 = Qf(x0)
+                G = -2 * np.pi * (A @ x1)[hole_p].sum() / dt
+                # hole law p = p_ch + R Q + K Q|Q| with Q = Q0 + G p: monotone in p -> bisection
+                p_ch = ramp * (-self.dp)
+                f = lambda p: p - p_ch - self.R_hole * (Q0 + G * p) - self.K_hole * (Q0 + G * p) * abs(Q0 + G * p)
+                lo, hi = min(p_ch, 0.0) - 1e-12, max(p_ch, 0.0) + 1e-12
+                while f(lo) > 0:
+                    lo -= abs(p_ch) + 1e-9
+                while f(hi) < 0:
+                    hi += abs(p_ch) + 1e-9
+                for _ in range(100):
+                    mid = 0.5 * (lo + hi)
+                    if f(mid) > 0:
+                        hi = mid
+                    else:
+                        lo = mid
+                p_new = 0.5 * (lo + hi)
+                xs = x0 + p_new * x1
+                Q_hole = Q0 + G * p_new
                 h_new = self.g0 + ubot(xs) - self.zb
                 act_new = np.zeros(self.n2r, bool)
                 act_new[bot_out2] = h_new[bot_out2] < self.hmin
@@ -260,13 +319,13 @@ class Preview:
                     and abs(p_new - p_hole) < 1e-4 * self.dp
                 h_lag = 0.5 * h_lag + 0.5 * np.maximum(h_new, self.hmin) if it > 8 else np.maximum(h_new, self.hmin)
                 active = act_new
-                p_hole = p_new if it < 30 else 0.5 * (p_hole + p_new)
+                p_hole = p_new
                 x = xs
                 if conv and it > 0:
                     break
             res = A @ x - b
             corner = nud + side1[0]                                  # film edge (bottom corner)
-            Q_edge = 2 * np.pi * res[corner] / dt                    # free liquid entering the film
+            Q_edge = 2 * np.pi * res[corner] / dt if self.film_edge_open else 0.0   # free liquid entering the film
             body = zero_p[zero_p != corner]
             Q_body = 2 * np.pi * res[body].sum() / dt                # body liquid entering through top/sides
             dV = -2 * np.pi * np.sum(self.B[nud:].dot(x - xn))       # liquid squeezed out of the sponge (mm^3)
@@ -290,8 +349,13 @@ class Preview:
             hist["h_rim"].append(float(h[rim_i])); hist["intrusion"].append(intr)
             hist["contact_r"].append([float(self.r2[cont].min()), float(self.r2[cont].max())] if len(cont) else None)
             ring = active[(self.r2 >= a) & (self.r2 <= a + 0.25)]
-            hist["sealed"].append(bool(len(cont) and ring[0]))
-            hist["contact_force"].append(float(2 * np.pi * np.sum(kpen * self.area2[active] *
+            hist["sealed"].append(bool(len(cont) and ring[0]) and self.hs == 0)   # slots never seal
+            hist["contact"].append(bool(len(cont)))
+            inside = self.r2 < (self.rin if self.hs > 0 else a)
+            hist["clearance"].append(float((self.g0 + ub[inside]).min()))       # lowest tissue point over the cup/hole vs skin level
+            hist["ring_load"].append(float(2 * np.pi * np.sum((kpen * self.area2 * self.support2 *
+                                     np.maximum(self.hmin - h, 0))[self.ring2])) if self.hs > 0 else 0.0)
+            hist["contact_force"].append(float(2 * np.pi * np.sum(kpen * self.area2[active] * self.support2[active] *
                                                (self.hmin - h[active]))))
             while snap_times and t1 >= snap_times[0] * 0.999:
                 snaps.append(self.fields(x, t1, p_hole))

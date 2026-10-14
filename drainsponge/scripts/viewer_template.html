@@ -38,7 +38,9 @@ main{max-width:1400px;margin:0 auto;padding:10px 16px 40px}
 .row label{font-size:13px;color:var(--muted)}
 input[type=range]{flex:1;min-width:140px;accent-color:var(--accent)}
 button{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:7px 14px;font-weight:600;cursor:pointer}
-button.ghost{background:var(--chip);color:var(--ink);border:1px solid var(--line)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{background:var(--chip);color:var(--ink);border-radius:0;font-weight:500;padding:6px 12px}
+.seg button.on{background:var(--blue);color:#fff}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
 .stat{background:var(--chip);border-radius:8px;padding:8px 10px}
 .stat b{display:block;font-size:18px}
@@ -62,16 +64,20 @@ code{background:var(--chip);padding:1px 5px;border-radius:4px;font-size:13px}
 <body>
 <header>
   <h1>Sponge tissue on one drain hole</h1>
-  <p class="sub">Dome-cap drain design · hole Ø1.0 mm in the 0.6 mm wall · biphasic (liquid-filled) tissue 50 µm above the skin · suction in the sheath channel</p>
+  <p class="sub">Current design vs. new standoff design · hole Ø1.0 mm in the 0.6 mm wall · biphasic (liquid-filled) tissue 50 µm above the drain · suction in the sheath channel</p>
 </header>
 <main>
+<div class="row" style="margin-top:0">
+  <span class="seg" id="segD"><button data-v="current">Current design</button><button data-v="standoff">Standoff ring (new)</button><button data-v="standoff_opt">Optimized ring</button></span>
+  <span class="seg" id="segS"><button data-v="open">Free liquid around</button><button data-v="closed">No free liquid</button></span>
+</div>
 <div class="grid">
   <div>
     <div id="view">
       <div class="tag" id="tag">loading…</div>
       <div class="legend"><div>pore / film pressure</div><div class="bar"></div>
         <div style="display:flex;justify-content:space-between"><span id="lmin">−5 kPa</span><span>0</span></div>
-        <div style="margin-top:4px"><span style="color:#1f9bd6">●</span> liquid in film / hole &nbsp;<span style="color:#0b3d91">●</span> liquid inside the sponge</div></div>
+        <div style="margin-top:4px"><span style="color:#1f9bd6">●</span> liquid in gap / slots / hole &nbsp;<span style="color:#1b4fd1">●</span> liquid inside the sponge</div></div>
     </div>
     <div class="card" style="margin-top:12px">
       <div class="row"><button id="play">▶ Play</button><label>time</label><input id="time" type="range" min="0" step="0.005" value="0"><b id="tlabel" style="min-width:90px;text-align:right">–</b></div>
@@ -86,18 +92,18 @@ code{background:var(--chip);padding:1px 5px;border-radius:4px;font-size:13px}
       <div class="stage" id="stage"></div>
       <div class="stats">
         <div class="stat"><span>pressure in the hole</span><b id="s_ph">–</b></div>
-        <div class="stat"><span>film at the hole rim</span><b id="s_h">–</b></div>
-        <div class="stat"><span>tissue depth into the hole</span><b id="s_d">–</b></div>
+        <div class="stat"><span>lowest tissue point vs. hole rim</span><b id="s_d">–</b></div>
+        <div class="stat"><span>gap under the tissue at the rim / ring</span><b id="s_h">–</b></div>
         <div class="stat"><span>flow into the hole (this hole)</span><b id="s_q">–</b></div>
       </div>
     </div>
     <div class="card" style="margin-top:12px">
       <div style="font-weight:600;font-size:14px">Where the liquid comes from (mL/min, log scale)</div>
       <svg id="c1" class="chart" viewBox="0 0 420 210"></svg>
-      <div style="font-size:12px;color:var(--muted)"><span style="color:var(--ink)">━</span> total into hole &nbsp; <span style="color:#1f9bd6">━</span> free liquid via the film &nbsp; <span style="color:#c0392b">━</span> out of the sponge (Darcy)</div>
-      <div style="font-weight:600;font-size:14px;margin-top:10px">Tissue pulled onto / into the hole (µm)</div>
+      <div style="font-size:12px;color:var(--muted)"><span style="color:var(--ink)">━</span> total into hole &nbsp; <span style="color:#1f9bd6">━</span> free liquid from the edge &nbsp; <span style="color:#c0392b">━</span> out of the sponge (Darcy)</div>
+      <div style="font-weight:600;font-size:14px;margin-top:10px">Lowest tissue point vs. the hole rim (µm)</div>
       <svg id="c2" class="chart" viewBox="0 0 420 170"></svg>
-      <div style="font-size:12px;color:var(--muted)"><span style="color:#1f9bd6">━</span> film at the rim &nbsp; <span style="color:#c0392b">━</span> depth into the hole</div>
+      <div style="font-size:12px;color:var(--muted)">below 0 = tissue inside the hole · dotted = ring top</div>
     </div>
   </div>
 </div>
@@ -107,10 +113,10 @@ code{background:var(--chip);padding:1px 5px;border-radius:4px;font-size:13px}
 
 <h2>What is computed here, and what the package contains</h2>
 <div class="card notes">
-  <p><b>This viewer</b> shows the reduced-order model (axisymmetric, linear poroelastic sponge + lubrication film + hole resistance + contact), solved in Python and revolved onto the 3D window. It checks against the 1D consolidation solution and conserves mass to 1e-12, but it is a preview, not the OpenFOAM/FEBio result.</p>
-  <p><b>OpenFOAM</b> (<code>out/openfoam/</code>): <code>porous_initial</code> and <code>porous_sealed</code> are single-domain Darcy–Brinkman cases (tissue = porous cellZone) you can run directly with <code>./Allrun</code> (ESI edition). <code>fluid_template</code> is the fluid side of the coupling.</p>
-  <p><b>FEBio</b> (<code>out/febio/oneway/tissue.feb</code>): biphasic neo-Hookean tissue (hex8), rigid drain surface, sliding contact, loaded with the film pressures from the preview model. <code>python -m drainsponge.couple</code> runs the full two-way OpenFOAM ⇄ FEBio loop.</p>
-  <p><b>Placeholder inputs</b>: tissue E, permeability and suction are not clinical values yet. Defaults: E = <span id="nE"></span> kPa, k = <span id="nk"></span> m⁴/(N·s), suction <span id="ndp"></span> kPa, film 50 µm, residual film under the seal 3 µm (surface roughness).</p>
+  <p><b>This viewer</b> shows the reduced-order model (axisymmetric, linear poroelastic sponge + lubrication film + slots as ducts + hole with viscous and orifice losses + contact), solved in Python and revolved onto the 3D window. It is a preview, not the OpenFOAM/FEBio result. The ring slots are modelled as flow paths; tissue sagging into the slots is only captured by the 3D model.</p>
+  <p><b>Scenarios</b>: <i>free liquid around</i> = the gap is open to a pool of wound liquid at body pressure; <i>no free liquid</i> = the only liquid is inside the tissue (the case that decides whether tissue is sucked into the hole).</p>
+  <p><b>3D models</b>: <code>out/cases/&lt;design&gt;_&lt;scenario&gt;/</code> holds the OpenFOAM cases (Darcy–Brinkman, ready to run) and a FEBio biphasic model; <code>hpc/</code> runs the full two-way OpenFOAM ⇄ FEBio coupling on ETH Euler, window by window from the last saved state.</p>
+  <p><b>Placeholder inputs</b>: tissue E = <span id="nE"></span> kPa, k = <span id="nk"></span> m⁴/(N·s), suction <span id="ndp"></span> kPa, residual film under contact 3 µm. Replace with clinical values.</p>
 </div>
 </main>
 <div id="lb"><img alt=""></div>
@@ -120,14 +126,11 @@ code{background:var(--chip);padding:1px 5px;border-radius:4px;font-size:13px}
 <script>
 const D = /*__DATA__*/null;
 const IMGS = /*__IMGS__*/[];
-const W = D.win, r2 = D.r2, z2 = D.z2, NR = r2.length, NZ = z2.length, S = D.snaps;
-const a = W.a, g0 = W.g0, H = W.H, R = W.R, DP = W.dp;
-document.getElementById('nE').textContent = (W.E/1e3).toFixed(0);
-document.getElementById('nk').textContent = W.k.toExponential(0);
-document.getElementById('ndp').textContent = (W.dp/1e3).toFixed(0);
-document.getElementById('lmin').textContent = '−' + (DP/1e3).toFixed(0) + ' kPa';
 
-// ---------------------------------------------------------------- interpolation helpers
+// ---------------------------------------------------------------- current dataset (set by setRun)
+let W, RUN, S, r2, z2, NR, NZ, zb, g0, R, DP, a, H, hs;
+let SA = 0, SB = 0, SF = 0;
+
 function loc(arr, x){
   const n = arr.length;
   if (x <= arr[0]) return [0, 0];
@@ -143,11 +146,9 @@ function bil(F, r, z){
 }
 function lin1(F, r){ const [i, t] = loc(r2, r); return (1-t)*F[i] + t*F[i+1]; }
 const skin = x => W.B*Math.sqrt(Math.max(0, 1 - ((x - W.xc)/W.A)**2)) + W.zc;
-let SA = 0, SB = 0, SF = 0;           // current snapshot pair and blend
 function val(name, r, z){ const A = bil(S[SA][name], r, z); return SF ? A + SF*(bil(S[SB][name], r, z) - A) : A; }
 function val1(name, r){ const A = lin1(S[SA][name], r); return SF ? A + SF*(lin1(S[SB][name], r) - A) : A; }
 
-// ---------------------------------------------------------------- colours
 function pcol(p, out, o){
   const t = Math.max(-1, Math.min(0.25, p / DP));
   let c;
@@ -159,7 +160,7 @@ function pcol(p, out, o){
   out[o] = c[0]; out[o+1] = c[1]; out[o+2] = c[2];
 }
 function hash3(x, y, z){ const s = Math.sin(x*127.1 + y*311.7 + z*74.7)*43758.5453; return s - Math.floor(s); }
-function noise(x, y, z){             // cheap value noise -> sponge speckle
+function noise(x, y, z){
   const f = 9, X = x*f, Y = y*f, Z = z*f, xi = Math.floor(X), yi = Math.floor(Y), zi = Math.floor(Z);
   const fx = X - xi, fy = Y - yi, fz = Z - zi; let v = 0;
   for (let dx = 0; dx < 2; dx++) for (let dy = 0; dy < 2; dy++) for (let dz = 0; dz < 2; dz++)
@@ -167,7 +168,7 @@ function noise(x, y, z){             // cheap value noise -> sponge speckle
   return v;
 }
 
-// ---------------------------------------------------------------- three.js scene
+// ---------------------------------------------------------------- three.js
 const view = document.getElementById('view');
 const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
 renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
@@ -175,9 +176,9 @@ view.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 100);
 camera.up.set(0, 0, 1);
-camera.position.set(3.2, -6.3, 2.1);
+camera.position.set(3.0, -6.0, 2.2);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.target.set(0, 0.6, -0.1); controls.update();
+controls.target.set(0, 0.5, 0.0); controls.update();
 scene.add(new THREE.AmbientLight(0xffffff, 0.55));
 const dl = new THREE.DirectionalLight(0xffffff, 0.75); dl.position.set(3, -5, 6); scene.add(dl);
 const dl2 = new THREE.DirectionalLight(0xffffff, 0.3); dl2.position.set(-4, 3, 2); scene.add(dl2);
@@ -187,47 +188,62 @@ function geom(g){
   G.setAttribute('position', new THREE.Float32BufferAttribute(g.v.slice(), 3));
   G.setIndex(g.f); G.computeVertexNormals(); return G;
 }
-const wallM = new THREE.Mesh(geom(D.geo.wall), new THREE.MeshLambertMaterial({color:0x8a9bb0, side:THREE.DoubleSide}));
-scene.add(wallM);
-const chanM = new THREE.Mesh(geom(D.geo.channel), new THREE.MeshLambertMaterial({color:0x9cc8f0, transparent:true, opacity:0.22, side:THREE.DoubleSide, depthWrite:false}));
-scene.add(chanM);
-const filmG = geom(D.geo.film);
-const filmM = new THREE.Mesh(filmG, new THREE.MeshLambertMaterial({color:0x2f8fe0, transparent:true, opacity:0.55, side:THREE.DoubleSide, depthWrite:false}));
-scene.add(filmM);
-const tisG = geom(D.geo.tissue);
-tisG.setAttribute('color', new THREE.Float32BufferAttribute(new Float32Array(D.geo.tissue.v.length), 3));
-const tisM = new THREE.Mesh(tisG, new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide, transparent:true, opacity:0.97}));
-scene.add(tisM);
-
-// precompute per-vertex reference data
-const TV = D.geo.tissue.v, nT = TV.length/3, tR = new Float32Array(nT), tZ = new Float32Array(nT), tN = new Float32Array(nT);
-for (let i = 0; i < nT; i++){
-  const x = TV[3*i], y = TV[3*i+1], z = TV[3*i+2];
-  tR[i] = Math.hypot(x, y); tZ[i] = Math.min(H, Math.max(0, z - skin(x) - g0)); tN[i] = 0.78 + 0.22*noise(x, y, z);
-}
-const FV = D.geo.film.v, nF = FV.length/3, fFrac = new Float32Array(nF), fR = new Float32Array(nF);
-for (let i = 0; i < nF; i++){
-  const x = FV[3*i], z = FV[3*i+2], s = skin(x);
-  fR[i] = Math.hypot(x, FV[3*i+1]); fFrac[i] = z >= s - 1e-6 ? (z - s)/g0 : -1;
+let meshes = [], tisG, filmG, tisM, TV, nT, tR, tZ, tN, FV, nF, fFrac, fR, fBase, curDesign = null;
+function buildScene(design){
+  meshes.forEach(m => { scene.remove(m); m.geometry.dispose(); });
+  meshes = [];
+  const G = D.designs[design].geo;
+  W = D.designs[design].win;
+  const wallM = new THREE.Mesh(geom(G.wall), new THREE.MeshLambertMaterial({color:0x8a9bb0, side:THREE.DoubleSide}));
+  const chanM = new THREE.Mesh(geom(G.channel), new THREE.MeshLambertMaterial({color:0x9cc8f0, transparent:true, opacity:0.22, side:THREE.DoubleSide, depthWrite:false}));
+  filmG = geom(G.film);
+  const filmM = new THREE.Mesh(filmG, new THREE.MeshLambertMaterial({color:0x2f8fe0, transparent:true, opacity:0.5, side:THREE.DoubleSide, depthWrite:false}));
+  tisG = geom(G.tissue);
+  tisG.setAttribute('color', new THREE.Float32BufferAttribute(new Float32Array(G.tissue.v.length), 3));
+  tisM = new THREE.Mesh(tisG, new THREE.MeshLambertMaterial({vertexColors:true, side:THREE.DoubleSide, transparent:true, opacity:0.97}));
+  tisM.visible = document.getElementById('tis').checked;
+  meshes = [wallM, chanM, filmM, tisM];
+  meshes.forEach(m => scene.add(m));
+  TV = G.tissue.v; nT = TV.length/3; tR = new Float32Array(nT); tZ = new Float32Array(nT); tN = new Float32Array(nT);
+  for (let i = 0; i < nT; i++){
+    const x = TV[3*i], y = TV[3*i+1], z = TV[3*i+2];
+    tR[i] = Math.hypot(x, y); tZ[i] = Math.max(0, z - skin(x) - W.hs - W.gap); tN[i] = 0.78 + 0.22*noise(x, y, z);
+  }
+  FV = G.film.v; nF = FV.length/3; fFrac = new Float32Array(nF); fR = new Float32Array(nF); fBase = new Float32Array(nF);
+  for (let i = 0; i < nF; i++){
+    const x = FV[3*i], z = FV[3*i+2], base = skin(x) + W.hs;
+    fR[i] = Math.hypot(x, FV[3*i+1]); fBase[i] = base; fFrac[i] = z >= base - 1e-6 ? (z - base)/W.gap : -1;
+  }
+  // slot directions that lie in the visible half (cut .. cut + pi)
+  slotTh = [];
+  for (const s0 of (W.slots || [])) for (const k of [-2, 0, 2]) {
+    const s = s0 + k*Math.PI;
+    if (s >= W.cut - 1e-6 && s <= W.cut + Math.PI + 1e-6) slotTh.push(s);
+  }
+  // look at the cut face from the front
+  const c = Math.cos(W.cut), sn = Math.sin(W.cut);
+  camera.position.set(3.0*c + 6.0*sn, 3.0*sn - 6.0*c, 2.2);
+  controls.target.set(-0.5*sn, 0.5*c, 0.0); controls.update();
+  curDesign = design;
 }
 
 // ---------------------------------------------------------------- particles
-const NP = 900, NFP = 260;
+const NP = 900, NFP = 300;
 const pp = new Float32Array(NP*3), fp = new Float32Array(NFP*3);
 const part = [], fpart = [];
-function spawnT(q){ q.r = Math.random()*R*0.98; q.th = Math.random() < 0.5 ? 0 : Math.PI;   // on the cut face
-  q.z = Math.random()*1.3; q.age = 0; }
-function spawnF(q, edge){ q.r = edge ? R*0.98 : a + Math.random()*(R - a); q.th = Math.random()*Math.PI; q.hole = false; q.z = 0; }
-for (let i = 0; i < NP; i++){ const q = {}; spawnT(q); part.push(q); }
-for (let i = 0; i < NFP; i++){ const q = {}; spawnF(q, false); fpart.push(q); }
+function spawnT(q){ q.r = Math.random()*R*0.98; q.th = W.cut + (Math.random() < 0.5 ? 0 : Math.PI); q.z = Math.random()*1.3; q.age = 0; }
+function spawnF(q, edge){ q.r = edge ? R*0.98 : a + Math.random()*(R - a); q.th = W.cut + Math.random()*Math.PI; q.hole = false; q.z = 0; }
+for (let i = 0; i < NP; i++) part.push({});
+for (let i = 0; i < NFP; i++) fpart.push({});
 function ptsObj(arr, color, size){
   const G = new THREE.BufferGeometry(); G.setAttribute('position', new THREE.BufferAttribute(arr, 3));
-  const P = new THREE.Points(G, new THREE.PointsMaterial({color, size, sizeAttenuation:true, depthTest:true}));
+  const P = new THREE.Points(G, new THREE.PointsMaterial({color, size, sizeAttenuation:true}));
   scene.add(P); return P;
 }
 const tisP = ptsObj(pp, 0x1b4fd1, 0.05), filmP = ptsObj(fp, 0x1f9bd6, 0.04);
-
+let slotTh = [];
 let mag = 1, wmax = 1e-9;
+function inRing(r){ return hs > 0 && r >= W.rin && r <= W.rout; }
 function stepParticles(dt){
   const lw = Math.log10(wmax);
   for (const q of part){
@@ -241,6 +257,7 @@ function stepParticles(dt){
       const v = val1('vf', q.r);
       const sp = Math.sign(v)*0.9*Math.max(0, Math.min(1, (Math.log10(Math.abs(v) + 1e-30) + 3.5)/4));
       q.r += sp*dt;
+      if (inRing(q.r) && slotTh.length){ let b = slotTh[0]; for (const s of slotTh) if (Math.abs(s - q.th) < Math.abs(b - q.th)) b = s; q.th += (b - q.th)*Math.min(1, 8*dt); }
       if (q.r < a){ q.hole = true; q.z = 0; q.r = Math.random()*a*0.9; }
       if (q.r > R) spawnF(q, true);
       if (Math.abs(sp) < 0.01) { q.r -= 0.002*dt; }
@@ -254,18 +271,19 @@ function placeParticles(){
   for (let i = 0; i < NP; i++){
     const q = part[i], ur = val('ur', q.r, q.z)*mag, uz = val('uz', q.r, q.z)*mag;
     const rr = q.r + ur, x = rr*Math.cos(q.th), y = rr*Math.sin(q.th);
-    pp[3*i] = x; pp[3*i+1] = y - 0.006; pp[3*i+2] = skin(x) + g0 + q.z + uz;
+    pp[3*i] = x - 0.006*Math.sin(W.cut)*-1; pp[3*i+1] = y - 0.006*Math.cos(W.cut); pp[3*i+2] = skin(x) + g0 + q.z + uz;
   }
   for (let i = 0; i < NFP; i++){
     const q = fpart[i], x = q.r*Math.cos(q.th), y = q.r*Math.sin(q.th);
     fp[3*i] = x; fp[3*i+1] = y + 0.002;
-    fp[3*i+2] = q.hole ? skin(x) + q.z : skin(x) + 0.5*Math.max(val1('h', q.r), 0.001);
+    const h = Math.max(val1('h', q.r), 0.001), b = lin1(zb, q.r);
+    fp[3*i+2] = q.hole ? skin(x) + q.z : skin(x) + (inRing(q.r) ? 0.5*(b + h) : b + 0.5*h);
   }
   tisP.geometry.attributes.position.needsUpdate = true;
   filmP.geometry.attributes.position.needsUpdate = true;
 }
 
-// ---------------------------------------------------------------- deform surfaces
+// ---------------------------------------------------------------- deform
 let look = false;
 function update(){
   const P = tisG.attributes.position.array, C = tisG.attributes.color.array;
@@ -280,37 +298,48 @@ function update(){
   const F = filmG.attributes.position.array;
   for (let i = 0; i < nF; i++){
     if (fFrac[i] < 0) continue;
-    const x = FV[3*i], s = skin(x), top = g0 + val('uz', fR[i], 0)*mag;
-    F[3*i+2] = s + fFrac[i]*Math.max(top, 0.0005);
+    const bottom = skin(FV[3*i]) + g0 + val('uz', fR[i], 0)*mag;
+    F[3*i+2] = fBase[i] + fFrac[i]*(bottom - fBase[i]);
   }
   filmG.attributes.position.needsUpdate = true;
-  // max Darcy flux of this frame (for particle speeds)
   wmax = 1e-12;
   const s = S[SA]; for (let k = 0; k < s.wr.length; k += 7) wmax = Math.max(wmax, Math.hypot(s.wr[k], s.wz[k]));
 }
 
 // ---------------------------------------------------------------- UI
-const tS = document.getElementById('time'); tS.max = S.length - 1;
-const rimI = r2.findIndex(r => r >= a - 1e-9);
+const tS = document.getElementById('time');
 function fmtT(t){ return t < 1e-3 ? (t*1e6).toFixed(0)+' µs' : t < 1 ? (t*1e3).toFixed(1)+' ms' : t < 120 ? t.toFixed(1)+' s' : t < 7200 ? (t/60).toFixed(1)+' min' : (t/3600).toFixed(1)+' h'; }
 function curT(){ return Math.exp(Math.log(S[SA].t) + SF*(Math.log(S[SB].t) - Math.log(S[SA].t))); }
+function stageText(t, cl, onDrain){
+  const std = hs > 0, open = RUN.open;
+  if (!std){
+    if (!onDrain) return ['1 · Liquid rushes in', 'The suction pulls the liquid in the 50 µm gap into the hole. The low pressure in the gap pulls the sponge down toward the drain.'];
+    if (cl > -1 && t < 1) return ['2 · Sealed like a suction cup', 'The sponge is sucked onto the hole rim. Free flow stops; only a leak through the roughness film remains.'];
+    return ['3 · Sponge sucked into the hole', 'Under the seal the hole draws liquid out of the sponge, which bulges ' + Math.max(0, -cl).toFixed(0) + ' µm into the hole.'];
+  }
+  if (open && !onDrain) return ['Hole stays open', 'The ring keeps the sponge ' + cl.toFixed(0) + ' µm above the hole rim. Free liquid flows through the gap and the slots into the hole; most of the suction is used by the flow through the hole, so the sponge is hardly pulled.'];
+  if (!onDrain) return ['1 · Gap empties', 'The liquid in the 0.45 mm gap is drawn into the hole; the sponge is pulled down toward the ring tops.'];
+  if (cl > 0) return ['2 · Sponge rests on the ring', 'Suction acts on the whole underside of the sponge through the gap and slots; liquid is drawn out of its pores. The cup keeps the sponge ' + cl.toFixed(0) + ' µm above the hole rim.'];
+  return ['3 · Sponge reaches the hole', 'The sponge bulges through the cup ' + (-cl).toFixed(0) + ' µm into the hole (soft tissue / strong suction).'];
+}
 function setTime(v){
   SA = Math.min(S.length - 1, Math.floor(v)); SB = Math.min(S.length - 1, SA + 1); SF = SB === SA ? 0 : v - SA;
-  const t = curT(), hr = val1('h', r2[rimI]), ph = S[SA].ph + SF*(S[SB].ph - S[SA].ph);
-  let dmin = 0; for (let i = 0; i < rimI; i++) dmin = Math.min(dmin, val('uz', r2[i], 0));
-  const depth = Math.max(0, -(g0 + dmin));
+  const t = curT(), ph = S[SA].ph + SF*(S[SB].ph - S[SA].ph);
+  const rimI = r2.findIndex(r => r >= (hs > 0 ? W.rin : a) - 1e-9);
+  let low = 1e9; for (let i = 0; i < rimI; i++) low = Math.min(low, g0 + val('uz', r2[i], 0));
+  const hr = val1('h', r2[rimI]);
+  const hi = RUN.hist;
+  let k = hi.t.findIndex(x => x >= t*(1 - 1e-9));
+  if (k < 0) k = hi.t.length - 1;
   document.getElementById('tlabel').textContent = fmtT(t);
   document.getElementById('s_ph').textContent = (ph/1e3).toFixed(2) + ' kPa';
+  document.getElementById('s_d').textContent = (low*1e3 >= 0 ? '+' : '') + (low*1e3).toFixed(0) + ' µm';
   document.getElementById('s_h').textContent = (hr*1e3).toFixed(1) + ' µm';
-  document.getElementById('s_d').textContent = (depth*1e3).toFixed(0) + ' µm';
-  const hi = D.hist, k = Math.max(0, hi.t.findIndex(x => x >= t));
   document.getElementById('s_q').textContent = hi.Q[k].toPrecision(2) + ' mL/min';
-  const sealed = hr < 0.006;
-  const st = !sealed ? ['1 · Free liquid rushes in', 'The suction pulls the free liquid in the 50 µm film into the hole. The low pressure in the film pulls the sponge down toward the drain.']
-    : t < 1 ? ['2 · Sealed like a suction cup', 'The sponge is sucked onto the hole rim. Free flow stops; only a leak through the roughness film (~3 µm) remains. The tissue bulges into the hole.']
-    : ['3 · Liquid pulled out of the sponge', 'Under the seal the hole now draws liquid through the pores of the tissue (blue particles). The sponge slowly drains and bulges further into the hole.'];
-  document.getElementById('stage').innerHTML = '<b>Stage ' + st[0] + '</b><br>' + st[1];
-  document.getElementById('tag').innerHTML = 't = <b>' + fmtT(t) + '</b> after suction on · deformation ×' + mag;
+  const st = stageText(t, low*1e3, hr < 0.006);
+  document.getElementById('stage').innerHTML = '<b>' + st[0] + '</b><br>' + st[1];
+  document.getElementById('tag').innerHTML = ({current:'current design', standoff:'standoff ring (new design)', standoff_opt:'optimized ring'}[selD]) + ' · ' + (RUN.open ? 'free liquid' : 'no free liquid') +
+    '<br>t = <b>' + fmtT(t) + '</b> after suction on · deformation ×' + mag;
   update(); drawCursor(t);
 }
 tS.addEventListener('input', () => setTime(+tS.value));
@@ -323,12 +352,13 @@ let playing = false;
 const pb = document.getElementById('play');
 pb.addEventListener('click', () => { playing = !playing; pb.textContent = playing ? '❚❚ Pause' : '▶ Play'; if (playing && +tS.value >= S.length - 1.001) tS.value = 0; });
 
-// ---------------------------------------------------------------- charts (SVG)
+// ---------------------------------------------------------------- charts
 const NS = 'http://www.w3.org/2000/svg';
 function el(tag, attrs, parent){ const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
-const T0 = Math.log10(D.hist.t[0]), T1 = Math.log10(D.hist.t[D.hist.t.length-1]);
+let T0, T1, cur1, cur2;
 const X = t => 40 + (Math.log10(t) - T0)/(T1 - T0)*370;
-function chart(svg, series, ylog, ymin, ymax, h){
+function chart(svg, series, ylog, ymin, ymax, h, extra){
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
   const Y = v => ylog ? h - 22 - (Math.log10(Math.max(v, ymin)) - Math.log10(ymin))/(Math.log10(ymax) - Math.log10(ymin))*(h - 34)
                       : h - 22 - (v - ymin)/(ymax - ymin)*(h - 34);
   for (let e = Math.ceil(T0); e <= T1; e++){
@@ -336,25 +366,51 @@ function chart(svg, series, ylog, ymin, ymax, h){
     if (e % 2 === 0) el('text', {x:X(10**e), y:h-8, 'text-anchor':'middle'}, svg).textContent = e >= 0 ? (10**e)+' s' : '1e'+e;
   }
   const ticks = [];
-  if (!ylog){ const st = (ymax - ymin) > 60 ? 20 : 10; for (let v = Math.ceil(ymin/st)*st; v <= ymax; v += st) ticks.push(v); }
-  if (ylog) for (let e = Math.ceil(Math.log10(ymin)); e <= Math.log10(ymax); e += 2) ticks.push(10**e);
+  if (ylog) { for (let e = Math.ceil(Math.log10(ymin)); e <= Math.log10(ymax); e += 2) ticks.push(10**e); }
+  else { const st = (ymax - ymin) > 400 ? 200 : (ymax - ymin) > 150 ? 100 : 50; for (let v = Math.ceil(ymin/st)*st; v <= ymax; v += st) ticks.push(v); }
   for (const v of ticks){
-    el('line', {x1:40, x2:410, y1:Y(v), y2:Y(v), stroke:'currentColor', 'stroke-opacity':0.12}, svg);
+    el('line', {x1:40, x2:410, y1:Y(v), y2:Y(v), stroke:'currentColor', 'stroke-opacity':v === 0 ? 0.5 : 0.12}, svg);
     el('text', {x:36, y:Y(v)+3, 'text-anchor':'end'}, svg).textContent = ylog ? '1e' + Math.round(Math.log10(v)) : v;
   }
+  if (extra != null) el('line', {x1:40, x2:410, y1:Y(extra), y2:Y(extra), stroke:'currentColor', 'stroke-dasharray':'2,3', 'stroke-opacity':0.6}, svg);
   for (const [arr, col, wdt] of series){
     let d = '';
-    D.hist.t.forEach((t, i) => { const v = arr[i]; if (ylog && !(v > 0)) return; d += (d ? 'L' : 'M') + X(t).toFixed(1) + ',' + Y(v).toFixed(1); });
+    RUN.hist.t.forEach((t, i) => { const v = arr[i]; if (ylog && !(v > 0)) return; d += (d ? 'L' : 'M') + X(t).toFixed(1) + ',' + Y(v).toFixed(1); });
     el('path', {d, fill:'none', stroke:col, 'stroke-width':wdt}, svg);
   }
   return el('line', {x1:0, x2:0, y1:10, y2:h-22, stroke:'#b23a48', 'stroke-width':1.5}, svg);
 }
-const ink = getComputedStyle(document.body).color;
-document.getElementById('c1').style.color = ink; document.getElementById('c2').style.color = ink;
-const cur1 = chart(document.getElementById('c1'), [[D.hist.Q, ink, 2], [D.hist.Qf, '#1f9bd6', 1.5], [D.hist.Qs, '#c0392b', 1.5]], true, 1e-8, 10, 210);
-const cur2 = chart(document.getElementById('c2'), [[D.hist.hr, '#1f9bd6', 2], [D.hist.di, '#c0392b', 2]], false,
-                   Math.min(...D.hist.di) - 5, Math.max(...D.hist.di.concat(D.hist.hr)) + 5, 170);
+function drawCharts(){
+  const ink = getComputedStyle(document.body).color;
+  document.getElementById('c1').style.color = ink; document.getElementById('c2').style.color = ink;
+  T0 = Math.log10(RUN.hist.t[0]); T1 = Math.log10(RUN.hist.t[RUN.hist.t.length-1]);
+  cur1 = chart(document.getElementById('c1'), [[RUN.hist.Q, ink, 2], [RUN.hist.Qf, '#1f9bd6', 1.5], [RUN.hist.Qs, '#c0392b', 1.5]], true, 1e-8, 1e3, 210, null);
+  const cl = RUN.hist.cl;
+  cur2 = chart(document.getElementById('c2'), [[cl, '#c0392b', 2]], false, Math.min(0, ...cl) - 30, Math.max(hs*1e3 + 60, ...cl) + 20, 170, hs > 0 ? hs*1e3 : null);
+}
 function drawCursor(t){ for (const c of [cur1, cur2]){ c.setAttribute('x1', X(t)); c.setAttribute('x2', X(t)); } }
+
+// ---------------------------------------------------------------- design / scenario
+let selD = 'standoff', selS = 'closed';
+function setRun(){
+  const key = selD + '_' + selS;
+  if (!D.runs[key]) { document.getElementById('stage').textContent = 'no data for ' + key; return; }
+  if (curDesign !== selD) buildScene(selD);
+  RUN = D.runs[key]; S = RUN.snaps; r2 = RUN.r2; z2 = RUN.z2; NR = r2.length; NZ = z2.length; zb = RUN.zb;
+  g0 = RUN.g0; R = RUN.R; a = W.a; H = W.H; hs = W.hs; DP = RUN.params.dp;
+  document.getElementById('nE').textContent = (RUN.params.E/1e3).toFixed(0);
+  document.getElementById('nk').textContent = RUN.params.k.toExponential(0);
+  document.getElementById('ndp').textContent = (DP/1e3).toFixed(0);
+  document.getElementById('lmin').textContent = '−' + (DP/1e3).toFixed(0) + ' kPa';
+  tS.max = S.length - 1;
+  part.forEach(spawnT); fpart.forEach(q => spawnF(q, false));
+  drawCharts();
+  for (const [id, v] of [['segD', selD], ['segS', selS]])
+    document.querySelectorAll('#' + id + ' button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  setTime(Math.min(+tS.value, S.length - 1));
+}
+document.querySelectorAll('#segD button').forEach(b => b.addEventListener('click', () => { selD = b.dataset.v; setRun(); }));
+document.querySelectorAll('#segS button').forEach(b => b.addEventListener('click', () => { selS = b.dataset.v; setRun(); }));
 
 // ---------------------------------------------------------------- gallery
 const gal = document.getElementById('gal'), lb = document.getElementById('lb');
@@ -370,7 +426,7 @@ lb.addEventListener('click', () => lb.style.display = 'none');
 // ---------------------------------------------------------------- loop
 function resize(){ const w = view.clientWidth, h = view.clientHeight; renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); }
 window.addEventListener('resize', resize); resize();
-setTime(0);
+setRun();
 let last = performance.now();
 function loop(now){
   const dt = Math.min(0.05, (now - last)/1000); last = now;

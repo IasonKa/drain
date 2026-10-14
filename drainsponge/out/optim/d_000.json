@@ -1,0 +1,22 @@
+{
+ "name": "current",
+ "standoff_h": 0.0,
+ "worst": {
+  "clearance_um": -563.7960043686992,
+  "Q_1h_mL_min": 4.252622860205138e-05,
+  "ring_contact_kPa": NaN,
+  "mass_err": 0.00020683807178610033
+ },
+ "pool": {
+  "clearance_um": -350.65104347616074,
+  "Q_1h_mL_min": 0.015295636196598673,
+  "ring_contact_kPa": NaN,
+  "mass_err": 5.412634443063905e-13
+ },
+ "severe": {
+  "clearance_um": -279.034954920674,
+  "Q_1h_mL_min": 3.3746605236874234e-05,
+  "ring_contact_kPa": NaN,
+  "mass_err": 1.118248409600141e-10
+ }
+}

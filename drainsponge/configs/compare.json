@@ -1,0 +1,6 @@
+{
+  "_comment": "Preview comparison of the designs at the production parameters (hpc/production_*.json): E 10 kPa, suction 10 kPa, 6 h. The preview uses constant permeability (Holmes-Mow only in FEBio).",
+  "suction": {"dp_Pa": 10000.0},
+  "tissue": {"E_Pa": 10000.0},
+  "time": {"t_end_s": 21600.0}
+}
