@@ -1,0 +1,105 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainsponge: single hole + sponge tissue
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+application     simpleFoam;            // ESI edition
+solver          incompressibleFluid;   // Foundation edition (foamRun)
+startFrom       latestTime;
+startTime       0;
+stopAt          endTime;
+endTime         3000;
+deltaT          1;
+writeControl    timeStep;
+writeInterval   3000;
+purgeWrite      1;
+writeFormat     ascii;
+writePrecision  10;
+timeFormat      general;
+runTimeModifiable true;
+
+functions
+{
+    flow_outlet
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        regionType      patch;
+        name            outlet;
+        patch           outlet;
+        operation       sum;
+        fields          (phi);
+        writeFields     false;
+        writeControl    timeStep;
+        writeInterval   20;
+        log             false;
+    }
+    flow_film_edge
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        regionType      patch;
+        name            film_edge;
+        patch           film_edge;
+        operation       sum;
+        fields          (phi);
+        writeFields     false;
+        writeControl    timeStep;
+        writeInterval   20;
+        log             false;
+    }
+    flow_tissue_top
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        regionType      patch;
+        name            tissue_top;
+        patch           tissue_top;
+        operation       sum;
+        fields          (phi);
+        writeFields     false;
+        writeControl    timeStep;
+        writeInterval   20;
+        log             false;
+    }
+    flow_tissue_side
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        regionType      patch;
+        name            tissue_side;
+        patch           tissue_side;
+        operation       sum;
+        fields          (phi);
+        writeFields     false;
+        writeControl    timeStep;
+        writeInterval   20;
+        log             false;
+    }
+    flow_out_of_tissue
+    {
+        type            surfaceFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+        regionType      faceZone;
+        name            tissue_iface_zone;
+        faceZone        tissue_iface_zone;
+        operation       sum;
+        fields          (phi);
+        writeFields     false;
+        writeControl    timeStep;
+        writeInterval   20;
+        log             false;
+    }
+    wallShearStress
+    {
+        type            wallShearStress;
+        libs            ("libfieldFunctionObjects.so");
+        patches         (drain_skin hole_wall wall_under channel_walls);
+        writeControl    writeTime;
+        log             false;
+    }
+}

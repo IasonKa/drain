@@ -1,0 +1,11 @@
+FoamFile
+{
+    format      ascii;
+    class       regIOobject;
+    location    "constant/polyMesh";
+    object      faceZones;
+}
+
+0
+(
+)

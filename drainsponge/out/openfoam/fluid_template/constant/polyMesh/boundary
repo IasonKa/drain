@@ -1,0 +1,57 @@
+FoamFile
+{
+    format      ascii;
+    class       polyBoundaryMesh;
+    location    "constant/polyMesh";
+    object      boundary;
+}
+
+7
+(
+    outlet
+    {
+        type            patch;
+        nFaces          128;
+        startFace       90144;
+    }
+    film_edge
+    {
+        type            patch;
+        nFaces          320;
+        startFace       90272;
+    }
+    tissue_iface
+    {
+        type            patch;
+        nFaces          1920;
+        startFace       90592;
+    }
+    drain_skin
+    {
+        type            wall;
+        inGroups        List<word> 1(wall);
+        nFaces          1280;
+        startFace       92512;
+    }
+    hole_wall
+    {
+        type            wall;
+        inGroups        List<word> 1(wall);
+        nFaces          640;
+        startFace       93792;
+    }
+    wall_under
+    {
+        type            wall;
+        inGroups        List<word> 1(wall);
+        nFaces          1280;
+        startFace       94432;
+    }
+    channel_walls
+    {
+        type            wall;
+        inGroups        List<word> 1(wall);
+        nFaces          2304;
+        startFace       95712;
+    }
+)

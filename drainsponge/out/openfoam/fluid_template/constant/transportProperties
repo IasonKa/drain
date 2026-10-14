@@ -1,0 +1,11 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainsponge: single hole + sponge tissue
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      transportProperties;
+}
+transportModel  Newtonian;
+nu              [0 2 -1 0 0 0 0] 1.47059e-06;

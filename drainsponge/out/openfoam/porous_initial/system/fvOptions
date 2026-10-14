@@ -1,0 +1,28 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainsponge: single hole + sponge tissue
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      fvOptions;
+}
+// tissue = porous sponge: Darcy drag nu*D*U with D = 1/K, K = k*mu = 1.5e-17 m^2
+tissuePorosity
+{
+    type            explicitPorositySource;
+    explicitPorositySourceCoeffs
+    {
+        selectionMode   cellZone;
+        cellZone        tissue;
+        type            DarcyForchheimer;
+        d               (6.66667e+16 6.66667e+16 6.66667e+16);
+        f               (0 0 0);
+        coordinateSystem
+        {
+            origin  (0 0 0);
+            e1      (1 0 0);
+            e2      (0 1 0);
+        }
+    }
+}

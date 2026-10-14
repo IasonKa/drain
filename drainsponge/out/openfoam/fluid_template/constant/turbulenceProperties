@@ -1,0 +1,10 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainsponge: single hole + sponge tissue
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      turbulenceProperties;
+}
+simulationType  laminar;
