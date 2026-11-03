@@ -56,6 +56,25 @@ Once fully exposed, the drain draws 19–23 L/min of air. A source with less cap
 | ~5 L/min | ~12 |
 | ~10 L/min | ~24 |
 
+## Pictures of the simulation
+
+The [`pictures/`](pictures) folder shows the drain while the pool empties, with the outlet end 10° up and the as-built USZ field next to the recommended layout:
+
+| File | Moment |
+|---|---|
+| `drain_emptying_tilt10.gif` | the whole drainage, about 12 s of animation for 165 s of draining |
+| `tilt10_1_submerged.png` | start: both drains fully submerged and full of liquid |
+| `tilt10_2_air_enters.png` | the first exposed openings of the USZ part start to draw air |
+| `tilt10_3_usz_stops.png` | the USZ part stops at 20 mm: about 28 L/min of air through its exposed openings, no liquid |
+| `tilt10_4_end.png` | the recommended part has drained to its lowest openings (1.4 mm) |
+
+Each picture shows three things:
+- **Side view:** a cut through the drain axis showing the pool, the drain wall, the liquid and air inside the drain and the outlet tube. Each opening on the near side is coloured by what flows through it: liquid in (blue), air in (orange) or nothing (grey).
+- **3D view from below:** the wetted skin and every opening, coloured the same way.
+- **Level plot:** the pool level against time for both designs.
+
+These are pictures of the network simulation's state: the flow through every opening, the pressure and the liquid level inside the drain. They are not CFD flow fields; for those, see `vof/`. To make them for another tilt, run `python scripts/make_pictures.py 15` (about 4 minutes).
+
 ## How it was done, and why
 
 1. **Hole and bore hydraulics.** Each hole obeys `Δp = R_v q + K q|q|`:
@@ -102,6 +121,8 @@ Once fully exposed, the drain draws 19–23 L/min of air. A source with less cap
 | `scripts/run_study.py` | All studies, written to `results/*.json` |
 | `scripts/make_figures.py` | All figures, written to `paper/figures/` |
 | `scripts/make_tables.py` | LaTeX tables and number macros, written to `paper/generated/` |
+| `scripts/make_pictures.py` | Pictures and animation of the drain emptying (side view, 3D view, flow through every opening), written to `pictures/` |
+| `pictures/` | The stills and the GIF animation (see "Pictures of the simulation") |
 | `results/*.json` | Raw results of every study, one record per case. The figures and tables are built only from these files. |
 | `results/recommended.json` | The chosen layout, read by the sensitivity, Monte Carlo, transient and mincap studies |
 | `vof/` | 3D OpenFOAM check (interFoam) of two stop levels on ETH Euler: case generator, case templates, job scripts, analysis. See [`vof/README.md`](vof/README.md). |
@@ -121,6 +142,7 @@ python -m pip install -r requirements.txt
 python scripts/run_study.py
 python scripts/make_figures.py
 python scripts/make_tables.py
+python scripts/make_pictures.py
 ```
 
 **Run single parts.** Each one rewrites its own `results/*.json`:
