@@ -9,7 +9,7 @@
 \usepackage{microtype}
 \usepackage{enumitem}
 \setlist{nosep,leftmargin=1.4em}
-\graphicspath{{figures/}}
+\graphicspath{{figures/}{../pictures/}{../vof/}}
 \input{generated/numbers.tex}
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\Lw}{\Lambda_{w}}
@@ -265,7 +265,7 @@ Tilts of $-10^\circ$ to $+20^\circ$ in $5^\circ$ steps give $\numnSweep$ cases.
 
 % =============================================================================
 \section{Simulations used to confirm the analysis}\label{sec:sim}
-Three-dimensional two-phase CFD (volume of fluid) was not available on this machine. The closed form was instead checked against two numerical models that drop its simplifications.
+The closed form was checked against two numerical models that drop its simplifications. A three-dimensional two-phase CFD check (volume of fluid) is set up as well (Section~\ref{sec:cfd}), but its results are not yet available.
 
 \paragraph{Quasi-static two-phase network.} Each opening is split into 61 equal-area elements (a Vogel spiral on the developed skin), mapped to their true height for the tilt. At each pool level the solver finds the submerged and exposed fractions of every opening and solves Eqs.~\eqref{eq:liqin}--\eqref{eq:balance}. It includes:
 \begin{itemize}
@@ -312,6 +312,22 @@ The last equation states that the rigid drain conserves volume, and it fixes $p_
 Figure~\ref{fig:curves} follows five designs as the pool falls. While all holes are submerged, the drains pass 720 to 970\,mL/min, close to the bore limit $Q_{max}=\numQmax$\,mL/min. The vacuum at the bore end of the interior is only about 2.4\,mmHg; the bore itself takes the rest of the 7\,mmHg. With the large USZ field, the interior even sits slightly above atmospheric pressure, because all the suction acts across the bore.
 
 As soon as the upper holes of the USZ field are exposed, the interior vacuum collapses ($\Lambda\gg1$). The drain then keeps emptying only while the pool is above the lip, which is 2.7\,mm when flat and 23.3\,mm at $10^\circ$, and it stops just below. A layout with little open area keeps 2 to 3\,mmHg inside and drains on until its lowest holes are uncovered. Side rows stop at about mid-height (4.4\,mm when flat): this is a geometric stop, because nothing lower can take in liquid.
+
+Figure~\ref{fig:pictures} draws the state that the network simulation computes, for both designs at $10^\circ$, with every opening coloured by what flows through it.
+\begin{itemize}
+\item \textbf{USZ at its stop (29\,s).} About 28\,L/min of air pours in through the exposed openings, and the vacuum inside falls to 37\,Pa. That vacuum still holds the liquid in the drain 3.4\,mm above the pool, but only up to the bore lip, so the submerged openings stop flowing.
+\item \textbf{Recommended layout at the same moment.} It keeps $-$432\,Pa inside and drains 397\,mL/min, with air entering only through the few exposed openings near the outlet.
+\item \textbf{Recommended layout at the end (153\,s).} It stops when its lowest openings leave the pool, at 1.4\,mm.
+\end{itemize}
+An animation of the whole drainage is in \texttt{pictures/drain\_emptying\_tilt10.gif}.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{tilt10_3_usz_stops.png}\\[2mm]
+\includegraphics[width=\linewidth]{tilt10_4_end.png}
+\caption{State of the network simulation while the pool empties, outlet end $10^\circ$ up, each drain in its own identical pool. Top: the moment the USZ part stops (20.0\,mm). Bottom: the recommended part has drained to its lowest openings (1.4\,mm). Each panel shows three views. Left: a cut through the drain axis with the pool, the liquid and air inside the drain, and the near-side openings, coloured blue for liquid in, orange for air in and grey for no flow. Right: a 3D view from below. Bottom: the pool level against time. These are states of the reduced-order model, not CFD fields.}
+\label{fig:pictures}
+\end{figure}
 
 \begin{figure}[!htbp]
 \centering\includegraphics[width=\linewidth]{fig07_drainage_curves.pdf}
@@ -475,6 +491,71 @@ A flat drain may come to rest upside down. Mirroring the rows onto the top face 
 The model predicts that at $10^\circ$ the as-built part leaves about 20\,mm and the recommended part about 1.4\,mm.
 
 % =============================================================================
+\section{Three-dimensional CFD check (set up, results pending)}\label{sec:cfd}
+The network model represents each opening and the bore by flow laws, and the inside of the drain by one gas pressure and one flat liquid level. A three-dimensional two-phase simulation drops these simplifications. It resolves the jets through the openings, the shape of the liquid inside the drain, liquid carried into the bore by the air stream, and the actual pressure field. Two cases have been set up and tested. Their results will be added here.
+
+\paragraph{Solver and geometry.} The solver is OpenFOAM v2606 \texttt{interFoam}: laminar, two incompressible phases, a volume-of-fluid interface (MULES) and surface tension, with a 90$^\circ$ contact angle as in the model's base case. The fluid properties are those of Section~\ref{sec:geometry}. The drain surface is generated from the model's geometry, with every opening drilled along the skin normal. A short outlet tube (4 bore diameters) is attached, and the drain sits in a trough 5\,mm wider than it on each side (Fig.~\ref{fig:cfd-domain}). The mesh is built in the drain frame, and the $10^\circ$ tilt enters only through gravity.
+\begin{itemize}
+\item \textbf{Outlet:} the static pressure at the tube end is held at $-933$\,Pa, an ideal wall regulator.
+\item \textbf{Top of the trough:} open to the atmosphere.
+\item \textbf{All walls:} no-slip.
+\end{itemize}
+
+\paragraph{Mesh.} The mesh is built with snappyHexMesh:
+\begin{itemize}
+\item 0.2\,mm cells at every opening rim, the tip cap, the end face and the bore, which puts five cells across a \O1.0\,mm opening;
+\item 0.4\,mm on the skin;
+\item 0.8\,mm inside the drain;
+\item 1.6\,mm in the pool and the air.
+\end{itemize}
+This gives 0.35\,M cells for the recommended layout and 0.67\,M for the as-built field. Both meshes pass \texttt{checkMesh}; the as-built mesh has 17 of 2.2\,M faces above the skewness limit of~4.
+
+\paragraph{Fixed-level snapshots.} A full drainage takes seconds of flow time and would need days of computing, so each run is a snapshot at one pool level $h$. The pool starts at $h$, and the drain interior starts filled to the inner level $\zeta(h)$ that the model predicts, with air above it. Then 0.12\,s of flow is computed. That is long enough for the air jets and the bore flow to settle, but the pool falls by less than 0.3\,mm. Averaged over the last 0.04\,s, the run gives:
+\begin{itemize}
+\item the liquid and air flow at the outlet;
+\item the gas pressure $p_g$ at the top of the interior;
+\item the flow through every opening, integrated over the cells inside its bore;
+\item the full pressure, velocity and phase fields.
+\end{itemize}
+The stop level then follows from the measured gas pressure through the static lift condition of Section~\ref{sec:physics}:
+\begin{equation}
+h_{s,\mathrm{CFD}}\approx \zl-\frac{|p_{g,\mathrm{CFD}}|}{\rho g},
+\end{equation}
+since at the stop the liquid held inside reaches the lip. The model's own values at the chosen levels are:
+
+\begin{table}[H]
+\centering\small
+\caption{The two CFD cases and the model's prediction at the same pool level ($\alpha=10^\circ$).}\label{tab:cfd}
+\begin{tabular}{@{}l r r r r r@{}}
+\toprule
+case & pool level & model stop & liquid out & air in & $p_g$ \\
+ & (mm) & (mm) & (mL/min) & (L/min) & (Pa) \\
+\midrule
+recommended layout & 8 & 1.4 & 203 & 14.7 & $-427$ \\
+USZ as built & 21 & 20.0 & 148 & 23.3 & $-37.5$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[!htbp]
+\centering\includegraphics[width=\linewidth]{domain.png}
+\caption{CFD domain of the recommended-layout case: the drain in its trough, tilted $10^\circ$ (left), and the cross-section (right).}
+\label{fig:cfd-domain}
+\end{figure}
+
+\paragraph{Status.} The set-up was tested with the native Windows build of OpenFOAM:
+\begin{itemize}
+\item both meshes built in 2 and 7 minutes;
+\item the solver ran stably through the first 2.7\,ms;
+\item the post-processing (cuts, 3D view and per-opening flows) worked on that output.
+\end{itemize}
+One core takes 3.4\,s per time step for the recommended case. Once the air jets form, the time step falls to 5--10\,\textmu s, so a full run takes about 3--4\,h on an 8-core machine for the recommended case and 6--8\,h for the as-built case. The runs are to be made on a Linux machine with
+\begin{center}\small
+\texttt{source /usr/lib/openfoam/openfoam2606/etc/bashrc; bash vof/local/run\_all.sh}
+\end{center}
+which builds, meshes and runs both cases and writes the pictures to \texttt{vof/local/results/}. The instructions are in \texttt{vof/local/README.md}.
+
+% =============================================================================
 \section{Limitations}\label{sec:limits}
 \begin{itemize}
 \item \textbf{Model order.} The model is a reduced-order network, not a 3D volume-of-fluid simulation. Slug and churn flow in the bore, foaming, and unsteady sloshing are represented only by the separated-phase bore model.
@@ -482,7 +563,7 @@ The model predicts that at $10^\circ$ the as-built part leaves about 20\,mm and 
 \item \textbf{Hole and bore laws.} The discharge coefficients and the additive Sampson--Poiseuille law are standard correlations, not fitted to this part. The stop level is insensitive to them (Table~\ref{tab:sens}).
 \item \textbf{Capillarity and drawdown.} These are treated with simple bounds. The real contact angle of the drain material should be measured.
 \item \textbf{Tissue and clots.} Tissue contact and clotting are outside the model; the existing FEBio work in the project addresses tissue sealing a hole.
-\item \textbf{Suggested CFD check.} A 3D volume-of-fluid run (for example OpenFOAM \texttt{interFoam} on the Euler cluster, as already set up for the sponge study) of two cases, the as-built field and the recommended layout at $10^\circ$, would be the next check.
+\item \textbf{CFD check pending.} The 3D volume-of-fluid check of Section~\ref{sec:cfd} is set up and tested but not yet run to the end, so the stop levels are confirmed only by the two reduced-order simulations.
 \end{itemize}
 
 % =============================================================================
@@ -496,7 +577,7 @@ The model predicts that at $10^\circ$ the as-built part leaves about 20\,mm and 
 \end{enumerate}
 
 \sloppy
-\paragraph{Reproduction.} All code is in \texttt{drain/drainstop}: \texttt{drainstop/model.py} (geometry, hydraulics, network solver, closed form), \texttt{drainstop/transient.py} (time-dependent model), \texttt{scripts/run\_study.py} (all studies, $\sim$10\,min on 12 cores), \texttt{scripts/make\_figures.py} and \texttt{scripts/make\_tables.py}.
+\paragraph{Reproduction.} All code is in \texttt{drain/drainstop}: \texttt{drainstop/model.py} (geometry, hydraulics, network solver, closed form), \texttt{drainstop/transient.py} (time-dependent model), \texttt{scripts/run\_study.py} (all studies, $\sim$10\,min on 12 cores), \texttt{scripts/make\_figures.py}, \texttt{scripts/make\_tables.py} and \texttt{scripts/make\_pictures.py} (Fig.~\ref{fig:pictures}); the CFD set-up is in \texttt{vof/} (Euler) and \texttt{vof/local/} (laptop).
 
 \begin{thebibliography}{99}\small
 \bibitem{sampson1891} R.~A. Sampson, On Stokes's current function, \emph{Phil. Trans. R. Soc. Lond. A} 182 (1891) 449--518.

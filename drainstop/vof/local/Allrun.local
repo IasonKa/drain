@@ -1,0 +1,49 @@
+#!/bin/bash
+# Mesh and run one fixed-level case, on Linux (OpenFOAM v2306 or newer, ESI openfoam.com) or on
+# Windows with the native OpenFOAM build in Git Bash.
+#   NP=8 ./Allrun             # parallel on 8 cores (mpirun on Linux, MS-MPI mpiexec on Windows)
+#   NP=1 ./Allrun             # serial
+#   ./Allrun mesh             # mesh and initial fields only
+cd "$(dirname "$0")"
+set -e
+case "$(uname -s)" in
+    MINGW*|MSYS*|CYGWIN*) source ../../../env_windows.sh; MPIRUN="mpiexec -n" ;;   # runs live in vof/local/runs/<name>/
+    *) MPIRUN="mpirun -np" ;;
+esac
+if ! command -v interFoam > /dev/null; then
+    echo "OpenFOAM not found: first run  source /usr/lib/openfoam/openfoam2606/etc/bashrc  (or your version)"
+    exit 1
+fi
+NP=${NP:-1}
+foamDictionary -entry numberOfSubdomains -set "$NP" system/decomposeParDict > /dev/null
+if [ ! -f MESHED ]; then
+    blockMesh > log.blockMesh 2>&1
+    surfaceFeatureExtract > log.surfaceFeatureExtract 2>&1
+    if [ "$NP" -gt 1 ]; then
+        decomposePar -force > log.decomposePar.mesh 2>&1
+        $MPIRUN "$NP" snappyHexMesh -parallel -overwrite > log.snappyHexMesh 2>&1
+        reconstructParMesh -constant > log.reconstructParMesh 2>&1
+        rm -rf processor*
+    else
+        snappyHexMesh -overwrite > log.snappyHexMesh 2>&1
+    fi
+    checkMesh -constant > log.checkMesh 2>&1 || true
+    grep -E "^ *cells:|Mesh OK|Failed" log.checkMesh || true
+    NOUT=$(awk '/^ *outlet *$/{f=1} f && /nFaces/{print $2+0; exit}' constant/polyMesh/boundary)
+    if [ "${NOUT:-0}" -eq 0 ]; then
+        echo "ERROR: the outlet patch has no faces - the drain interior was cut off from the pool"; exit 2
+    fi
+    topoSet > log.topoSet 2>&1
+    rm -rf 0 && cp -r 0.orig 0
+    setFields > log.setFields 2>&1
+    touch case.foam MESHED
+fi
+[ "$1" = "mesh" ] && exit 0
+if [ "$NP" -gt 1 ]; then
+    decomposePar -force > log.decomposePar 2>&1
+    $MPIRUN "$NP" interFoam -parallel > log.interFoam 2>&1
+    reconstructPar > log.reconstructPar 2>&1
+else
+    interFoam > log.interFoam 2>&1
+fi
+touch FINISHED

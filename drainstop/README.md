@@ -110,6 +110,14 @@ These are pictures of the network simulation's state: the flow through every ope
 
    The folder holds the case templates, the Slurm job scripts with automatic stop detection and job chaining, and the post-processing that compares each run with the model. Its README explains how to run them.
 
+   **On a laptop:** [`vof/local/`](vof/local/README.md) runs lighter fixed-level snapshots of the same two cases with one command on Linux:
+
+   ```
+   bash vof/local/run_all.sh
+   ```
+
+   Each case takes 3–8 h on 8 cores. The command produces pressure, velocity and liquid/air heatmaps, a 3D view, and the flow through every opening next to the model. The set-up was tested on this PC, but the full runs are still to be done (paper, Section 8).
+
 ## Folder layout
 
 | Path | What it is |

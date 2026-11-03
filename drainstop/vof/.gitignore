@@ -25,3 +25,6 @@ cases/*/system/setFieldsDict
 
 __pycache__/
 *.pyc
+
+# local fixed-level runs (large); finished pictures are copied to local/results/
+local/runs/
