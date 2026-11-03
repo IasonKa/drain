@@ -1,0 +1,12 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainstop VOF check, written by vof/make_cases.py
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      decomposeParDict;
+}
+numberOfSubdomains 48;      // Allmesh sets it to NP
+method          scotch;

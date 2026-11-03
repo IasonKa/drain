@@ -1,0 +1,46 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainstop VOF check, written by vof/make_cases.py
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// cellZone 'lumen': drain interior (and the openings) + outlet tube. Pool = everything else.
+actions
+(
+    {
+        name    lumenSet;
+        type    cellSet;
+        action  new;
+        source  surfaceToCell;
+        file    "constant/triSurface/envelope.stl";
+        useSurfaceOrientation true;     // closed, outward oriented
+        outsidePoints   ((0.06037 0.0116755 0.003017));
+        includeCut      false;
+        includeInside   true;
+        includeOutside  false;
+        nearDistance    -1;
+        curvature       -100;
+    }
+    {
+        name    lumenSet;
+        type    cellSet;
+        action  add;
+        source  cylinderToCell;
+        point1  (0.119 0 0.004835);
+        point2  (0.1368 0 0.004835);
+        p1      (0.119 0 0.004835);
+        p2      (0.1368 0 0.004835);
+        radius  0.00252;
+    }
+    {
+        name    lumen;
+        type    cellZoneSet;
+        action  new;
+        source  setToCellZone;
+        set     lumenSet;
+    }
+);

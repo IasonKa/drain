@@ -1,0 +1,5 @@
+#!/bin/bash
+cd "$(dirname "$0")"
+rm -rf processor* postProcessing 0 [1-9]* 0.[0-9]* constant/polyMesh constant/extendedFeatureEdgeMesh \
+       constant/triSurface/*.eMesh log.* MESHED STOPPED WALLTIME FINISHED case.foam analysis \
+       system/snappyHexMeshDict system/setFieldsDict

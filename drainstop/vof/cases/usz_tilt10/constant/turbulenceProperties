@@ -1,0 +1,11 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainstop VOF check, written by vof/make_cases.py
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      turbulenceProperties;
+}
+simulationType  laminar;

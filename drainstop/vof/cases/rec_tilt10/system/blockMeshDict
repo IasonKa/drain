@@ -1,0 +1,46 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainstop VOF check, written by vof/make_cases.py
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// trough around the drain, drain frame, 1.6 mm background cells
+scale           1;
+vertices
+(
+    (-0.005 -0.0144 -0.0025)
+    (0.1358 -0.0144 -0.0025)
+    (0.1358 0.0144 -0.0025)
+    (-0.005 0.0144 -0.0025)
+    (-0.005 -0.0144 0.0391)
+    (0.1358 -0.0144 0.0391)
+    (0.1358 0.0144 0.0391)
+    (-0.005 0.0144 0.0391)
+);
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) (88 18 26) simpleGrading (1 1 1)
+);
+edges           ();
+boundary
+(
+    walls       // tip end, sides and floor of the pool
+    {
+        type    wall;
+        faces   ((0 4 7 3) (0 1 5 4) (3 7 6 2) (0 3 2 1));
+    }
+    atmosphere  // top, always in air
+    {
+        type    patch;
+        faces   ((4 5 6 7));
+    }
+    outlet      // end of the outlet tube (the rest of this face is cut away)
+    {
+        type    patch;
+        faces   ((1 2 6 5));
+    }
+);

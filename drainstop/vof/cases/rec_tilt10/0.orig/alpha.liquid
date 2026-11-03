@@ -1,0 +1,34 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainstop VOF check, written by vof/make_cases.py
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      alpha.liquid;
+}
+dimensions      [0 0 0 0 0 0 0];
+internalField   uniform 0;
+boundaryField
+{
+    "(walls|drain|poolEnd)"
+    {
+        type            constantAlphaContactAngle;
+        theta0          90;     // as theta_e = 90 deg in the model (no capillary hold)
+        limit           gradient;
+        value           uniform 0;
+    }
+    atmosphere
+    {
+        type            inletOutlet;
+        inletValue      uniform 0;
+        value           uniform 0;
+    }
+    outlet
+    {
+        type            inletOutlet;
+        inletValue      uniform 0;
+        value           uniform 0;
+    }
+}

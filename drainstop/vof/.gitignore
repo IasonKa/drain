@@ -1,0 +1,27 @@
+# Drain and helper surfaces (about 20 MB): rebuilt by make_cases.py in about 10 s
+#     python vof/make_cases.py --no-estimate
+# run_vof.sbatch and test_vof.sbatch rebuild them when they are missing.
+cases/*/constant/triSurface/*.stl
+
+# Outputs, if a case is meshed or run in place (runs normally go to $SCRATCH/drainstop_vof)
+cases/*/constant/polyMesh/
+cases/*/constant/extendedFeatureEdgeMesh/
+cases/*/constant/triSurface/*.eMesh
+cases/*/0/
+cases/*/[1-9]*/
+cases/*/0.[0-9]*/
+cases/*/processor*/
+cases/*/postProcessing/
+cases/*/analysis/
+cases/*/log.*
+cases/*/watch.log
+cases/*/case.foam
+cases/*/MESHED
+cases/*/STOPPED
+cases/*/WALLTIME
+cases/*/FINISHED
+cases/*/system/snappyHexMeshDict
+cases/*/system/setFieldsDict
+
+__pycache__/
+*.pyc

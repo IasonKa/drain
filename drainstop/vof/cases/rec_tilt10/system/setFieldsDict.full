@@ -1,0 +1,30 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainstop VOF check, written by vof/make_cases.py
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      setFieldsDict;
+}
+// full start: liquid below the world level h0 = 33.19 mm above the lowest point of the skin,
+// the same level inside and outside the drain. Box edges i (horizontal), j (lateral), k (up).
+defaultFieldValues
+(
+    volScalarFieldValue alpha.liquid 0
+);
+regions
+(
+    rotatedBoxToCell
+    {
+        origin  (-0.0278251083 -0.03 -0.0426286211);
+        i       (0.177265396 0 -0.031256672);
+        j       (0 0.06 0);
+        k       (0.0138918542 0 0.0787846202);
+        fieldValues
+        (
+            volScalarFieldValue alpha.liquid 1
+        );
+    }
+);

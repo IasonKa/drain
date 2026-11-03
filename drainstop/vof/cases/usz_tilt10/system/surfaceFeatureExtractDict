@@ -1,0 +1,22 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainstop VOF check, written by vof/make_cases.py
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      surfaceFeatureExtractDict;
+}
+drain.stl
+{
+    extractionMethod    extractFromSurface;
+    includedAngle       150;
+    extractFromSurfaceCoeffs { includedAngle 150; }
+    subsetFeatures
+    {
+        nonManifoldEdges    no;
+        openEdges           yes;
+    }
+    writeObj            no;
+}

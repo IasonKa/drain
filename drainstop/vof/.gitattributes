@@ -1,0 +1,14 @@
+# Scripts and OpenFOAM dictionaries run on Linux (Euler): keep LF line endings on every checkout
+*.sh       text eol=lf
+*.sbatch   text eol=lf
+*.py       text eol=lf
+*.md       text eol=lf
+*.json     text eol=lf
+*.env      text eol=lf
+Allmesh    text eol=lf
+Allclean   text eol=lf
+cases/**/system/*     text eol=lf
+cases/**/constant/*   text eol=lf
+cases/**/0.orig/*     text eol=lf
+*.png      binary
+*.stl      binary

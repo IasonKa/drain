@@ -1,0 +1,50 @@
+#!/bin/bash
+# Mesh and initial fields of one run, in a copy of this case directory.
+#   RES=coarse|fine  START=full|short  NP=<tasks>  [AIR_RHO_FACTOR=1]  ./Allmesh
+# Writes MESHED when the case is decomposed and ready for: mpirun -np $NP interFoam -parallel
+cd "$(dirname "$0")"
+set -e
+source ./case.env
+RES=${RES:-coarse}; START=${START:-full}; NP=${NP:-1}; AIR_RHO_FACTOR=${AIR_RHO_FACTOR:-1}
+eval MAX_DT=\$MAX_DT_$RES
+eval END_TIME=\$END_TIME_$START
+eval WRITE=\$WRITE_$START
+cp system/snappyHexMeshDict.$RES system/snappyHexMeshDict
+cp system/setFieldsDict.$START system/setFieldsDict
+foamDictionary -entry maxDeltaT -set "$MAX_DT" system/controlDict > /dev/null
+foamDictionary -entry endTime -set "$END_TIME" system/controlDict > /dev/null
+foamDictionary -entry writeInterval -set "$WRITE" system/controlDict > /dev/null
+foamDictionary -entry numberOfSubdomains -set "$NP" system/decomposeParDict > /dev/null
+if [ "$AIR_RHO_FACTOR" != "1" ]; then       # heavier air: same stop level, larger time step
+    RHO=$(awk -v f="$AIR_RHO_FACTOR" -v r="$RHO_AIR" 'BEGIN{printf "%.6g", r*f}')
+    NU=$(awk -v f="$AIR_RHO_FACTOR" -v r="$RHO_AIR" -v m="$MU_AIR" 'BEGIN{printf "%.6g", m/(r*f)}')
+    foamDictionary -entry air/rho -set "$RHO" constant/transportProperties > /dev/null
+    foamDictionary -entry air/nu -set "$NU" constant/transportProperties > /dev/null
+fi
+echo "Allmesh: RES=$RES START=$START NP=$NP maxDeltaT=$MAX_DT endTime=$END_TIME air x$AIR_RHO_FACTOR"
+
+blockMesh > log.blockMesh 2>&1
+surfaceFeatureExtract > log.surfaceFeatureExtract 2>&1
+if [ "$NP" -gt 1 ]; then
+    decomposePar -force > log.decomposePar.mesh 2>&1
+    mpirun -np "$NP" snappyHexMesh -parallel -overwrite > log.snappyHexMesh 2>&1
+    reconstructParMesh -constant > log.reconstructParMesh 2>&1
+    rm -rf processor*
+else
+    snappyHexMesh -overwrite > log.snappyHexMesh 2>&1
+fi
+checkMesh -constant > log.checkMesh 2>&1 || true
+grep -E "^ *cells:|Mesh OK|Failed" log.checkMesh || true
+NOUT=$(awk '/^ *outlet *$/{f=1} f && /nFaces/{print $2+0; exit}' constant/polyMesh/boundary)
+if [ "${NOUT:-0}" -eq 0 ]; then
+    echo "ERROR: the outlet patch has no faces - the drain interior was cut off from the pool"; exit 2
+fi
+topoSet > log.topoSet 2>&1
+grep -E "lumen" log.topoSet | tail -2 || true
+rm -rf 0 && cp -r 0.orig 0
+setFields > log.setFields 2>&1
+if [ "$NP" -gt 1 ]; then
+    decomposePar -force > log.decomposePar 2>&1
+fi
+touch case.foam MESHED
+echo "Allmesh: done"

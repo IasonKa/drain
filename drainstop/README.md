@@ -85,7 +85,11 @@ Once fully exposed, the drain draws 19–23 L/min of air. A source with less cap
    - `pump`: limited source capacity.
    - `mincap`: minimum regulator flow for the recommended design.
    - `sizes_rec`: every hole size at the recommended layout.
-7. **No 3D CFD.** There was no OpenFOAM on this PC, so a full 3D volume-of-fluid run was not possible here. A two-case `interFoam` check on the ETH Euler cluster was set up separately as the next step.
+7. **3D CFD check, prepared but not yet run** ([`vof/`](vof/README.md)). There is no OpenFOAM on this PC. Two OpenFOAM `interFoam` volume-of-fluid cases are set up instead for the ETH Euler cluster, both with the outlet 10° up:
+   - the as-built USZ field, where the model predicts a stop at 20.0 mm;
+   - the recommended layout, where it predicts 1.4 mm.
+
+   The folder holds the case templates, the Slurm job scripts with automatic stop detection and job chaining, and the post-processing that compares each run with the model. Its README explains how to run them.
 
 ## Folder layout
 
@@ -100,6 +104,7 @@ Once fully exposed, the drain draws 19–23 L/min of air. A source with less cap
 | `scripts/make_tables.py` | LaTeX tables and number macros, written to `paper/generated/` |
 | `results/*.json` | Raw results of every study, one record per case. The figures and tables are built only from these files. |
 | `results/recommended.json` | The chosen layout, read by the sensitivity, Monte Carlo, transient and mincap studies |
+| `vof/` | 3D OpenFOAM check (interFoam) of two stop levels on ETH Euler: case generator, case templates, job scripts, analysis. See [`vof/README.md`](vof/README.md). |
 
 ## Rerun on another computer
 
@@ -153,4 +158,4 @@ print(m.descend(dh=0.1)["h_stop"], "mm  network simulation") # 1.36
 - **Source.** −7 mmHg is held in the outlet tube by a wall regulator, modelled as ideal. The `pump` and `mincap` parts cover limited flow capacity.
 - **Fluid.** The fluid is 50 wt% glycerol in water (ρ = 1126 kg/m³, μ = 6 mPa·s, γ = 0.068 N/m). Water and 40/80 % glycerol are in `FLUIDS` and in the sensitivity study.
 - **Interior.** The drain interior is one open lumen. The as-built flutes and core change flow rates but not stop levels, since no liquid flows at the stop.
-- **Simulation scope.** The model is reduced-order, not 3D volume-of-fluid CFD. Slug and churn flow in the bore, foaming and sloshing are only represented by the separated-phase bore model.
+- **Simulation scope.** The model is reduced-order, not 3D volume-of-fluid CFD. Slug and churn flow in the bore, foaming and sloshing are only represented by the separated-phase bore model. The `vof/` cases are there to test this.

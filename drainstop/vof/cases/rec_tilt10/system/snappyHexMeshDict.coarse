@@ -1,0 +1,114 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainstop VOF check, written by vof/make_cases.py
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// coarse: skin 0.4 mm, openings/caps 0.2 mm, bore 0.2 mm,
+//        lumen 0.4 mm, pool 0.8 mm, air 1.6 mm
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    drain.stl       { type triSurfaceMesh; name drain; }
+    poolEnd.stl     { type triSurfaceMesh; name poolEnd; }
+    poolRegion.stl  { type triSurfaceMesh; name poolRegion; }
+    lumen.stl       { type triSurfaceMesh; name lumen; }
+    boreZone        { type searchableCylinder; point1 (0.1166 0 0.004835); point2 (0.122 0 0.004835); radius 0.00342; }
+    tubeZone        { type searchableCylinder; point1 (0.1186 0 0.004835); point2 (0.1368 0 0.004835); radius 0.00212; }
+    tipZone         { type searchableBox; min (-0.0006 -0.009525 -0.0006); max (0.0009 0.009525 0.01027); }
+    endZone         { type searchableBox; min (0.118 -0.009525 -0.0006); max (0.1196 0.009525 0.01027); }
+}
+
+castellatedMeshControls
+{
+    maxLocalCells       3000000;
+    maxGlobalCells      40000000;
+    minRefinementCells  10;
+    maxLoadUnbalance    0.10;
+    nCellsBetweenLevels 2;
+    features
+    (
+        { file "drain.eMesh"; levels ((0.0002 3)); }    // opening rims, caps, bore lip
+    );
+    refinementSurfaces
+    {
+        drain   { level (2 2); patchInfo { type wall; } }
+        poolEnd { level (1 1); patchInfo { type wall; } }
+    }
+    resolveFeatureAngle 30;
+    refinementRegions
+    {
+        poolRegion  { mode inside; levels ((1e15 1)); }    // liquid at the start
+        lumen       { mode inside; levels ((1e15 2)); }
+        tubeZone    { mode inside; levels ((1e15 2)); }
+        boreZone    { mode inside; levels ((1e15 3)); }
+        tipZone     { mode inside; levels ((1e15 3)); }    // 0.3 mm tip cap
+        endZone     { mode inside; levels ((1e15 3)); }    // 0.4 mm end face
+    }
+    locationInMesh (0.06037 0.0116755 0.003017);      // pool, beside the drain
+    allowFreeStandingZoneFaces true;
+}
+
+snapControls
+{
+    nSmoothPatch            3;
+    tolerance               2.0;
+    nSolveIter              50;
+    nRelaxIter              5;
+    nFeatureSnapIter        10;
+    implicitFeatureSnap     false;
+    explicitFeatureSnap     true;
+    multiRegionFeatureSnap  false;
+}
+
+addLayersControls
+{
+    relativeSizes           true;
+    layers                  {}
+    expansionRatio          1.0;
+    finalLayerThickness     0.3;
+    minThickness            0.1;
+    nGrow                   0;
+    featureAngle            60;
+    slipFeatureAngle        30;
+    nRelaxIter              3;
+    nSmoothSurfaceNormals   1;
+    nSmoothNormals          3;
+    nSmoothThickness        10;
+    maxFaceThicknessRatio   0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedialAxisAngle      90;
+    nBufferCellsNoExtrude   0;
+    nLayerIter              50;
+}
+
+meshQualityControls
+{
+    maxNonOrtho             65;
+    maxBoundarySkewness     20;
+    maxInternalSkewness     4;
+    maxConcave              80;
+    minVol                  1e-30;      // m3: cells here are down to 1e-12 m3
+    minTetQuality           1e-30;
+    minArea                 -1;
+    minTwist                0.02;
+    minDeterminant          0.001;
+    minFaceWeight           0.05;
+    minVolRatio             0.01;
+    minTriangleTwist        -1;
+    nSmoothScale            4;
+    errorReduction          0.75;
+    relaxed
+    {
+        maxNonOrtho         75;
+    }
+}
+
+mergeTolerance  1e-6;

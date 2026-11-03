@@ -1,0 +1,27 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainstop VOF check, written by vof/make_cases.py
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      transportProperties;
+}
+phases          (liquid air);
+
+liquid          // 50 wt% glycerol-water, 20 C
+{
+    transportModel  Newtonian;
+    nu              5.3286e-06;
+    rho             1126;
+}
+
+air
+{
+    transportModel  Newtonian;
+    nu              1.50332e-05;
+    rho             1.204;
+}
+
+sigma           0.068;

@@ -1,0 +1,32 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  drainstop VOF check, written by vof/make_cases.py
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      p_rgh;
+}
+dimensions      [1 -1 -2 0 0 0 0];
+internalField   uniform 0;
+boundaryField
+{
+    "(walls|drain|poolEnd)"
+    {
+        type            fixedFluxPressure;
+        value           uniform 0;
+    }
+    atmosphere          // open pool surface, atmospheric (gauge 0)
+    {
+        type            prghTotalPressure;
+        p0              uniform 0;
+        value           uniform 0;
+    }
+    outlet              // regulated suction, -7 mmHg static in the outlet tube
+    {
+        type            prghPressure;
+        p               uniform -933.254;
+        value           uniform 0;
+    }
+}
