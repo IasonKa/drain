@@ -50,9 +50,10 @@ foreach ($c in $Cases) {
                 Write-Host "-- building the geometry and mesh (1 min for rec_tilt10, ~15 min for usz_tilt10)"
                 Run-Py $log (@("vof\kratos\make_case.py", $tmpl, $h) + $Presets[$tmpl] + @("--name", $name))
             }
-            if (Test-Path "$run\vtk_output") { Remove-Item -Recurse -Force "$run\vtk_output" }
+            # a run stopped part-way (reboot, closed window) continues from its last 5 ms snapshot
+            $resume = $(if ($Force) { @() } else { @("--resume") })
             Write-Host "-- running Kratos (progress every 10 steps; this takes hours)"
-            Run-Py $log @("vof\kratos\run_case.py", $run, "--threads", "$Threads")
+            Run-Py $log (@("vof\kratos\run_case.py", $run, "--threads", "$Threads") + $resume)
         }
         Write-Host "-- pictures"
         Run-Py $log @("vof\kratos\show_setup.py", $run)

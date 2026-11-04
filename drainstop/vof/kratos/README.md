@@ -56,7 +56,7 @@ RUN.bat -FineUSZ                               USZ with 0.25 mm opening cells (a
 RUN.bat -Force                                 run a finished case again
 ```
 
-A run that's stopped part-way is restarted from the beginning. Finished cases are skipped.
+**Stopping and continuing.** You can stop a run at any time: close the window, reboot, or let the PC lose power. Running `RUN.bat` again continues it from its last snapshot, saved every 5 ms of flow, so you lose at most about 5 ms of flow. Finished cases are skipped, and `-Force` starts a case from zero.
 
 ## GPU: not used, and why
 

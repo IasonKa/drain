@@ -59,8 +59,10 @@ def vtk_time(path):
 
 
 def vtk_files(run):
-    fs = glob.glob(os.path.join(run, "vtk_output", "*.vtk"))
-    return sorted(fs, key=vtk_time)
+    """All field outputs: vtk_saved/ (before a resume) and vtk_output/ (since), one per time."""
+    fs = glob.glob(os.path.join(run, "vtk_saved", "*.vtk")) + glob.glob(os.path.join(run, "vtk_output", "*.vtk"))
+    by_time = {vtk_time(f): f for f in fs}
+    return [by_time[t] for t in sorted(by_time)]
 
 
 def read_monitor(run):
