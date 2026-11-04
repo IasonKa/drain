@@ -1,0 +1,3 @@
+# Kratos runs (meshes and fields, large); finished pictures go to results/
+runs/
+__pycache__/

@@ -1,0 +1,11 @@
+# Python 3.12, Windows x64. Installed by SETUP.bat into %USERPROFILE%\venvs\drain-kratos
+KratosMultiphysics==10.3.1
+KratosFluidDynamicsApplication==10.3.1
+KratosLinearSolversApplication==10.3.1
+gmsh==4.15.2
+numpy==2.5.4
+matplotlib==3.11.2
+pyvista==0.49.2
+vtk==9.7.1
+imageio==2.37.0
+pillow==13.0.0

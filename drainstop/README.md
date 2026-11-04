@@ -110,7 +110,9 @@ These are pictures of the network simulation's state: the flow through every ope
 
    The folder holds the case templates, the Slurm job scripts with automatic stop detection and job chaining, and the post-processing that compares each run with the model. Its README explains how to run them.
 
-   **On a laptop:** [`vof/local/`](vof/local/README.md) runs lighter fixed-level snapshots of the same two cases with one command on Linux:
+   **On a Windows PC or workstation:** [`vof/kratos/`](vof/kratos/README.md) runs the same two fixed-level cases with Kratos Multiphysics. It needs no Linux, MPI or compiler. Double-click `SETUP.bat` once, then `RUN.bat`. It uses all CPU cores; the GPU isn't used, as explained in its README.
+
+   **On a Linux laptop:** [`vof/local/`](vof/local/README.md) runs lighter fixed-level snapshots of the same two cases with OpenFOAM, with one command:
 
    ```
    bash vof/local/run_all.sh
@@ -134,6 +136,8 @@ These are pictures of the network simulation's state: the flow through every ope
 | `results/*.json` | Raw results of every study, one record per case. The figures and tables are built only from these files. |
 | `results/recommended.json` | The chosen layout, read by the sensitivity, Monte Carlo, transient and mincap studies |
 | `vof/` | 3D OpenFOAM check (interFoam) of two stop levels on ETH Euler: case generator, case templates, job scripts, analysis. See [`vof/README.md`](vof/README.md). |
+| `vof/local/` | The same check on a Linux laptop with OpenFOAM (fixed-level snapshots, `run_all.sh`) |
+| `vof/kratos/` | The same check on a Windows PC or workstation with Kratos Multiphysics (`SETUP.bat`, `RUN.bat`) |
 
 ## Rerun on another computer
 

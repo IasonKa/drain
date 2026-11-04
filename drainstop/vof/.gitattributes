@@ -11,5 +11,7 @@ Allclean   text eol=lf
 cases/**/system/*     text eol=lf
 cases/**/constant/*   text eol=lf
 cases/**/0.orig/*     text eol=lf
+*.bat      text eol=crlf
+*.ps1      text eol=crlf
 *.png      binary
 *.stl      binary
