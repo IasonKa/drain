@@ -104,13 +104,13 @@ These are pictures of the network simulation's state: the flow through every ope
    - `pump`: limited source capacity.
    - `mincap`: minimum regulator flow for the recommended design.
    - `sizes_rec`: every hole size at the recommended layout.
-7. **3D CFD check, prepared but not yet run** ([`vof/`](vof/README.md)). There is no OpenFOAM on this PC. Two OpenFOAM `interFoam` volume-of-fluid cases are set up instead for the ETH Euler cluster, both with the outlet 10° up:
-   - the as-built USZ field, where the model predicts a stop at 20.0 mm;
-   - the recommended layout, where it predicts 1.4 mm.
+7. **3D two-phase CFD check, run with Kratos on this laptop** ([`vof/kratos/`](vof/kratos/README.md), results, GIFs and graphs in [`vof/kratos/results/`](vof/kratos/results)). Two fixed-level snapshots, both with the outlet 10° up:
+   - **The as-built USZ field, pool at 21 mm** (1 mm above the model's stop at 20.0 mm), 15 ms of flow. The outlet carries mainly air (16.5 L/min; model 23.3) and only a trickle of liquid (58 mL/min; model 148), the near-stop state the model predicts.
+   - **The recommended layout, pool at 8 mm**, 50 ms of flow. This run did not settle: the drain started almost full, primed, and was still siphoning out its starting liquid. It can't be compared with the model's steady value.
 
-   The folder holds the case templates, the Slurm job scripts with automatic stop detection and job chaining, and the post-processing that compares each run with the model. Its README explains how to run them.
+   The CFD confirms the air-leak mechanism, but not the stop levels themselves: the runs are too short and too coarse for that. The setup needs no Linux, MPI or compiler: double-click `SETUP.bat` once, then `RUN.bat`. It uses all CPU cores; the GPU isn't used, as explained in its README.
 
-   **On a Windows PC or workstation:** [`vof/kratos/`](vof/kratos/README.md) runs the same two fixed-level cases with Kratos Multiphysics. It needs no Linux, MPI or compiler. Double-click `SETUP.bat` once, then `RUN.bat`. It uses all CPU cores; the GPU isn't used, as explained in its README.
+   **On the ETH Euler cluster:** [`vof/`](vof/README.md) holds the same two cases for OpenFOAM `interFoam`, with Slurm job scripts, automatic stop detection, job chaining and post-processing.
 
    **On a Linux laptop:** [`vof/local/`](vof/local/README.md) runs lighter fixed-level snapshots of the same two cases with OpenFOAM, with one command:
 

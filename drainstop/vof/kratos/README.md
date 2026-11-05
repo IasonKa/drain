@@ -29,6 +29,31 @@ This folder runs a 3D CFD check of the drain-stop study (`drainstop/paper/drain_
 
 ![mesh](doc/setup_mesh_rec.png)
 
+## Results (run on a 12-core laptop, November 2026)
+
+Everything is in [`results/`](results): pictures, GIFs, `summary.json` and the logged flows (`monitor.csv`) for each case. The paper's Section 8 discusses them.
+
+| | Recommended layout, pool 8 mm | USZ as built, pool 21 mm |
+|---|---|---|
+| Flow time computed | 50 ms (stopped there) | 16 ms (diverged at 16.4 ms; 0–15 ms used) |
+| Liquid out, CFD (model) | 674 mL/min at 40–50 ms (203) | 58 mL/min at 4–15 ms (148) |
+| Air out, CFD (model) | 0.05 L/min (14.7) | 16.5 L/min (23.3) |
+| Pressure at the top of the interior, CFD (model) | −60 to −90 Pa, in liquid (−427) | −5 to −85 Pa, in air (−37.5) |
+| Reading | **Not settled.** The drain started 94 % full, primed and siphons out the liquid it started with; its lowest openings push liquid back into the pool. Not comparable with the model's steady value. | **Near the stop, as the model predicts:** the outlet carries mainly air and only a trickle of liquid; air flow within 30 % of the model. |
+
+What the CFD confirms: exposed openings draw air at −7 mmHg, and that air stream along the top of the interior takes most of the bore. What it doesn't: the stop levels themselves. The runs are too short and the openings too coarse (3–4 cells across, no surface tension) for that.
+
+**USZ as built, pool 21 mm** (left: mid-plane over time; right: 3D, cut open along the axis):
+
+<img src="results/usz_tilt10_h21_coarse/midplane_slow.gif" width="49%"> <img src="results/usz_tilt10_h21_coarse/cut3d_orbit.gif" width="49%">
+
+**Recommended layout, pool 8 mm:**
+
+<img src="results/rec_tilt10_h8/midplane_slow.gif" width="49%"> <img src="results/rec_tilt10_h8/cut3d_slow.gif" width="49%">
+
+![USZ history](results/usz_tilt10_h21_coarse/history.png)
+![recommended history](results/rec_tilt10_h8/history.png)
+
 ## Quick start on a new Windows workstation
 
 1. **Get the files:** on https://github.com/IasonKa/drain, choose **Code → Download ZIP**. Before unzipping, right-click the ZIP → Properties → tick **Unblock**, so Windows doesn't block the scripts. Then extract it, for example to `C:\drain`. With git installed, `git clone https://github.com/IasonKa/drain.git` works too.
@@ -72,7 +97,7 @@ Both cases are fixed-level snapshots: they run for 0.10 s (recommended layout) o
 
 | Machine | Recommended (139 k nodes, 2,000 steps) | USZ coarse (203 k nodes, 1,200 steps) |
 |---|---|---|
-| 12-core laptop CPU (Intel Core Ultra 7 255U), measured | about 25–35 s/step → 15–20 h | about 40–50 s/step → 13–17 h |
+| 12-core laptop CPU (Intel Core Ultra 7 255U), measured | about 25–35 s/step → 15–20 h | about 25–60 s/step → 8–20 h |
 | 16–32-core workstation, estimate | about 8–15 s/step → 5–8 h | about 12–20 s/step → 4–7 h |
 
 Meshing takes about 1 min for the recommended case and about 15 min for the USZ case, which has 609 openings. Disk use is about 0.5–1 GB per case, in `runs\`, which isn't kept in git.
@@ -122,3 +147,4 @@ Meshing takes about 1 min for the recommended case and about 15 min for the USZ 
 - **`SETUP.bat` fails at pip:** check the internet connection or proxy, then run it again. It continues where it stopped.
 - **Kratos does not load / missing `MSVCP140.dll` or `VCOMP140.dll`:** the Visual C++ runtime didn't install. Install it from https://aka.ms/vs/17/release/vc_redist.x64.exe and run `SETUP.bat` again.
 - **Very slow or uneven steps:** other heavy programs are running, or the PC throttles on battery. Keep it plugged in and use `-Threads` equal to the physical core count.
+- **`nan` in the progress lines:** the solution diverged. In the USZ run this happened when a liquid slug reached the end of the outlet tube, where the pressure is prescribed. Snapshots from before are still valid. A longer outlet tube or a smaller time step (`make_case.py ... --dt 2.5e-5`) should help.

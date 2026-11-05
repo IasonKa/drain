@@ -491,69 +491,106 @@ A flat drain may come to rest upside down. Mirroring the rows onto the top face 
 The model predicts that at $10^\circ$ the as-built part leaves about 20\,mm and the recommended part about 1.4\,mm.
 
 % =============================================================================
-\section{Three-dimensional CFD check (set up, results pending)}\label{sec:cfd}
-The network model represents each opening and the bore by flow laws, and the inside of the drain by one gas pressure and one flat liquid level. A three-dimensional two-phase simulation drops these simplifications. It resolves the jets through the openings, the shape of the liquid inside the drain, liquid carried into the bore by the air stream, and the actual pressure field. Two cases have been set up and tested. Their results will be added here.
+\section{Three-dimensional CFD check}\label{sec:cfd}
+The network model represents each opening and the bore by flow laws, and the inside of the drain by one gas pressure and one flat liquid level. A three-dimensional two-phase simulation drops these simplifications. It resolves the jets through the openings, the shape of the liquid inside the drain, the air stream into the bore and the actual pressure field. One case was run for each layout (Table~\ref{tab:cfd}). The set-up, all pictures and animations, and the logged data are in \texttt{vof/kratos/}.
 
-\paragraph{Solver and geometry.} The solver is OpenFOAM v2606 \texttt{interFoam}: laminar, two incompressible phases, a volume-of-fluid interface (MULES) and surface tension, with a 90$^\circ$ contact angle as in the model's base case. The fluid properties are those of Section~\ref{sec:geometry}. The drain surface is generated from the model's geometry, with every opening drilled along the skin normal. A short outlet tube (4 bore diameters) is attached, and the drain sits in a trough 5\,mm wider than it on each side (Fig.~\ref{fig:cfd-domain}). The mesh is built in the drain frame, and the $10^\circ$ tilt enters only through gravity.
+\paragraph{Solver and geometry.} The solver is the two-fluid Navier--Stokes solver of Kratos Multiphysics~10.3. The flow is laminar, both phases are incompressible, and a level set tracks the liquid--air interface. Surface tension is not modelled, which matches the model's base case (contact angle $90^\circ$). The fluid properties are those of Section~\ref{sec:geometry}.
+
+The geometry is built with gmsh/OpenCASCADE from the model's geometry: every opening drilled through the 0.6\,mm wall along the skin normal, the \O4.24\,mm bore in the end face, and a 16.8\,mm outlet tube. The drain sits in a trough 5.5\,mm wider than it on each side, with a floor 2.5\,mm below the drain and parallel to it (Fig.~\ref{fig:cfd-domain}). The mesh is built in the drain frame, and the $10^\circ$ tilt enters only through gravity. The boundary conditions are:
 \begin{itemize}
-\item \textbf{Outlet:} the static pressure at the tube end is held at $-933$\,Pa, an ideal wall regulator.
-\item \textbf{Top of the trough:} open to the atmosphere.
+\item \textbf{Outlet:} the pressure at the tube end is held at $-933$\,Pa, an ideal wall regulator.
+\item \textbf{Top of the trough:} open to the atmosphere (0\,Pa), so air can flow in and out.
 \item \textbf{All walls:} no-slip.
 \end{itemize}
 
-\paragraph{Mesh.} The mesh is built with snappyHexMesh:
+\paragraph{Mesh and time step.} The tetrahedral mesh has these cell sizes (as-built field in brackets):
 \begin{itemize}
-\item 0.2\,mm cells at every opening rim, the tip cap, the end face and the bore, which puts five cells across a \O1.0\,mm opening;
-\item 0.4\,mm on the skin;
+\item 0.25\,mm (0.35\,mm) at the opening rims and the bore;
+\item 0.5\,mm (0.6\,mm) on the skin;
 \item 0.8\,mm inside the drain;
 \item 1.6\,mm in the pool and the air.
 \end{itemize}
-This gives 0.35\,M cells for the recommended layout and 0.67\,M for the as-built field. Both meshes pass \texttt{checkMesh}; the as-built mesh has 17 of 2.2\,M faces above the skewness limit of~4.
+This gives 139\,k nodes and 645\,k cells for the recommended layout, and 203\,k nodes and 827\,k cells for the as-built field.
 
-\paragraph{Fixed-level snapshots.} A full drainage takes seconds of flow time and would need days of computing, so each run is a snapshot at one pool level $h$. The pool starts at $h$, and the drain interior starts filled to the inner level $\zeta(h)$ that the model predicts, with air above it. Then 0.12\,s of flow is computed. That is long enough for the air jets and the bore flow to settle, but the pool falls by less than 0.3\,mm. Averaged over the last 0.04\,s, the run gives:
+The time step is fixed at 50\,\textmu s (implicit BDF2). Kratos's default acceleration limit of $5\,g$ is switched off: the air jets through the openings accelerate at about $10^5$\,m/s$^2$, and the limit stops them. On a 12-core laptop one step takes 25--60\,s.
+
+\paragraph{Fixed-level snapshots.} A full drainage takes seconds of flow time, which would need weeks on this machine, so each run is a snapshot at one pool level $h$:
 \begin{itemize}
-\item the liquid and air flow at the outlet;
-\item the gas pressure $p_g$ at the top of the interior;
-\item the flow through every opening, integrated over the cells inside its bore;
-\item the full pressure, velocity and phase fields.
+\item \textbf{Start:} the pool starts at $h$. The drain interior starts filled to the inner level $\zeta(h)$ that the model predicts, with air above it.
+\item \textbf{Logged every step:} the liquid and air flow at the outlet, and the pressure at eight probes along the top of the interior and in the bore.
+\item \textbf{Saved every 5\,ms:} the full fields.
+\item \textbf{Flow through each opening:} sampled on a disc across the middle of its bore.
 \end{itemize}
-The stop level then follows from the measured gas pressure through the static lift condition of Section~\ref{sec:physics}:
-\begin{equation}
-h_{s,\mathrm{CFD}}\approx \zl-\frac{|p_{g,\mathrm{CFD}}|}{\rho g},
-\end{equation}
-since at the stop the liquid held inside reaches the lip. The model's own values at the chosen levels are:
 
 \begin{table}[H]
 \centering\small
-\caption{The two CFD cases and the model's prediction at the same pool level ($\alpha=10^\circ$).}\label{tab:cfd}
-\begin{tabular}{@{}l r r r r r@{}}
+\caption{The two CFD cases at $\alpha=10^\circ$. CFD values are averaged over the flow-time window shown; the model's prediction is at the same pool level. The pressure is taken at the top of the drain interior, in its last 30\,mm before the end face.}\label{tab:cfd}
+\begin{tabular}{@{}l r r r r r r@{}}
 \toprule
-case & pool level & model stop & liquid out & air in & $p_g$ \\
- & (mm) & (mm) & (mL/min) & (L/min) & (Pa) \\
+ & pool & stop level & window & liquid out & air out & interior pressure \\
+ & (mm) & (mm) & (ms) & (mL/min) & (L/min) & (Pa) \\
 \midrule
-recommended layout & 8 & 1.4 & 203 & 14.7 & $-427$ \\
-USZ as built & 21 & 20.0 & 148 & 23.3 & $-37.5$ \\
+recommended layout, CFD & 8 & -- & 40--50 & 674 & 0.05 & $-60$ to $-90$ (in liquid) \\
+\quad model & 8 & 1.4 & -- & 203 & 14.7 & $-427$ \\[1mm]
+USZ as built, CFD & 21 & -- & 4--15 & 58 & 16.5 & $-5$ to $-85$ (in air) \\
+\quad model & 21 & 20.0 & -- & 148 & 23.3 & $-37.5$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{figure}[!htbp]
-\centering\includegraphics[width=\linewidth]{domain.png}
-\caption{CFD domain of the recommended-layout case: the drain in its trough, tilted $10^\circ$ (left), and the cross-section (right).}
+\centering\includegraphics[width=0.85\linewidth]{cfd_rec_setup.png}
+\caption{CFD set-up of the recommended-layout case: the drain in its trough with the outlet end $10^\circ$ up, the pool at 8\,mm, and the liquid inside the drain at the model's inner level.}
 \label{fig:cfd-domain}
 \end{figure}
 
-\paragraph{Status.} The set-up was tested with the native Windows build of OpenFOAM:
+\paragraph{As-built field, pool at 21\,mm.} This level is 1\,mm above the model's stop level.
 \begin{itemize}
-\item both meshes built in 2 and 7 minutes;
-\item the solver ran stably through the first 2.7\,ms;
-\item the post-processing (cuts, 3D view and per-opening flows) worked on that output.
+\item \textbf{Air:} within 2\,ms the air flow through the exposed openings rises to 16--17\,L/min and stays there (Fig.~\ref{fig:cfd-usz}). The flows sampled in the 609 openings add up to 16.5\,L/min of air, the same as at the outlet.
+\item \textbf{Liquid:} it leaves only as a thin film and in short slugs, 58\,mL/min on average. The openings take in 45\,mL/min.
+\item \textbf{Inside the drain:} the liquid stays near the model's inner level ($\zeta=24.3$\,mm), about 3\,mm above the pool, held up by the vacuum. The air flows along the top of the interior into the bore at several metres per second.
+\item \textbf{Air pressure:} along the top of the interior it falls from about $-5$\,Pa, 30\,mm before the end face, to $-85$\,Pa just before the bore. The model's single gas pressure, $-37.5$\,Pa, lies in between.
 \end{itemize}
-One core takes 3.4\,s per time step for the recommended case. Once the air jets form, the time step falls to 5--10\,\textmu s, so a full run takes about 3--4\,h on an 8-core machine for the recommended case and 6--8\,h for the as-built case. The runs are to be made on a Linux machine with
-\begin{center}\small
-\texttt{source /usr/lib/openfoam/openfoam2606/etc/bashrc; bash vof/local/run\_all.sh}
-\end{center}
-which builds, meshes and runs both cases and writes the pictures to \texttt{vof/local/results/}. The instructions are in \texttt{vof/local/README.md}.
+The CFD therefore shows the state the model predicts near the stop: the outlet carries mainly air and little liquid. The air flow is 29\,\% below the model's value.
+
+At 16.4\,ms a liquid slug reached the end of the outlet tube, where the pressure is prescribed, and the solution diverged numerically. The fields up to 15\,ms come before this and are used here.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{cfd_usz_midplane.png}\\[2mm]
+\includegraphics[width=0.8\linewidth]{cfd_usz_history.png}
+\caption{As-built field, pool at 21\,mm. Top: the plane through the drain axis, averaged over 4--15\,ms; it shows the liquid (blue), the pressure, and the speed on a log scale. Bottom: the liquid and air flow at the outlet and the air pressure at the top of the interior against time, with the model's values dashed. The step in the pressure at 10.2\,ms is where a second probe comes out of the liquid into the air.}
+\label{fig:cfd-usz}
+\end{figure}
+
+\paragraph{Recommended layout, pool at 8\,mm.} This run did not reach a steady state in the 50\,ms computed. It went through three stages:
+\begin{enumerate}
+\item \textbf{Start (0--12\,ms).} With $\zeta=24.7$\,mm, the drain starts 94\,\% full of liquid. The air pocket left at the top of the outlet end is held at $-650$ to $-900$\,Pa (model: $-427$\,Pa), and air leaves at 4--6\,L/min (model: 14.7\,L/min).
+\item \textbf{Priming (12--37\,ms).} The pocket is drawn off and the bore fills with liquid. Air then enters only as bubbles through the exposed openings (Fig.~\ref{fig:cfd-rec}).
+\item \textbf{Siphon (37--50\,ms).} The outlet carries 674\,mL/min of liquid and almost no air, and the pressure at the top of the interior, now in liquid, is only $-60$ to $-90$\,Pa.
+\end{enumerate}
+That vacuum can't hold the liquid column 16.7\,mm above the pool, which needs at least $-184$\,Pa. So the drain is emptying the liquid it started with, not drawing it from the pool:
+\begin{itemize}
+\item at 50\,ms its lowest openings carry liquid outward into the pool, at 0.4--0.5\,m/s (about 10\,mL/min each);
+\item the liquid inside the drain fell from 12.35 to 12.11\,mL between 5 and 50\,ms;
+\item only 0.21\,mL left through the outlet in the whole run.
+\end{itemize}
+The outlet flow at 50\,ms is therefore part of the start-up, and it can't be compared with the model's steady 203\,mL/min. Reaching the steady state would take a few tenths of a second of flow, that is two to three days on this laptop.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{cfd_rec_cut3d.png}\\[2mm]
+\includegraphics[width=0.8\linewidth]{cfd_rec_history.png}
+\caption{Recommended layout, pool at 8\,mm. Top: the drain at 50\,ms, cut open along its axis. The far half of the wall and the cut plane are coloured by pressure, liquid surfaces and air bubbles are blue, and streamlines are coloured by speed. Bottom: the liquid and air flow at the outlet and the air pressure at the top of the interior against time, with the model's values dashed. After 12\,ms no probe at the top of the interior is in air, so the pressure curve ends.}
+\label{fig:cfd-rec}
+\end{figure}
+
+\paragraph{What the CFD shows, and what it does not.}
+\begin{itemize}
+\item \textbf{It confirms the mechanism the model is built on.} Exposed openings draw air at $-7$\,mmHg. That air flows along the top of the interior into the bore and uses up most of the bore's capacity.
+\item \textbf{It agrees with the model near the as-built drain's stop.} With the as-built field at 21\,mm, the outlet carries mainly air and little liquid, as the model predicts 1\,mm above its stop level. The air flow agrees within 30\,\%.
+\item \textbf{It does not confirm the stop levels quantitatively.} The runs are short (15 and 50\,ms) and the recommended case is still in its start-up. The openings have only 3--4 cells across, surface tension is not modelled, and the trough is small. The stop levels therefore still rest on the two reduced-order simulations of Section~\ref{sec:sim}.
+\end{itemize}
 
 % =============================================================================
 \section{Limitations}\label{sec:limits}
@@ -563,7 +600,7 @@ which builds, meshes and runs both cases and writes the pictures to \texttt{vof/
 \item \textbf{Hole and bore laws.} The discharge coefficients and the additive Sampson--Poiseuille law are standard correlations, not fitted to this part. The stop level is insensitive to them (Table~\ref{tab:sens}).
 \item \textbf{Capillarity and drawdown.} These are treated with simple bounds. The real contact angle of the drain material should be measured.
 \item \textbf{Tissue and clots.} Tissue contact and clotting are outside the model; the existing FEBio work in the project addresses tissue sealing a hole.
-\item \textbf{CFD check pending.} The 3D volume-of-fluid check of Section~\ref{sec:cfd} is set up and tested but not yet run to the end, so the stop levels are confirmed only by the two reduced-order simulations.
+\item \textbf{CFD check is qualitative.} The 3D two-phase runs of Section~\ref{sec:cfd} confirm the air-leak mechanism and the near-stop state of the as-built drain, but they are short and coarse at the openings. The stop levels are confirmed quantitatively only by the two reduced-order simulations.
 \end{itemize}
 
 % =============================================================================
@@ -577,7 +614,7 @@ which builds, meshes and runs both cases and writes the pictures to \texttt{vof/
 \end{enumerate}
 
 \sloppy
-\paragraph{Reproduction.} All code is in \texttt{drain/drainstop}: \texttt{drainstop/model.py} (geometry, hydraulics, network solver, closed form), \texttt{drainstop/transient.py} (time-dependent model), \texttt{scripts/run\_study.py} (all studies, $\sim$10\,min on 12 cores), \texttt{scripts/make\_figures.py}, \texttt{scripts/make\_tables.py} and \texttt{scripts/make\_pictures.py} (Fig.~\ref{fig:pictures}); the CFD set-up is in \texttt{vof/} (Euler) and \texttt{vof/local/} (laptop).
+\paragraph{Reproduction.} All code is in \texttt{drain/drainstop}: \texttt{drainstop/model.py} (geometry, hydraulics, network solver, closed form), \texttt{drainstop/transient.py} (time-dependent model), \texttt{scripts/run\_study.py} (all studies, $\sim$10\,min on 12 cores), \texttt{scripts/make\_figures.py}, \texttt{scripts/make\_tables.py} and \texttt{scripts/make\_pictures.py} (Fig.~\ref{fig:pictures}); the 3D CFD (Kratos, Windows) and its results are in \texttt{vof/kratos/}; an OpenFOAM set-up is in \texttt{vof/} (Euler) and \texttt{vof/local/} (Linux).
 
 \begin{thebibliography}{99}\small
 \bibitem{sampson1891} R.~A. Sampson, On Stokes's current function, \emph{Phil. Trans. R. Soc. Lond. A} 182 (1891) 449--518.
