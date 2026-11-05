@@ -59,6 +59,7 @@ foreach ($c in $Cases) {
         Run-Py $log @("vof\kratos\show_setup.py", $run)
         Run-Py $log @("vof\kratos\render_kratos.py", $run, "--frames")
         Run-Py $log @("vof\kratos\make_gifs.py", $run)
+        Run-Py $log @("vof\kratos\render_3d.py", $run, "--all")
         $res = Join-Path $Root "vof\kratos\results\$name"
         New-Item -ItemType Directory -Force $res | Out-Null
         Copy-Item "$run\pictures\*.png", "$run\pictures\*.gif", "$run\pictures\summary.json", "$run\model_state.json",
