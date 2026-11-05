@@ -113,7 +113,7 @@ Meshing takes about 1 min for the recommended case and about 15 min for the USZ 
 | `history.png` | Outlet liquid and air flow and the pressure inside the drain against time, with the model's values |
 | `midplane.gif` | The mid-plane over time |
 | `midplane_slow.gif`, `outlet_end_slow.gif` | Slow animations, 1.5 s per 5 ms of flow, with the time and the measured flows in each title (`make_gifs.py`) |
-| `cut3d_<t>ms.png`, `cut3d_slow.gif` | 3D view of the drain cut open along its axis: wall and cut plane coloured by pressure, liquid surfaces and bubbles, streamlines coloured by speed (`render_3d.py`) |
+| `cut3d_<t>ms.png`, `cut3d_slow.gif`, `cut3d_orbit.gif` | 3D view of the drain cut open along its axis: wall and cut plane coloured by pressure, liquid surfaces and bubbles, streamlines coloured by speed; over time, and with the camera swinging around the last output (`render_3d.py`) |
 | `summary.json`, `monitor.csv` | The numbers |
 
 ## Troubleshooting

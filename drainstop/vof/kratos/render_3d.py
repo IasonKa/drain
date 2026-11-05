@@ -1,6 +1,6 @@
 """3D pictures of a Kratos drain run: the drain cut open along its axis, in the world frame.
 
-    python vof/kratos/render_3d.py <run dir> [--all] [--seconds 1.5]
+    python vof/kratos/render_3d.py <run dir> [--all] [--orbit] [--seconds 1.5]
 
 Each picture shows, for one field output:
 - the far half of the drain wall (and the trough floor) coloured by pressure,
@@ -30,7 +30,12 @@ def world(mesh, tilt):
     return m
 
 
-def picture(g, st, t, path, title):
+CAMERA = [(45, -205, 95), (66, 0, 13), (0, 0, 1)]
+
+
+def picture(g, st, t, path, title, orbit=None):
+    """Render one output. orbit=(gif path, n frames): swing the camera +-60 deg about the vertical
+    through the drain's centre and write a GIF instead of one picture."""
     import pyvista as pv
     pv.OFF_SCREEN = True
     tilt = rk.TILT
@@ -76,10 +81,25 @@ def picture(g, st, t, path, title):
                                          vertical=True, height=0.32, width=0.03, title_font_size=17,
                                          label_font_size=14, color="black", fmt="%.1f"))
     pl.add_text(title, position="upper_left", font_size=12, color="black")
-    pl.camera_position = [(45, -205, 95), (66, 0, 13), (0, 0, 1)]
+    pl.camera_position = CAMERA
     pl.camera.zoom(1.55)
     pl.enable_anti_aliasing("ssaa")
-    pl.screenshot(path)
+    if orbit is None:
+        pl.screenshot(path)
+    else:
+        gif, n = orbit
+        pos0, foc = np.array(CAMERA[0], float), np.array(CAMERA[1], float)
+        r = pos0 - foc
+        angles = np.concatenate([np.linspace(0, 60, n // 4), np.linspace(60, -60, n // 2),
+                                 np.linspace(-60, 0, n // 4)])
+        pl.open_gif(gif, fps=12)
+        for a in np.radians(angles):
+            c, s = math.cos(a), math.sin(a)
+            rr = np.array([c * r[0] - s * r[1], s * r[0] + c * r[1], r[2]])
+            pl.camera.position = tuple(foc + rr)
+            pl.camera.focal_point = tuple(foc)
+            pl.camera.up = (0, 0, 1)
+            pl.write_frame()
     pl.close()
 
 
@@ -88,6 +108,7 @@ def main():
     ap.add_argument("run")
     ap.add_argument("--all", action="store_true", help="every output and an animated GIF")
     ap.add_argument("--seconds", type=float, default=1.5)
+    ap.add_argument("--orbit", action="store_true", help="also a GIF swinging around the last output")
     a = ap.parse_args()
     run = os.path.abspath(a.run)
     st = json.load(open(os.path.join(run, "model_state.json")))
@@ -120,6 +141,13 @@ def main():
         dur = [a.seconds * 1000] * (len(imgs) - 1) + [a.seconds * 3000]
         imageio.mimsave(os.path.join(out, "cut3d_slow.gif"), imgs, duration=dur, loop=0)
         print("  wrote cut3d_slow.gif")
+    if a.orbit:
+        f = rk.vtk_files(run)[-1]
+        t = rk.vtk_time(f)
+        picture(rk.load(f), st, t, None,
+                f"{label} drain, pool {st['h']:g} mm, outlet end {rk.TILT:g} deg up, t = {t * 1e3:.1f} ms "
+                "(camera swinging +-60 deg)", orbit=(os.path.join(out, "cut3d_orbit.gif"), 48))
+        print("  wrote cut3d_orbit.gif")
 
 
 if __name__ == "__main__":
