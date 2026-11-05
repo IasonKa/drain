@@ -112,6 +112,7 @@ Meshing takes about 1 min for the recommended case and about 15 min for the USZ 
 | `view3d.png` | 3D: pressure on the drain, the liquid surface, and the flow through each opening |
 | `history.png` | Outlet liquid and air flow and the pressure inside the drain against time, with the model's values |
 | `midplane.gif` | The mid-plane over time |
+| `midplane_slow.gif`, `outlet_end_slow.gif` | Slow animations, 1.5 s per 5 ms of flow, with the time and the measured flows in each title (`make_gifs.py`) |
 | `summary.json`, `monitor.csv` | The numbers |
 
 ## Troubleshooting
