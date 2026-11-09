@@ -5,6 +5,12 @@
 **Model results**: the time histories, pressures and tissue movement come from the reduced-order model (axisymmetric, small deformation) with placeholder values: tissue stiffness 10 kPa, permeability 1e-14 m^4/(N s), suction 10 kPa. They show trends and design differences; the full 3D OpenFOAM + FEBio runs (hpc/) give the final numbers.
 
 
+## The drain inside the body, with irrigation (`in_body/`)
+
+- `in_body/in_body_setup.png`: The whole set-up (patient, irrigation bag and pump, drain, canister, wall regulator at -7 mmHg), plus a cut across the drain among the bowel loops and a close-up of one ringed hole.
+- `in_body/in_body_3d.png`: 3D view: your standoff drain CAD under bowel loops (cut open), with the irrigation catheter tip about 15 mm above it and the liquid paths.
+- See `in_body/README.md` for what is real and what is drawn, and how to rebuild.
+
 ## Real geometry (your CAD) with the sponge organ
 
 - `01_drain_with_sponge_organ_standoff.png`: New standoff-ring drain with the sponge organ lying on it.
