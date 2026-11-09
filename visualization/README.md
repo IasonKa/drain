@@ -8,6 +8,7 @@
 ## The drain inside the body, with irrigation (`in_body/`)
 
 - `in_body/in_body_setup.png`: The whole set-up (patient, irrigation bag and pump, drain, canister, wall regulator at -7 mmHg), plus a cut across the drain among the bowel loops and a close-up of one ringed hole.
+- `in_body/in_body_3d_packed.png`: Realistic packing: the drain buried in bowel loops and omentum (drawn see-through); no empty space, liquid only in thin films.
 - `in_body/in_body_3d.png`: 3D view: your standoff drain CAD under bowel loops (cut open), with the irrigation catheter tip about 15 mm above it and the liquid paths.
 - See `in_body/README.md` for what is real and what is drawn, and how to rebuild.
 
