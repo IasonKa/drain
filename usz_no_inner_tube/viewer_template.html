@@ -1,0 +1,147 @@
+<title>USZ Sheath V Connection</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* layout: one drawing-board viewport, a control strip under it, then the part list as a spec table */
+:root {
+  --bg: #f3f5f7; --panel: #ffffff; --fg: #18222d; --muted: #5b6876; --line: #d5dbe2;
+  --stage: #e6eaef; --part: #8fa0b3; --ghost: #d9822b; --irr: #1f6fd6; --accent: #1f6fd6;
+  --display: "Space Grotesk", "Segoe UI", sans-serif; --body: Inter, "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12171d; --panel: #1a2129; --fg: #e6ebf0; --muted: #9aa7b4; --line: #2c3742;
+  --stage: #0d1116; --part: #9fb0c3; --ghost: #f0a04a; --irr: #5aa2ff; --accent: #5aa2ff; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12171d; --panel: #1a2129; --fg: #e6ebf0; --muted: #9aa7b4; --line: #2c3742;
+  --stage: #0d1116; --part: #9fb0c3; --ghost: #f0a04a; --irr: #5aa2ff; --accent: #5aa2ff; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); line-height: 1.5;
+  padding-block: 20px 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: 1.5rem; margin: 0; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 65ch; }
+#stage { position: relative; background: var(--stage); border: 1px solid var(--line); border-radius: 6px; height: min(64vh, 620px); min-height: 320px; overflow: hidden; touch-action: none; }
+#stage canvas { display: block; width: 100%; height: 100%; }
+.hint { position: absolute; left: 10px; bottom: 8px; font-size: 0.75rem; color: var(--muted); pointer-events: none; }
+.err { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; text-align: center; color: var(--muted); }
+.bar { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+.group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.group > span { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+button { font: 500 0.85rem var(--body); color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 6px 10px; cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+label.chk { display: inline-flex; gap: 6px; align-items: center; font-size: 0.88rem; cursor: pointer; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+th, td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 500; color: var(--muted); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+td.n { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tbl { overflow-x: auto; }
+.note { color: var(--muted); font-size: 0.85rem; max-width: 75ch; margin: 0; }
+</style>
+<div class="wrap">
+  <h1>USZ sheath with V connection, internal tube removed</h1>
+  <p class="lede">This is the USZ CAD itself with three changes. The internal spoked tube is gone, the suction tube now stops at the narrow end of the funnel so the funnel is an open V into the tube, and the tip has a cap with the irrigation port. The sheath, its ribs and every hole are unchanged.</p>
+  <div id="stage"><div class="hint">Drag to rotate · scroll or pinch to zoom · right-drag or two fingers to move</div></div>
+  <div class="bar">
+    <div class="group"><span>View</span>
+      <button id="v-all" type="button">Whole part</button>
+      <button id="v-v" type="button">V connection</button>
+      <button id="v-tip" type="button">Tip and irrigation</button>
+      <button id="v-end" type="button">Look along the axis</button>
+    </div>
+    <div class="group"><span>Show</span>
+      <label class="chk"><input type="checkbox" id="c-cut" checked> Cut open (top half off)</label>
+      <label class="chk"><input type="checkbox" id="c-removed"> <i class="sw" style="background:var(--ghost)"></i> Removed internal tube</label>
+      <label class="chk"><input type="checkbox" id="c-cap" checked> <i class="sw" style="background:var(--irr)"></i> Tip cap and irrigation port</label>
+    </div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Part</th><th>What it is</th><th>Size</th></tr></thead>
+    <tbody>
+      <tr><td>Sheath</td><td>Unchanged USZ sheath: elliptic skin, inner ribs, two V-ribs, all holes</td><td class="n" id="t-sheath"></td></tr>
+      <tr><td>V connection</td><td>The existing funnel collar, now open from the lumen into the suction tube</td><td class="n" id="t-v"></td></tr>
+      <tr><td>Suction tube</td><td>Cut back to the narrow end of the funnel; it no longer runs into the sheath</td><td class="n" id="t-tube"></td></tr>
+      <tr><td>Internal tube</td><td>Removed over the whole sheath (tick the box to see where it was)</td><td class="n">5.5 mm outside</td></tr>
+      <tr><td>Tip cap and irrigation port</td><td>New. Closes the tip; port on the axis, pointing at the suction end</td><td class="n">bore 1.0 mm, 1.6 mm outside</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">The model is the triangle mesh exported from the USZ Inventor part, edited directly. It is exact enough to judge the design and to run the flow study, but the change still has to be redone in the Inventor file before manufacturing. The tip cap and port are my addition and are drawn simply.</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const DATA = /*DATA*/null;
+(function () {
+  const stage = document.getElementById("stage");
+  const info = DATA.info;
+  document.getElementById("t-sheath").textContent = info.sheath_length.toFixed(0) + " mm long, 17.9 × 9.7 mm";
+  document.getElementById("t-v").textContent = info.funnel_length.toFixed(1) + " mm long";
+  document.getElementById("t-tube").textContent = "bore " + info.suction_tube_bore.toFixed(1) + " mm, " + info.suction_tube_outside.toFixed(1) + " mm outside";
+  if (!window.THREE || !THREE.OrbitControls) {
+    const e = document.createElement("div"); e.className = "err";
+    e.textContent = "The 3D library did not load, so the model cannot be drawn here.";
+    stage.appendChild(e); return;
+  }
+  function bytes(b64) { const s = atob(b64), a = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a.buffer; }
+  function geom(d) {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(bytes(d.p)), 3));
+    g.setIndex(new THREE.BufferAttribute(d.w === 2 ? new Uint16Array(bytes(d.i)) : new Uint32Array(bytes(d.i)), 1));
+    return g;
+  }
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.localClippingEnabled = true;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  stage.insertBefore(renderer.domElement, stage.firstChild);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.5, 2000);
+  camera.up.set(0, 0, 1);
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = false;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x556070, 0.75));
+  const key = new THREE.DirectionalLight(0xffffff, 0.65);
+  camera.add(key); key.position.set(0.4, 0.6, 1); scene.add(camera);
+  const cut = new THREE.Plane(new THREE.Vector3(0, 0, -1), 0.9);       // keeps z < 0.9 above the axis
+  const mat = (c, o) => new THREE.MeshPhongMaterial({ color: c, flatShading: true, side: THREE.DoubleSide, shininess: 18, transparent: o < 1, opacity: o });
+  const mBody = mat(css("--part"), 1), mGhost = mat(css("--ghost"), 0.85), mCap = mat(css("--irr"), 1);
+  const body = new THREE.Mesh(geom(DATA.body), mBody);
+  const removed = new THREE.Mesh(geom(DATA.removed), mGhost);
+  const cap = new THREE.Mesh(geom(DATA.cap), mCap);
+  scene.add(body, removed, cap);
+  const cCut = document.getElementById("c-cut"), cRem = document.getElementById("c-removed"), cCap = document.getElementById("c-cap");
+  function draw() { renderer.render(scene, camera); }
+  function apply() {
+    const planes = cCut.checked ? [cut] : [];
+    mBody.clippingPlanes = planes; mCap.clippingPlanes = planes; mGhost.clippingPlanes = planes;
+    removed.visible = cRem.checked; cap.visible = cCap.checked;
+    renderer.setClearColor(new THREE.Color(css("--stage")), 1);
+    mBody.color.set(css("--part")); mGhost.color.set(css("--ghost")); mCap.color.set(css("--irr"));
+    draw();
+  }
+  const views = {
+    "v-all": [[55, -150, 130], [0, -5, 0]],
+    "v-v": [[22, -92, 30], [0, -62, 0]],
+    "v-tip": [[-38, 112, 44], [0, 52, 0]],
+    "v-end": [[0, 150, 0.01], [0, 0, 0]]
+  };
+  function view(id) {
+    const v = views[id];
+    camera.position.set(v[0][0], v[0][1], v[0][2]); controls.target.set(v[1][0], v[1][1], v[1][2]);
+    controls.update(); draw();
+  }
+  Object.keys(views).forEach(id => document.getElementById(id).addEventListener("click", () => view(id)));
+  [cCut, cRem, cCap].forEach(c => c.addEventListener("change", apply));
+  controls.addEventListener("change", draw);
+  function size() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); draw();
+  }
+  new ResizeObserver(size).observe(stage);
+  new MutationObserver(apply).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  if (window.matchMedia) matchMedia("(prefers-color-scheme: dark)").addEventListener("change", apply);
+  size(); apply(); view("v-v");
+})();
+</script>

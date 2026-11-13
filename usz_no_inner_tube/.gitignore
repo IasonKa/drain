@@ -1,0 +1,10 @@
+# solver input meshes: regenerate with flow/make_flow_case.py
+flow/runs/*/flow.mdpa
+# superseded or failed trial runs (no results)
+flow/runs/prelim/
+flow/runs/test/
+flow/runs/tip/
+flow/runs/mid/
+flow/runs/conn/
+__pycache__/
+*.time

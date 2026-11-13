@@ -1,0 +1,120 @@
+{
+ "problem_data": {
+  "problem_name": "flow",
+  "parallel_type": "OpenMP",
+  "echo_level": 0,
+  "start_time": 0.0,
+  "end_time": 1.0
+ },
+ "output_processes": {},
+ "solver_settings": {
+  "model_part_name": "FluidModelPart",
+  "domain_size": 3,
+  "solver_type": "Monolithic",
+  "model_import_settings": {
+   "input_type": "mdpa",
+   "input_filename": "flow"
+  },
+  "material_import_settings": {
+   "materials_filename": "materials.json"
+  },
+  "echo_level": 0,
+  "compute_reactions": false,
+  "maximum_iterations": 4,
+  "relative_velocity_tolerance": 0.0001,
+  "absolute_velocity_tolerance": 1e-07,
+  "relative_pressure_tolerance": 0.0001,
+  "absolute_pressure_tolerance": 1e-07,
+  "volume_model_part_name": "Fluid",
+  "skin_parts": [
+   "Inlet",
+   "Outlet",
+   "Walls",
+   "Holes"
+  ],
+  "no_skin_parts": [],
+  "time_scheme": "bdf2",
+  "time_stepping": {
+   "automatic_time_step": false,
+   "time_step": 0.01
+  },
+  "formulation": {
+   "element_type": "qsvms",
+   "use_orthogonal_subscales": false,
+   "dynamic_tau": 1.0
+  },
+  "linear_solver_settings": {
+   "solver_type": "amgcl",
+   "max_iteration": 200,
+   "tolerance": 1e-06,
+   "smoother_type": "ilu0",
+   "krylov_type": "lgmres",
+   "coarsening_type": "aggregation",
+   "scaling": false,
+   "use_block_matrices_if_possible": true,
+   "verbosity": 0
+  }
+ },
+ "processes": {
+  "initial_conditions_process_list": [],
+  "boundary_conditions_process_list": [
+   {
+    "python_module": "assign_vector_variable_process",
+    "kratos_module": "KratosMultiphysics",
+    "process_name": "AssignVectorVariableProcess",
+    "Parameters": {
+     "model_part_name": "FluidModelPart.Inlet",
+     "variable_name": "VELOCITY",
+     "value": [
+      0.0,
+      -0.11232022307639035,
+      0.0
+     ],
+     "constrained": [
+      true,
+      true,
+      true
+     ]
+    }
+   },
+   {
+    "python_module": "apply_noslip_process",
+    "kratos_module": "KratosMultiphysics.FluidDynamicsApplication",
+    "process_name": "ApplyNoSlipProcess",
+    "Parameters": {
+     "model_part_name": "FluidModelPart.Walls"
+    }
+   },
+   {
+    "python_module": "apply_outlet_process",
+    "kratos_module": "KratosMultiphysics.FluidDynamicsApplication",
+    "process_name": "ApplyOutletProcess",
+    "Parameters": {
+     "model_part_name": "FluidModelPart.Outlet",
+     "variable_name": "PRESSURE",
+     "constrained": true,
+     "value": "-933.0*(1.0-exp(-t/0.05))",
+     "hydrostatic_outlet": false,
+     "h_top": 0.0,
+     "outlet_inflow_contribution": true
+    }
+   },
+   {
+    "python_module": "apply_outlet_process",
+    "kratos_module": "KratosMultiphysics.FluidDynamicsApplication",
+    "process_name": "ApplyOutletProcess",
+    "Parameters": {
+     "model_part_name": "FluidModelPart.Holes",
+     "variable_name": "PRESSURE",
+     "constrained": true,
+     "value": 0.0,
+     "hydrostatic_outlet": false,
+     "h_top": 0.0,
+     "outlet_inflow_contribution": true
+    }
+   }
+  ],
+  "gravity": [],
+  "auxiliar_process_list": []
+ }
+}
