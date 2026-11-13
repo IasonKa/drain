@@ -1,0 +1,127 @@
+    Current solution step index : 0
+step 1 t=0.0005s dt=0.0005 change=nan vmax=0.133 flows(mL/min,+out)=[-4.167  1.458  2.486] wall 22s
+step 2 t=0.0011s dt=0.0006 change=0.266 vmax=0.156 flows(mL/min,+out)=[-4.167  2.03   2.239] wall 41s
+step 3 t=0.00182s dt=0.00072 change=0.118 vmax=0.158 flows(mL/min,+out)=[-4.167  2.622  1.52 ] wall 57s
+step 4 t=0.002684s dt=0.000864 change=0.102 vmax=0.154 flows(mL/min,+out)=[-4.167  3.701  0.38 ] wall 71s
+step 5 t=0.003721s dt=0.00104 change=0.127 vmax=0.15 flows(mL/min,+out)=[-4.167  5.519 -1.472] wall 84s
+step 6 t=0.004965s dt=0.00124 change=0.186 vmax=0.151 flows(mL/min,+out)=[-4.167  8.381 -4.371] wall 97s
+step 7 t=0.006458s dt=0.00149 change=0.267 vmax=0.157 flows(mL/min,+out)=[-4.167 12.722 -8.743] wall 112s
+step 8 t=0.00825s dt=0.00179 change=0.397 vmax=0.164 flows(mL/min,+out)=[ -4.167  19.117 -15.11 ] wall 127s
+step 9 t=0.0104s dt=0.00215 change=0.423 vmax=0.237 flows(mL/min,+out)=[ -4.167  28.239 -24.017] wall 144s
+step 10 t=0.01298s dt=0.00258 change=0.413 vmax=0.365 flows(mL/min,+out)=[ -4.167  40.608 -35.727] wall 162s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 11
+step 11 t=0.01608s dt=0.0031 change=0.445 vmax=0.532 flows(mL/min,+out)=[ -4.167  55.929 -49.587] wall 179s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 12
+step 12 t=0.01979s dt=0.00372 change=0.5 vmax=0.717 flows(mL/min,+out)=[ -4.167  72.274 -63.471] wall 197s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 13
+step 13 t=0.02379s dt=0.004 change=0.488 vmax=0.915 flows(mL/min,+out)=[ -4.167  85.548 -74.024] wall 214s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 14
+step 14 t=0.02779s dt=0.004 change=0.411 vmax=1.04 flows(mL/min,+out)=[ -4.167  94.912 -81.174] wall 232s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 15
+step 15 t=0.03179s dt=0.004 change=0.34 vmax=1.12 flows(mL/min,+out)=[ -4.167 101.836 -86.349] wall 249s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 16
+step 16 t=0.03579s dt=0.004 change=0.251 vmax=1.19 flows(mL/min,+out)=[ -4.167 107.337 -90.428] wall 268s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 17
+step 17 t=0.03979s dt=0.004 change=0.225 vmax=1.24 flows(mL/min,+out)=[ -4.167 111.938 -93.842] wall 286s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 18
+step 18 t=0.04379s dt=0.004 change=0.175 vmax=1.29 flows(mL/min,+out)=[ -4.167 115.921 -96.806] wall 302s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 19
+step 19 t=0.04779s dt=0.004 change=0.118 vmax=1.33 flows(mL/min,+out)=[ -4.167 119.449 -99.432] wall 319s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 20
+step 20 t=0.05179s dt=0.004 change=0.0792 vmax=1.37 flows(mL/min,+out)=[  -4.167  122.623 -101.787] wall 337s
+[WARNING] NavierStokesMonolithicSolver: Fluid solver did not converge for step 21
+step 21 t=0.05579s dt=0.004 change=0.0571 vmax=1.4 flows(mL/min,+out)=[  -4.167  125.5   -103.912] wall 353s
+step 22 t=0.05979s dt=0.004 change=0.032 vmax=1.43 flows(mL/min,+out)=[  -4.167  128.107 -105.822] wall 371s
+step 23 t=0.06379s dt=0.004 change=0.0205 vmax=1.46 flows(mL/min,+out)=[  -4.167  130.459 -107.533] wall 388s
+step 24 t=0.06779s dt=0.004 change=0.019 vmax=1.48 flows(mL/min,+out)=[  -4.167  132.579 -109.061] wall 405s
+step 25 t=0.07179s dt=0.004 change=0.0182 vmax=1.51 flows(mL/min,+out)=[  -4.167  134.49  -110.427] wall 422s
+step 26 t=0.07579s dt=0.004 change=0.0211 vmax=1.53 flows(mL/min,+out)=[  -4.167  136.217 -111.651] wall 438s
+step 27 t=0.07979s dt=0.004 change=0.0194 vmax=1.55 flows(mL/min,+out)=[  -4.167  137.782 -112.749] wall 456s
+step 28 t=0.08379s dt=0.004 change=0.0271 vmax=1.56 flows(mL/min,+out)=[  -4.167  139.203 -113.736] wall 472s
+step 29 t=0.08779s dt=0.004 change=0.0329 vmax=1.58 flows(mL/min,+out)=[  -4.167  140.494 -114.622] wall 490s
+step 30 t=0.09179s dt=0.004 change=0.0353 vmax=1.59 flows(mL/min,+out)=[  -4.167  141.666 -115.416] wall 510s
+step 31 t=0.09579s dt=0.004 change=0.0348 vmax=1.6 flows(mL/min,+out)=[  -4.167  142.731 -116.126] wall 527s
+step 32 t=0.09979s dt=0.004 change=0.0345 vmax=1.62 flows(mL/min,+out)=[  -4.167  143.701 -116.764] wall 545s
+step 33 t=0.1038s dt=0.004 change=0.036 vmax=1.63 flows(mL/min,+out)=[  -4.167  144.588 -117.338] wall 562s
+step 34 t=0.1078s dt=0.004 change=0.0337 vmax=1.64 flows(mL/min,+out)=[  -4.167  145.404 -117.856] wall 580s
+step 35 t=0.1118s dt=0.004 change=0.0302 vmax=1.64 flows(mL/min,+out)=[  -4.167  146.156 -118.325] wall 597s
+step 36 t=0.1158s dt=0.004 change=0.0306 vmax=1.65 flows(mL/min,+out)=[  -4.167  146.85  -118.747] wall 616s
+step 37 t=0.1198s dt=0.004 change=0.0299 vmax=1.66 flows(mL/min,+out)=[  -4.167  147.489 -119.125] wall 633s
+step 38 t=0.1238s dt=0.004 change=0.0292 vmax=1.67 flows(mL/min,+out)=[  -4.167  148.076 -119.462] wall 651s
+step 39 t=0.1278s dt=0.004 change=0.0276 vmax=1.67 flows(mL/min,+out)=[  -4.167  148.614 -119.761] wall 668s
+step 40 t=0.1318s dt=0.004 change=0.0222 vmax=1.68 flows(mL/min,+out)=[  -4.167  149.105 -120.02 ] wall 684s
+step 41 t=0.1358s dt=0.004 change=0.0185 vmax=1.68 flows(mL/min,+out)=[  -4.167  149.558 -120.253] wall 698s
+step 42 t=0.1398s dt=0.004 change=0.0154 vmax=1.69 flows(mL/min,+out)=[  -4.167  149.975 -120.46 ] wall 712s
+step 43 t=0.1438s dt=0.004 change=0.017 vmax=1.69 flows(mL/min,+out)=[  -4.167  150.36  -120.643] wall 726s
+step 44 t=0.1478s dt=0.004 change=0.0178 vmax=1.7 flows(mL/min,+out)=[  -4.167  150.716 -120.802] wall 740s
+step 45 t=0.1518s dt=0.004 change=0.0178 vmax=1.7 flows(mL/min,+out)=[  -4.167  151.044 -120.941] wall 755s
+step 46 t=0.1558s dt=0.004 change=0.0166 vmax=1.71 flows(mL/min,+out)=[  -4.167  151.347 -121.061] wall 773s
+step 47 t=0.1598s dt=0.004 change=0.0145 vmax=1.71 flows(mL/min,+out)=[  -4.167  151.627 -121.164] wall 788s
+step 48 t=0.1638s dt=0.004 change=0.0139 vmax=1.71 flows(mL/min,+out)=[  -4.167  151.888 -121.252] wall 803s
+step 49 t=0.1678s dt=0.004 change=0.0133 vmax=1.72 flows(mL/min,+out)=[  -4.167  152.131 -121.327] wall 816s
+step 50 t=0.1718s dt=0.004 change=0.0116 vmax=1.72 flows(mL/min,+out)=[  -4.167  152.358 -121.391] wall 831s
+step 51 t=0.1758s dt=0.004 change=0.0107 vmax=1.72 flows(mL/min,+out)=[  -4.167  152.569 -121.443] wall 844s
+step 52 t=0.1798s dt=0.004 change=0.0112 vmax=1.72 flows(mL/min,+out)=[  -4.167  152.766 -121.485] wall 858s
+step 53 t=0.1838s dt=0.004 change=0.0115 vmax=1.73 flows(mL/min,+out)=[  -4.167  152.949 -121.516] wall 877s
+step 54 t=0.1878s dt=0.004 change=0.0115 vmax=1.73 flows(mL/min,+out)=[  -4.167  153.119 -121.539] wall 894s
+step 55 t=0.1918s dt=0.004 change=0.0116 vmax=1.73 flows(mL/min,+out)=[  -4.167  153.277 -121.553] wall 909s
+step 56 t=0.1958s dt=0.004 change=0.0117 vmax=1.73 flows(mL/min,+out)=[  -4.167  153.422 -121.558] wall 925s
+step 57 t=0.1998s dt=0.004 change=0.0119 vmax=1.73 flows(mL/min,+out)=[  -4.167  153.556 -121.556] wall 943s
+step 58 t=0.2038s dt=0.004 change=0.013 vmax=1.73 flows(mL/min,+out)=[  -4.167  153.68  -121.547] wall 959s
+step 59 t=0.2078s dt=0.004 change=0.0146 vmax=1.73 flows(mL/min,+out)=[  -4.167  153.794 -121.532] wall 975s
+step 60 t=0.2118s dt=0.004 change=0.0157 vmax=1.74 flows(mL/min,+out)=[  -4.167  153.899 -121.513] wall 987s
+step 61 t=0.2158s dt=0.004 change=0.0162 vmax=1.74 flows(mL/min,+out)=[  -4.167  153.995 -121.487] wall 998s
+step 62 t=0.2198s dt=0.004 change=0.0159 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.081 -121.454] wall 1010s
+step 63 t=0.2238s dt=0.004 change=0.0145 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.158 -121.416] wall 1021s
+step 64 t=0.2278s dt=0.004 change=0.0122 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.227 -121.372] wall 1034s
+step 65 t=0.2318s dt=0.004 change=0.0105 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.289 -121.324] wall 1045s
+step 66 t=0.2358s dt=0.004 change=0.00878 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.347 -121.273] wall 1058s
+step 67 t=0.2398s dt=0.004 change=0.00861 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.4   -121.22 ] wall 1070s
+step 68 t=0.2438s dt=0.004 change=0.00811 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.452 -121.165] wall 1082s
+step 69 t=0.2478s dt=0.004 change=0.00828 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.501 -121.108] wall 1094s
+step 70 t=0.2518s dt=0.004 change=0.00888 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.549 -121.051] wall 1105s
+step 71 t=0.2558s dt=0.004 change=0.00884 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.594 -120.994] wall 1117s
+step 72 t=0.2598s dt=0.004 change=0.00817 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.637 -120.937] wall 1129s
+step 73 t=0.2638s dt=0.004 change=0.00717 vmax=1.74 flows(mL/min,+out)=[  -4.167  154.675 -120.879] wall 1140s
+step 74 t=0.2678s dt=0.004 change=0.00805 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.709 -120.821] wall 1152s
+step 75 t=0.2718s dt=0.004 change=0.00867 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.738 -120.761] wall 1164s
+step 76 t=0.2758s dt=0.004 change=0.00911 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.762 -120.7  ] wall 1177s
+step 77 t=0.2798s dt=0.004 change=0.00924 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.781 -120.638] wall 1189s
+step 78 t=0.2838s dt=0.004 change=0.00904 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.798 -120.576] wall 1200s
+step 79 t=0.2878s dt=0.004 change=0.00861 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.813 -120.514] wall 1211s
+step 80 t=0.2918s dt=0.004 change=0.00805 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.829 -120.452] wall 1222s
+step 81 t=0.2958s dt=0.004 change=0.00747 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.847 -120.392] wall 1233s
+step 82 t=0.2998s dt=0.004 change=0.00689 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.867 -120.334] wall 1246s
+step 83 t=0.3038s dt=0.004 change=0.0063 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.89  -120.277] wall 1258s
+step 84 t=0.3078s dt=0.004 change=0.00586 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.914 -120.221] wall 1271s
+step 85 t=0.3118s dt=0.004 change=0.00558 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.939 -120.166] wall 1284s
+step 86 t=0.3158s dt=0.004 change=0.00519 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.963 -120.109] wall 1296s
+step 87 t=0.3198s dt=0.004 change=0.00492 vmax=1.75 flows(mL/min,+out)=[  -4.167  154.984 -120.052] wall 1308s
+step 88 t=0.3238s dt=0.004 change=0.00494 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.002 -119.992] wall 1322s
+step 89 t=0.3278s dt=0.004 change=0.00509 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.015 -119.931] wall 1336s
+step 90 t=0.3318s dt=0.004 change=0.00512 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.025 -119.869] wall 1349s
+step 91 t=0.3358s dt=0.004 change=0.00537 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.03  -119.806] wall 1363s
+step 92 t=0.3398s dt=0.004 change=0.00552 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.034 -119.741] wall 1375s
+step 93 t=0.3438s dt=0.004 change=0.0054 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.035 -119.676] wall 1386s
+step 94 t=0.3478s dt=0.004 change=0.00499 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.036 -119.611] wall 1402s
+step 95 t=0.3518s dt=0.004 change=0.00472 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.035 -119.545] wall 1424s
+step 96 t=0.3558s dt=0.004 change=0.00477 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.035 -119.478] wall 1444s
+step 97 t=0.3598s dt=0.004 change=0.00465 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.033 -119.411] wall 1461s
+step 98 t=0.3638s dt=0.004 change=0.00484 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.031 -119.344] wall 1474s
+step 99 t=0.3678s dt=0.004 change=0.00475 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.028 -119.276] wall 1488s
+step 100 t=0.3718s dt=0.004 change=0.00491 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.024 -119.209] wall 1501s
+step 101 t=0.3758s dt=0.004 change=0.00467 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.019 -119.142] wall 1515s
+step 102 t=0.3798s dt=0.004 change=0.00438 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.014 -119.076] wall 1533s
+step 103 t=0.3838s dt=0.004 change=0.00405 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.009 -119.01 ] wall 1548s
+step 104 t=0.3878s dt=0.004 change=0.00399 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.005 -118.946] wall 1563s
+step 105 t=0.3918s dt=0.004 change=0.00452 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.001 -118.884] wall 1577s
+step 106 t=0.3958s dt=0.004 change=0.00497 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.    -118.823] wall 1594s
+step 107 t=0.3998s dt=0.004 change=0.00533 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.001 -118.764] wall 1611s
+step 108 t=0.4038s dt=0.004 change=0.0056 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.005 -118.708] wall 1625s
+step 109 t=0.4078s dt=0.004 change=0.00628 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.011 -118.653] wall 1640s
+step 110 t=0.4118s dt=0.004 change=0.00667 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.019 -118.601] wall 1658s
+step 111 t=0.4158s dt=0.004 change=0.00671 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.029 -118.55 ] wall 1682s
+step 112 t=0.4198s dt=0.004 change=0.00642 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.04  -118.5  ] wall 1705s
+step 113 t=0.4238s dt=0.004 change=0.00586 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.051 -118.45 ] wall 1726s
+step 114 t=0.4278s dt=0.004 change=0.00567 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.063 -118.401] wall 1744s
+step 115 t=0.4318s dt=0.004 change=0.00577 vmax=1.75 flows(mL/min,+out)=[  -4.167  155.075 -118.351] wall 1764s

@@ -1,0 +1,45 @@
+{
+ "case": "mid_coarse",
+ "irrigation_ml_min": 4.166666666666667,
+ "viscosity_mPas": 1.0,
+ "nodes": 90107,
+ "tets": 397178,
+ "solver_step": 115,
+ "flows_ml_min": {
+  "irrigation_in": 4.167,
+  "suction_out": 155.031,
+  "bath_boundary_out": -118.33,
+  "hole0_out": -37.822,
+  "hole1_out": -38.54,
+  "hole2_out": -37.084,
+  "hole3_out": -39.057
+ },
+ "lumen_volume_ml": 11.14,
+ "nominal_residence_s": 4.3,
+ "plug_speed_mm_s": 0.745,
+ "pressure_tip_Pa": -885.6,
+ "pressure_mid_Pa": -412.9,
+ "slow_volume_fraction": 0.285,
+ "irrigant_streamline_ends": {
+  "suction": 0.043,
+  "stalled": 0.958,
+  "hole0": 0.0,
+  "hole1": 0.0,
+  "hole2": 0.0,
+  "hole3": 0.0
+ },
+ "irrigant_transit_s": {
+  "fastest": 19.7,
+  "median": 21.1
+ },
+ "lumen_filled_by": {
+  "irrigation": 0.143,
+  "holes": 0.002,
+  "not_reached": 0.855
+ },
+ "lumen_renewed_within": {
+  "1x_residence": 0.028,
+  "3x_residence": 0.072,
+  "10x_residence": 0.139
+ }
+}
