@@ -22,9 +22,10 @@ return is the ring vortex seen in the animation. The model below gives, with no 
 \item the length of the loop, about \SI{32}{mm} (simulation: \SI{38}{mm});
 \item the scaling of the loop length, proportional to flow rate and roughly to $1/d$.
 \end{itemize}
-It does not give the strength of the loop from first principles: the return flow peaks at
-\SI{10}{mL/min} in the simulation, 2.4 times the irrigation, because the walls cut the entrainment short.
-An earlier estimate of \SI{57}{mL/min} from the unconfined formula was too high and is withdrawn.
+Assembled into one flow field for a round tube (section 7), the model also gives the strength of the loop
+to about 35\,\%: a peak return flow of \SI{13.6}{mL/min} against \SI{10.1}{mL/min} in the simulation, 2.4 times
+the irrigation. The main thing it misses is that the lumen is oval, so the fluid returns only along the two
+wide sides. An earlier estimate of \SI{57}{mL/min} from the unconfined formula ignored the walls and is withdrawn.
 
 \section{Set-up and numbers}
 \begin{figure}[h]\centering
@@ -140,7 +141,7 @@ Centre speed at $x=\SI{10}{mm}$ (mm/s) & 63 & 56\\
 Half-width at $x=\SI{10}{mm}$ (mm) & 0.90 & 0.92\\
 Half-width at $x=\SI{20}{mm}$ (mm) & 1.49 & 1.39\\
 Loop length $x_{\rm end}$ (mm) & 32 & 38\\
-Peak return flow (mL/min) & not predicted & 10.1 at $x=\SI{14}{mm}$\\ \bottomrule
+Peak return flow (mL/min) & 13.6 at \SI{17}{mm} (section 7) & 10.1 at \SI{14}{mm}\\ \bottomrule
 \end{tabular}\end{center}
 The entrainment rate $8\pi\nu$ is reproduced almost exactly. Beyond about \SI{12}{mm} the walls take over:
 the return flow occupies a ring of limited area, it opposes the jet, and the jet slows down faster than a
@@ -152,6 +153,40 @@ Q_{\rm back}(x)\approx 8\pi\nu\,x\left(1-\frac{x}{x_{\rm end}}\right)^{3/2},\qqu
 \end{equation}
 With $x_{\rm end}=\SI{38}{mm}$ it gives a peak of \SI{10.7}{mL/min} at \SI{15}{mm}; the simulation has
 \SI{10.1}{mL/min} at \SI{14}{mm}.
+
+
+\section{The whole flow field, predicted and simulated}
+The pieces above can be assembled into one flow field for a round tube of radius $R_{\rm eq}$. With
+$s=r^2/R_{\rm eq}^2$, $X=x+x_0$, $F(\xi)=\xi^2/(1+\xi^2/4)$ and the axial speed $u=\frac1r\,\partial\psi/\partial r$,
+the stream function is
+\begin{equation}
+\psi(x,r)=m\,\nu X\,F(\xi)\;+\;(1-m)\,\frac{Q}{2\pi}\left(2s-s^2\right)\;-\;B(x)\left(3s^2-2s^3\right),
+\qquad B=m\left[\nu X\,F(\xi_R)-\frac{Q}{2\pi}\right].
+\end{equation}
+The first term is the Schlichting jet, the second the duct (Poiseuille) flow, the third the return flow, with a
+profile that vanishes on the axis and has no slip at the wall. $B$ is fixed by requiring the net flow
+through every section to be $Q$ ($\psi=Q/2\pi$ at the wall). The weight $m(x)$ hands the jet over to the duct
+flow around the predicted loop end of eq.~\eqref{eq:xend}: $m=1$ up to $0.5\,x_{\rm end}$, falling as a cosine
+to $0$ at $1.5\,x_{\rm end}$. Nothing is fitted to the simulation.
+\begin{figure}[h]\centering
+\includegraphics[width=0.9\linewidth]{fig_field.png}
+\caption{Streamlines and axial speed. A: analytical model. B, C: simulation on the two mid-planes of the
+oval lumen.}
+\end{figure}
+\begin{figure}[h]\centering
+\includegraphics[width=\linewidth]{fig_profiles.png}
+\caption{Axial speed across the lumen at three distances, and the return flow along the sheath.}
+\end{figure}
+
+What the model gets right: the ring vortex itself, its position, the jet profile and centre speed (within
+15--30\,\% along the loop), the vortex centre at about $r=\SI{2.5}{mm}$, and the order of the return flow
+(peak \SI{13.6}{mL/min} at \SI{17}{mm} against \SI{10.1}{mL/min} at \SI{14}{mm}).
+
+What it misses: the lumen is oval, not round. In the simulation the fluid returns only through the two wide
+sides of the oval; across the narrow direction the jet fills the height and everything moves forward (panel
+C). The loop is therefore two lobes rather than a full ring, the return speed in the lobes is higher than
+the model's, and the loop closes a little later (\SI{38}{mm} against \SI{32}{mm}). The model also starts
+with a small return flow at $x=0$ because the idealised jet carries more than $Q$ at its virtual outlet.
 
 \section{Pressure}\label{sec:p}
 When the jet has spread over the lumen its momentum has become a pressure rise
