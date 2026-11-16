@@ -94,10 +94,12 @@ t = np.linspace(0, 600, 600)
 V_loop = A * 38e-3
 tau = V_loop / Q
 t_res = (120e-3 - 38e-3) / (Q / A)
-a.plot(t, np.exp(-t / tau), color=C1, label=fr"tip zone (stirred), $\tau$={tau:.0f} s")
+a.plot(t, np.exp(-t / tau), color=C1, label=fr"tip zone if perfectly stirred, $\tau$={tau:.0f} s")
 phi = np.where(t > t_res / 2, t_res / (4 * np.maximum(t, 1e-9)), 1 - t / t_res)
 a.plot(t, phi, color=C2, label=fr"duct section, parabolic profile, $t_r$={t_res:.0f} s")
 a.plot(t, np.clip(1 - t / t_res, 0, 1), color=C3, ls="--", label="duct section, ideal plug")
+fl = json.load(open(os.path.join(HERE, "..", "flow", "results", "blocked", "flush.json")))["curve"]
+a.plot(fl["t"], fl["left"], color="k", lw=1.6, label="simulation, whole lumen (marker tracking)")
 a.set_xlabel("time (s)"); a.set_ylabel("fraction of old fluid left"); a.set_ylim(0, 1.02); a.set_xlim(0, 600)
 a.legend(frameon=False, fontsize=7)
 a = axs[1]

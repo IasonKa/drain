@@ -202,18 +202,24 @@ changes the pressure, not the flow, as long as the holes stay blocked.
 \section{What it means for flushing}
 \begin{figure}[h]\centering
 \includegraphics[width=0.95\linewidth]{fig_wash.png}
-\caption{Left: fraction of old fluid left, tip zone and duct section taken separately. Right: loop length
+\caption{Left: fraction of old fluid left; idealised tip zone and duct section taken separately, and the simulated whole lumen. Right: loop length
 from eq.~\eqref{eq:design} against outlet diameter for three irrigation rates; the star is the simulated
 case.}
 \end{figure}
 \textbf{Tip zone (the loop).} Volume $V=A\,x_{\rm end}=\SI{3.5}{mL}$. The loop turns over in
-$V/\max Q_{\rm back}\approx\SI{21}{s}$, faster than the through-flow time $\tau=V/Q=\SI{51}{s}$, so the
-zone is roughly a stirred tank and old fluid leaves as
+$V/\max Q_{\rm back}\approx\SI{21}{s}$, faster than the through-flow time $\tau=V/Q=\SI{51}{s}$. If the
+zone were perfectly stirred, old fluid would leave as
 \begin{equation}
 \phi_{\rm tip}(t)=e^{-t/\tau},\qquad \tau=\frac{A\,x_{\rm end}}{Q}=\SI{51}{s}.
 \end{equation}
-5\,\% is left after $3\tau\approx\SI{2.5}{min}$. Mixing is good, displacement is not: fresh irrigation is
-diluted into the zone and part of it is carried round again.
+\emph{This is a lower bound, not what happens.} The flow is steady and laminar, so the streamlines of the
+ring vortex are closed: the same fluid goes round and round, and fresh irrigation passes through the core
+of the jet and out along the edge of the loop without mixing into it. Old fluid leaves the vortex only by
+diffusion across streamlines. Marker tracking in the simulated field (advection plus diffusion with
+$D=\SI{1e-9}{m^2/s}$, black curve in the figure) gives 72\,\% of the old fluid left in the lumen after
+\SI{1}{min}, 44\,\% after \SI{5}{min} and 31\,\% after \SI{10}{min}; most of what remains sits in the
+loop and in the rib grooves. Without diffusion, 86\,\% of the fluid that starts inside the loop never
+leaves it.
 
 \textbf{Duct section.} Length $L=\SI{82}{mm}$, mean residence $t_r=L/U_m=\SI{110}{s}$. Diffusion across
 the lumen takes $R_{\rm eq}^2/D\approx\SI{3e4}{s}$ for $D=\SI{1e-9}{m^2/s}$, far longer, so each streamline
@@ -241,12 +247,13 @@ Outlet $d$ (mm) & Outlet speed (mm/s) & $Re$ & Loop length, eq.~\eqref{eq:design
 2.5 & 14 & 35 & 9\\ \bottomrule
 \end{tabular}\end{center}
 \begin{itemize}\setlength\itemsep{0pt}
-\item A small outlet gives a long stirred zone at the tip, a large outlet gives a short one and more of
-the sheath in plain displacement flow. Only the 1.0 mm row has been simulated.
-\item Doubling the irrigation rate doubles the loop length and halves every flushing time.
+\item A small outlet gives a long vortex zone at the tip, a large outlet gives a short one and more of
+the sheath in plain displacement flow. Simulated: with a \SI{2}{mm} outlet 27\,\% of the old fluid is left
+after \SI{10}{min}, against 31\,\% with \SI{1}{mm}.
+\item Doubling the irrigation rate doubles the loop length and halves the through-flow times.
 \item Moving the outlet away from the tip leaves the fluid between the tip and the outlet with no
-through-flow at all; it would be renewed only by whatever the loop stirs backwards. This is the question
-for the planned position study.
+through-flow. The position study (final report) confirms it: 90--98\,\% of that fluid is still old after
+\SI{10}{min} once the outlet is \SI{30}{mm} or more from the tip, so the tip is the best position.
 \end{itemize}
 
 \section{With some holes open: orifice estimate}

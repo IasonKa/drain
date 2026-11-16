@@ -1,0 +1,27 @@
+    Current solution step index : 0
+step 1 t=0.02s dt=0.02 change=nan vmax=0.0329 flows(mL/min,+out)=[-4.167  3.896] wall 19s
+step 2 t=0.046s dt=0.026 change=0.317 vmax=0.0375 flows(mL/min,+out)=[-4.167  4.156] wall 32s
+step 3 t=0.0798s dt=0.0338 change=0.3 vmax=0.0422 flows(mL/min,+out)=[-4.167  4.102] wall 45s
+step 4 t=0.1237s dt=0.0439 change=0.314 vmax=0.0444 flows(mL/min,+out)=[-4.167  4.104] wall 58s
+step 5 t=0.1809s dt=0.0571 change=0.34 vmax=0.0435 flows(mL/min,+out)=[-4.167  4.11 ] wall 73s
+step 6 t=0.2551s dt=0.0743 change=0.32 vmax=0.0428 flows(mL/min,+out)=[-4.167  4.113] wall 90s
+step 7 t=0.3517s dt=0.0965 change=0.295 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.116] wall 109s
+step 8 t=0.4772s dt=0.125 change=0.259 vmax=0.0428 flows(mL/min,+out)=[-4.167  4.117] wall 139s
+step 9 t=0.6403s dt=0.163 change=0.219 vmax=0.0428 flows(mL/min,+out)=[-4.167  4.117] wall 181s
+step 10 t=0.8524s dt=0.212 change=0.185 vmax=0.0428 flows(mL/min,+out)=[-4.167  4.117] wall 226s
+step 11 t=1.128s dt=0.276 change=0.145 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.117] wall 259s
+step 12 t=1.487s dt=0.358 change=0.109 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.116] wall 293s
+step 13 t=1.953s dt=0.466 change=0.0766 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.116] wall 328s
+step 14 t=2.558s dt=0.606 change=0.0499 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.116] wall 365s
+step 15 t=3.346s dt=0.787 change=0.0282 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.116] wall 420s
+step 16 t=4.369s dt=1.02 change=0.0135 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.116] wall 496s
+step 17 t=5.7s dt=1.33 change=0.00564 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.115] wall 537s
+step 18 t=7.43s dt=1.73 change=0.00346 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.115] wall 577s
+step 19 t=9.679s dt=2.25 change=0.00226 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.115] wall 598s
+step 20 t=12.6s dt=2.92 change=0.00104 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.115] wall 627s
+step 21 t=16.4s dt=3.8 change=0.000399 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.115] wall 652s
+step 22 t=21.35s dt=4.94 change=0.000319 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.115] wall 676s
+step 23 t=26.35s dt=5 change=0.00021 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.115] wall 699s
+step 24 t=31.35s dt=5 change=0.000118 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.115] wall 723s
+step 25 t=36.35s dt=5 change=8.21e-05 vmax=0.0427 flows(mL/min,+out)=[-4.167  4.115] wall 746s
+stationary
