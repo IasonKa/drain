@@ -102,10 +102,15 @@ def main():
     ap.add_argument("--h", type=float, default=0.55)
     ap.add_argument("--mu", type=float, default=MU)
     ap.add_argument("--name", default=None)
+    ap.add_argument("--s", type=float, default=0.0, help="irrigation outlet distance from the tip, mm (0 = in the tip cap)")
+    ap.add_argument("--d", type=float, default=2 * R_NOZ, help="irrigation outlet bore, mm")
     a = ap.parse_args()
     run = os.path.join(HERE, "runs", a.name or a.case)
     os.makedirs(run, exist_ok=True)
     P, area = lumen_profile()
+    r_noz, r_out = a.d / 2, a.d / 2 + 0.3                 # bore and outside radius of the irrigation tube
+    y0 = YB - a.s                                         # plane of the irrigation outlet
+    assert a.s == 0 or a.s >= LN + 1
     holes = [(x, y, float(z_skin(x))) for x, y in HOLES[a.case]]
     print("lumen outline points", len(P), "area %.1f mm2" % area, flush=True)
 
@@ -120,8 +125,9 @@ def main():
     e1 = occ.addCurveLoop([occ.addEllipse(XC, YA + 0.3, ZC, FUN_A, FUN_B, zAxis=[0, 1, 0], xAxis=[1, 0, 0])])
     e2 = occ.addCurveLoop([occ.addCircle(XC, Y_FN, ZC, R_FN, zAxis=[0, 1, 0], xAxis=[1, 0, 0])])
     funnel = [d for d in occ.addThruSections([e1, e2], makeSolid=True, makeRuled=True) if d[0] == 3]
-    tools = funnel + [(3, occ.addCylinder(XC, Y_FN + 0.3, ZC, 0, -(LT + 0.3), 0, R_TUBE)),
-                      (3, occ.addCylinder(XC, YB - 0.5, ZC, 0, LN + 0.5, 0, R_NOZ))]
+    tools = funnel + [(3, occ.addCylinder(XC, Y_FN + 0.3, ZC, 0, -(LT + 0.3), 0, R_TUBE))]
+    if a.s == 0:
+        tools.append((3, occ.addCylinder(XC, YB - 0.5, ZC, 0, LN + 0.5, 0, r_noz)))
     for x, y, zs in holes:
         tools.append((3, occ.addCylinder(x, y, zs - 2.4, 0, 0, Z_BATH + 0.2 - (zs - 2.4), R_HOLE)))
     if holes:
@@ -130,18 +136,25 @@ def main():
         hx, hy = [h[0] for h in holes], [h[1] for h in holes]
         tools.append((3, occ.addBox(min(hx) - 3, min(hy) - 3, Z_BATH, max(hx) - min(hx) + 6, max(hy) - min(hy) + 6, H_BATH)))
     vol, _ = occ.fuse(vol, tools)
+    if a.s > 0:
+        # irrigation tube through the tip cap along the axis: a solid rod in the lumen, with the last LN of its bore meshed
+        vol, _ = occ.cut(vol, [(3, occ.addCylinder(XC, y0, ZC, 0, a.s + 1.0, 0, r_out))])
+        vol, _ = occ.fuse(vol, [(3, occ.addCylinder(XC, y0 - 0.5, ZC, 0, LN + 0.5, 0, r_noz))])
     occ.synchronize()
     assert len(vol) == 1, vol
 
     def size(dim, tag, x, y, z, lc):
         h = a.h
         r = np.hypot(x - XC, z - ZC)
-        if y > YB - 0.2:
-            h = 0.14
+        if y > y0 - 0.2:
+            if r < r_out + 0.25 and (a.s == 0 or y < y0 + LN + 0.3):
+                h = 0.14 * max(1.0, a.d)                  # bore and outlet rim
+            elif r < r_out + 0.6:
+                h = min(h, 0.3)                           # along the outside of the irrigation tube
         else:
-            d = YB - y                                    # jet region behind the nozzle
-            if d < 40 and r < 1.0 + 0.06 * d:
-                h = min(h, 0.16 + 0.008 * d)
+            d = y0 - y                                    # jet region behind the nozzle
+            if d < 40 and r < 2 * r_noz + 0.06 * d:
+                h = min(h, 0.16 * max(1.0, a.d ** 0.5) + 0.008 * d)
         if y < YA + 1:
             h = min(h, 0.4)
         for hx, hy, hz in holes:
@@ -168,7 +181,10 @@ def main():
     tets, tris = orient(xyz, tets, tris)
     c = xyz[tris].mean(axis=1)
     lab = np.zeros(len(tris), int)                        # 0 wall, 1 inlet, 2 outlet, 3+k hole k
-    lab[c[:, 1] > YB + LN - 1e-4] = 1
+    if a.s == 0:
+        lab[c[:, 1] > YB + LN - 1e-4] = 1
+    else:
+        lab[(abs(c[:, 1] - (y0 + LN)) < 1e-4) & (np.hypot(c[:, 0] - XC, c[:, 2] - ZC) < r_noz)] = 1
     lab[c[:, 1] < Y_FN - LT + 1e-4] = 2
     lab[c[:, 2] > Z_BATH + 1e-4] = 3                      # sides and top of the bath pocket
     surf = {"Inlet": tris[lab == 1], "Outlet": tris[lab == 2], "Walls": tris[lab == 0]}
@@ -252,7 +268,7 @@ def main():
               "processes": {"initial_conditions_process_list": [], "boundary_conditions_process_list": bcs,
                             "gravity": [], "auxiliar_process_list": []}}
     json.dump(params, open(os.path.join(run, "ProjectParameters.json"), "w"), indent=1)
-    json.dump(dict(case=a.case, q_ml_min=a.q, v_in=float(v_in), holes=holes, mu=a.mu, rho=RHO, p_suction=P_SUCTION,
+    json.dump(dict(case=a.case, s_mm=a.s, d_mm=a.d, q_ml_min=a.q, v_in=float(v_in), holes=holes, mu=a.mu, rho=RHO, p_suction=P_SUCTION,
                    lumen_area_mm2=float(area), nodes=int(n), tets=int(len(tets))),
               open(os.path.join(run, "case.json"), "w"), indent=1)
     print("written", run)

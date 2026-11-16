@@ -1,0 +1,27 @@
+iteration 5000: 313 markers still moving, slowest clock 150 s, wall 51 s
+iteration 10000: 154 markers still moving, slowest clock 327 s, wall 63 s
+iteration 15000: 40 markers still moving, slowest clock 489 s, wall 68 s
+{
+ "case": "s045",
+ "s_mm": 45.0,
+ "d_mm": 1.0,
+ "n": 3000,
+ "T": 600.0,
+ "D_m2_s": 1e-09,
+ "iterations": 18586,
+ "old_left": {
+  "60s": 0.811,
+  "120s": 0.7493333333333333,
+  "300s": 0.6456666666666667,
+  "600s": 0.5476666666666666
+ },
+ "volume_behind_outlet": 0.36633333333333334,
+ "old_left_behind_outlet": {
+  "300s": 0.9308462238398544,
+  "600s": 0.8962693357597816
+ },
+ "old_left_ahead_of_outlet": {
+  "300s": 0.4807995791688585,
+  "600s": 0.3461336138874277
+ }
+}

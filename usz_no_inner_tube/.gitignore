@@ -8,3 +8,6 @@ flow/runs/mid/
 flow/runs/conn/
 __pycache__/
 *.time
+# sweep meshes: regenerate with make_flow_case.py blocked --s <mm> [--d <mm>]
+flow/runs/s[0-9]*/mesh.npz
+flow/runs/d2s*/mesh.npz
