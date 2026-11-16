@@ -2,20 +2,22 @@
 
 ## Reports written in this project
 
-| Report | Where in this repo |
+| File in this folder | What it is |
 |---|---|
-| Drain stop study (final, 5 Nov 2026) | `drainstop/paper/drain_stop.pdf` |
-| Irrigation flow study, final report (16 Nov 2026) | `usz_no_inner_tube/paper/final_report.pdf` |
-| Ring vortex mathematics (corrected, 16 Nov 2026) | `usz_no_inner_tube/paper/jet_loop_maths.pdf` |
-| Drain stop study, earlier version (3 Nov 2026) | `bibliography/earlier_versions/drain_stop_2026-11-03.pdf` |
-| Ring vortex mathematics, earlier version (13 Nov 2026) | `bibliography/earlier_versions/jet_loop_maths_2026-11-13_before_correction.pdf` |
+| `drain_stop.pdf` | Drain stop study, first version (3 Nov 2026) |
+| `drain_stop_2.pdf` | Drain stop study, final version (5 Nov 2026); same file as `drainstop/paper/drain_stop.pdf` |
+| `jet_loop_maths.pdf` | Ring vortex mathematics, version of 13 Nov 2026 |
 
-The earlier version of the ring vortex paper treats the vortex zone as a stirred tank with a time
-constant of 51 s. That claim was withdrawn; use the corrected paper.
+Newer reports elsewhere in this repo:
+- `usz_no_inner_tube/paper/final_report.pdf`: irrigation flow study, final report (16 Nov 2026)
+- `usz_no_inner_tube/paper/jet_loop_maths.pdf`: ring vortex mathematics, corrected (16 Nov 2026)
+
+`jet_loop_maths.pdf` in this folder treats the vortex zone as a stirred tank with a time constant of
+51 s. That claim was withdrawn; use the corrected paper.
 
 ## Literature
 
-Listed by reference only. The publisher PDFs are not stored here because this repository is public.
+Not ours, so listed by DOI only. The PDFs are not stored here.
 
 1. Z. Xu, J. Lioi, J. Mu, M. M. Kamocka, X. Liu, D. Z. Chen, E. D. Rosen, M. Alber.
    "A Multiscale Model of Venous Thrombus Formation with Surface-Mediated Control of Blood Coagulation
